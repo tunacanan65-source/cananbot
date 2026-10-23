@@ -40,8 +40,8 @@ def run_scheduler():
                 # Eğer şu anki saat ve dakika bu slota denk geliyorsa ve bugün henüz atılmadıysa
                 if now.hour == slot["hour"] and now.minute == slot["minute"]:
                     if slot_key not in last_posted_date_slot:
-                        print(f"\n🚀 [VAKİT GELDİ] {slot['label']} ({now.strftime('%H:%M')}) ateşleniyor...")
-                        canan_autopilot.run_single_autopilot_post()
+                        print(f"\n🚀 [VAKİT GELDİ] {slot['label']} ({now.strftime('%H:%M')}) ateşleniyor... (Tip: {slot['type']})")
+                        canan_autopilot.run_single_autopilot_post(force_type=slot["type"])
                         last_posted_date_slot[slot_key] = True
                         time.sleep(65)  # Aynı dakikada çift tetiklenmeyi önle
             time.sleep(20)
