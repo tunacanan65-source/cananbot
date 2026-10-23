@@ -1,0 +1,148 @@
+import os
+
+"""
+Canan Tuna - Otonom Yaşam Simülasyonu Senaryo Kütüphanesi
+Her senaryo kendine özel, sıfırdan üretilmiş BİRİNCİL GÖRSELİNE sahiptir.
+Tüm görseller assets/images/ altında bağımsız ve taşınabilir olarak saklanır.
+"""
+
+BASE_DIR = os.path.dirname(__file__)
+IMAGES_DIR = os.path.join(BASE_DIR, "assets", "images")
+
+SCENARIOS = [
+    # 1. Bodrum Beach Club (Bikinili / Mayolu Güneşlenme - Tatil Fotoğrafı)
+    {
+        "id": "tatil_bodrum_beach",
+        "category": "tatil",
+        "type": "photo",
+        "image_path": os.path.join(IMAGES_DIR, "canan_tuna_bodrum_beach_1792678870147.jpg"),
+        "caption": "Deniz, güneş ve biraz kafa dinlemece... ☀️🌊 Bodrum bana her zaman çok iyi geliyor. Siz tatilde deniz insanı mısınız havuz mu? 🏖️👇",
+        "tags": "#bodrum #tatil #beachvibes #güneş #yaz #canantuna #lifestyle"
+    },
+
+    # 2. Yağmurlu Karaköy Akşamı (Trenchcoat & Şeffaf Şemsiye - Sokak Fotoğrafı)
+    {
+        "id": "sokak_karakoy_yagmur",
+        "category": "sokak",
+        "type": "photo",
+        "image_path": os.path.join(IMAGES_DIR, "canan_tuna_karakoy_street_portrait_1792678880948.jpg"),
+        "caption": "Yağmurda ıslanmayı seven kaç kişiyiz? 🌧️🌂 Karaköy sokaklarında yürüyüş yapıp kahvemi aldım. Yağmurlu havalar bana inanılmaz ilham veriyor... ✨",
+        "tags": "#karaköy #istanbul #yağmur #trenchcoat #sokakmodası #canantuna #lifestyle"
+    },
+
+    # 3. Pilates Reformer Stüdyosu (Bebek Mavisi Tayt - Spor Videosu)
+    {
+        "id": "spor_pilates_reformer",
+        "category": "spor",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_tuna_pilates_portrait_1792678899801.jpg"),
+        "caption": "Reformer seansı bitti, ter atıldı! 💪🧘‍♀️ Vücuduna iyi bakmak kendine yapabileceğin en büyük iyilik. Bugün spora vakit ayırdınız mı canlar? 🔥👇",
+        "tags": "#pilates #reformer #fitgirl #spor #sağlıklıyaşam #canantuna #gymmotivation"
+    },
+
+    # 4. Boğaz Manzaralı Çatı Katı Akşam Yemeği (Siyah Şık Elbise - Gece Videosu)
+    {
+        "id": "gece_bogaz_aksam_yemegi",
+        "category": "gece",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_tuna_bosphorus_night_1792678913579.jpg"),
+        "caption": "İstanbul geceleri ve Boğaz'ın ışıkları... 🌉✨ Bazen sadece durup bu şehrin tadını çıkarmak gerekiyor. Akşamınız nasıl geçiyor aşklar? 🍷❤️",
+        "tags": "#boğaz #istanbul #iyigeceler #şekerim #canantuna #gecehayatı #dinner"
+    },
+
+    # 5. İstanbul Trafiğinde Araba İçi Selfie (Direksiyon Başında - Gündüz Videosu)
+    {
+        "id": "sokak_araba_selfie",
+        "category": "sokak",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_tuna_driver_selfie_1792678924695.jpg"),
+        "caption": "İstanbul trafiği klasiği: Kırmızı ışıkta selfie çekilir! 🚗💨 Şarkımı açtım enerjimi düşürmüyorum. Trafikte olanlara sabırlar diliyorum 🙈🎧",
+        "tags": "#istanbul #trafik #selfie #carselfie #gününkaresi #canantuna #enerji"
+    },
+
+    # 6. Balkonda Çıplak Ayak Kahve Keyfi (Hırka & Şort - Sabah Dinlenme Fotoğrafı)
+    {
+        "id": "ev_balkon_ciplak_ayak",
+        "category": "ev",
+        "type": "photo",
+        "image_path": os.path.join(IMAGES_DIR, "canan_tuna_cozy_balcony_portrait_1792678939456.jpg"),
+        "caption": "Balkonda sabah kahvesi, serin hava ve sessizlik... ☕🌿 Bütün gün böyle oturabilirim. Güne güzel bir başlangıç yaptık, sizde durumlar ne? 🌸👇",
+        "tags": "#günaydın #kahvekeyfi #huzur #evhali #balkonkeyfi #canantuna #gününkaresi"
+    },
+
+    # 7. Nişantaşı Kafe Molası (Deri Ceket & İced Coffee - Gündüz Fotoğrafı)
+    {
+        "id": "sokak_nisantasi_kafe",
+        "category": "sokak",
+        "type": "photo",
+        "image_path": os.path.join(IMAGES_DIR, "canan_tana_nisantasi_cafe_1792666291150.jpg"),
+        "caption": "Nişantaşı sokakları ve buz gibi bir filtre kahve... ☕🕶️ Enerjim tavan! Bugün kendiniz için ne yaptınız aşklar? 👇✨",
+        "tags": "#nişantaşı #istanbul #kahvekeyfi #sokakmodası #canantuna #lifestyle"
+    },
+
+    # 8. Sabah Ev Rutini (Mutfak & Sıcak Kupa - Sabah Videosu)
+    {
+        "id": "ev_sabah_kahvesi",
+        "category": "ev",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_tuna_morning_lifestyle_1792660779429.jpg"),
+        "caption": "Güne kahvesiz başlayamayanlar el kaldırsın! ☕☀️ Bugünün mottosu: Gülümse ve anı yaşa! Harika bir gün olsun hepimize 🌸💛",
+        "tags": "#günaydın #sabahkahvesi #evhali #huzur #canantuna #pozitifenerji"
+    },
+
+    # 9. Kış Günü Sıcak Kahve (Karlı Sokak & Puffer Mont - Kış Fotoğrafı)
+    {
+        "id": "sokak_kis_sicak_kahve",
+        "category": "sokak",
+        "type": "photo",
+        "image_path": os.path.join(IMAGES_DIR, "canan_tuna_winter_street_1792666325312.jpg"),
+        "caption": "Hava buz gibi ama içimizi ısıtan kahvemiz var ❄️☕ Karlı günlerde sokakta yürümek bana hep masal gibi gelir. Siz kış insanı mısınız? ☃️🤍",
+        "tags": "#kış #kar #soğuk #kahvekeyfi #canantuna #wintervibes"
+    },
+
+    # 10. Spor Salonu Ayna İlerlemesi (Tayt & Crop Top - Spor Videosu)
+    {
+        "id": "spor_gym_ayna_selfie",
+        "category": "spor",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_tuna_fitness_selfie_1792663898849.jpg"),
+        "caption": "Bahane yok, disiplin var! 🔥💪 Bugünkü antrenmanı tamamladım. Aynadaki değişimi görmek en büyük motivasyonum! Siz başladınız mı? 🏋️‍♀️",
+        "tags": "#fitness #gymmotivation #fitgirl #disiplin #spor #canantuna #workout"
+    },
+
+    # 11. Yoğun Antrenman Sonrası Halı Keyfi (Pembe Spor Sütyeni - Akşamüstü Fotoğrafı)
+    {
+        "id": "spor_sonrasi_hali_dinlenme",
+        "category": "spor",
+        "type": "photo",
+        "image_path": os.path.join(IMAGES_DIR, "canan_tuna_post_workout_1792664056043.jpg"),
+        "caption": "Bacak gününden sonra halıya serilenler derneği başkanı seçildim sanırım! 🙈😂 Yorulduk ama değdi. Şimdi güzel bir dinlenme zamanı 💆‍♀️✨",
+        "tags": "#postworkout #fitlife #dinlenme #yorgunluk #canantuna #gymgirl"
+    },
+
+    # 12. Pazar Rahatlığı (Krem Örgü Kazak - Ev Fotoğrafı)
+    {
+        "id": "ev_pazar_rahatligi",
+        "category": "ev",
+        "type": "photo",
+        "image_path": os.path.join(IMAGES_DIR, "canan_tuna_cozy_livingroom_png_1792663231002.jpg"),
+        "caption": "Evde battaniye ve sıcak bir çay modundayım bugün... 🛋️📖 Bazen hiçbir şey yapmamak da ruhuna çok iyi gelir. Bugün evde misiniz dışarıda mı? 🍵👇",
+        "tags": "#evkeyfi #huzur #cozyvibes #dinlenme #canantuna #haftasonu"
+    },
+
+    # 13. Güneşli Balkon Portresi (Lila Crop Top - Gündüz Videosu)
+    {
+        "id": "ev_gunesli_balkon_selfie",
+        "category": "ev",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_tuna_selfie_1792665280198.jpg"),
+        "caption": "Güneş açtıysa enerjimiz de yerine gelir! ☀️🌸 Yepyeni hedefler, güzel başlangıçlar... Gününüz harika geçsin canlar! 💖✨",
+        "tags": "#güneş #pozitifenerji #selfie #balkonkeyfi #canantuna #gününkaresi"
+    }
+]
+
+def get_scenario_by_id(scenario_id: str) -> dict:
+    for s in SCENARIOS:
+        if s["id"] == scenario_id:
+            return s
+    return SCENARIOS[0]
