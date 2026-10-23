@@ -10,6 +10,84 @@ BASE_DIR = os.path.dirname(__file__)
 IMAGES_DIR = os.path.join(BASE_DIR, "assets", "images")
 
 SCENARIOS = [
+    # 🌟 5. YENİ: Ateş Kırmızısı Saten Abiye - İtalyan Restoranı (Gece Daveti)
+    {
+        "id": "gece_kirmizi_italyan_restoran",
+        "category": "gece",
+        "type": "photo",
+        "image_path": os.path.join(IMAGES_DIR, "canan_red_dress_restaurant.jpg"),
+        "caption": "Kırmızı her kadının gardırobunda en az bir kere olmalı bence... ❤️✨ Mum ışığı, güzel bir akşam yemeği ve hafif İtalyan ezgileri. Kırmızı kombinimi nasıl buldunuz aşklar? 🍷👇",
+        "tags": "#kırmızıelbise #gecedaveti #zarafet #dinner #italyan #lifestyle #canantuna #gününkaresi"
+    },
+
+    # 🌟 6. YENİ: Zümrüt Yeşili Kruvaze Blazer - Business Executive (İş & Kariyer)
+    {
+        "id": "is_zumrut_blazer_executive",
+        "category": "sokak",
+        "type": "photo",
+        "image_path": os.path.join(IMAGES_DIR, "canan_emerald_blazer_office.jpg"),
+        "caption": "Yeni projeler, yeni toplantılar ve yüksek hedefler! 💼💚 Zümrüt yeşili blazer'ımın verdiği özgüveni çok seviyorum. Kadın girişimciler ve iş kadınları burada mı? Gücünüzü gösterin! 🚀✨",
+        "tags": "#businesswoman #blazer #kariyer #ofisstili #kombin #girişimci #canantuna #stil"
+    },
+
+    # 🌟 7. YENİ: Hardal Sarısı Keten Elbise - Alaçatı Begonvilleri (Yaz Sokak Modası)
+    {
+        "id": "sokak_alacati_sari_elbise",
+        "category": "tatil",
+        "type": "photo",
+        "image_path": os.path.join(IMAGES_DIR, "canan_alacati_yellow_dress.jpg"),
+        "caption": "Alaçatı sokakları, pembe begonviller ve güneş sarısı bir yaz günü... ☀️🌸 Sarı renk bana inanılmaz pozitif enerji veriyor! Sizin en sevdiğiniz yaz rengi hangisi? Yorumlarda buluşalım 💛👇",
+        "tags": "#alaçatı #çeşme #sarıelbise #yazmodası #begonvil #tatil #canantuna #enerji"
+    },
+
+    # 🌟 8. YENİ: Pastel Lila Dikişsiz Spor Takımı - Sabah Park Egzersizi (Fitness)
+    {
+        "id": "spor_lila_park_fitness",
+        "category": "spor",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_lilac_fitness_park.jpg"),
+        "caption": "Sabah koşusu ve park esnemesi tamamlandı! 💜🌿 Lila spor takımımın enerjisine bayıldım. Güne erken başlamak ve ter atmak gün boyu zinde tutuyor. Bugün kendiniz için ne yaptınız? 💪🔥",
+        "tags": "#fitness #sabahsporu #lilatakım #gymgirl #motivasyon #sağlıklıyaşam #canantuna #reels"
+    },
+    # 🌟 1. YENİ: Kapadokya Balonlar & Mağara Otel Terası (Tatil Fotoğrafı)
+    {
+        "id": "tatil_kapadokya_balonlar",
+        "category": "tatil",
+        "type": "photo",
+        "image_path": os.path.join(IMAGES_DIR, "canan_cappadocia_terrace.jpg"),
+        "caption": "Kapadokya'da gün doğumu masal gibi... 🎈✨ Gökyüzündeki balonları izlerken sıcacık kahvemi yudumlamak bana inanılmaz bir huzur verdi. Hayatınızda mutlaka görmeniz gereken yerler listenize ekleyin derim! Siz Kapadokya'ya gittiniz mi aşklar? ☕🌅👇",
+        "tags": "#kapadokya #cappadocia #gündoğumu #balon #seyahat #travelblogger #canantuna #huzur"
+    },
+
+    # 🌟 2. YENİ: Bebek Sahilinde Kruvasan & Sabah Kahvesi (Sabah Yaşam Fotoğrafı)
+    {
+        "id": "sabah_bebek_kruvasan_kahve",
+        "category": "ev",
+        "type": "photo",
+        "image_path": os.path.join(IMAGES_DIR, "canan_bebek_cafe.jpg"),
+        "caption": "Sabah kahvesi ve taze kruvasan klasiği! 🥐☕ Bebek sahilinde güne mis gibi başladım. Tatlı krizine girenler burada mı? Kendinize güzel bir gün hediye edin aşklar 🌸💛",
+        "tags": "#bebek #kahvekeyfi #kruvasan #günaydın #istanbul #lifestyle #canantuna #gününkaresi"
+    },
+
+    # 🌟 3. YENİ: Ege Lüks Yat Turu & Deniz Esintisi (Müzikli Reels Videosu)
+    {
+        "id": "tatil_ege_yat_turu",
+        "category": "tatil",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_yacht_summer.jpg"),
+        "caption": "Rüzgar saçımda, masmavi deniz önümde... 🛥️🌊 Bazen her şeyi geride bırakıp denize açılmak en güzel terapi! Yaz tatilini en çok nerede geçirmeyi seviyorsunuz? Yorumları görelim ☀️⚓👇",
+        "tags": "#yatturu #deniz #tatil #yaz #summervibes #canantuna #reels #mavi"
+    },
+
+    # 🌟 4. YENİ: Boğaz Manzaralı Çatı Terası Golden Hour (Müzikli Reels Videosu)
+    {
+        "id": "gece_bogaz_cati_terasi",
+        "category": "gece",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_rooftop_sunset.jpg"),
+        "caption": "Altın saatler (Golden hour) ve Boğaz manzarası... 🌇✨ Gün batarken bu şehir bambaşka bir büyüye bürünüyor. Akşam planınız ne canlar? 🍷❤️",
+        "tags": "#goldenhour #günbatımı #istanbul #boğaz #rooftop #zarafet #canantuna #reels"
+    },
     # 1. Bodrum Beach Club (Bikinili / Mayolu Güneşlenme - Tatil Fotoğrafı)
     {
         "id": "tatil_bodrum_beach",
