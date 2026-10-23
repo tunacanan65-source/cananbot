@@ -34,11 +34,9 @@ def create_reels_video(image_path: str, voice_text: str = None, output_mp4: str 
     total_frames = int(duration * 30)
 
     # 1. Sinematik yumuşak zoom / süzülme (Ken Burns)
-    # 2. @canantuna_official estetik filigranı
-    filter_complex = (
+    filter_complex_clean = (
         f"[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,"
         f"zoompan=z='min(zoom+0.0006,1.08)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d={total_frames}:s=1080x1920:fps=30,"
-        f"drawtext=text='@canantuna_official':fontcolor=white@0.85:fontsize=38:x=50:y=h-140:box=1:boxcolor=black@0.4:boxborderw=12,"
         f"format=yuv420p[v];"
         f"[1:a]afade=t=in:ss=0:d=1,afade=t=out:st={duration-1.5}:d=1.5,volume=0.85[a]"
     )
@@ -47,7 +45,7 @@ def create_reels_video(image_path: str, voice_text: str = None, output_mp4: str 
         FFMPEG_EXE, "-y",
         "-loop", "1", "-i", image_path,
         "-ss", "0", "-t", str(duration), "-i", music_file,
-        "-filter_complex", filter_complex,
+        "-filter_complex", filter_complex_clean,
         "-map", "[v]",
         "-map", "[a]",
         "-c:v", "libx264",
@@ -62,7 +60,9 @@ def create_reels_video(image_path: str, voice_text: str = None, output_mp4: str 
     print(f"🎬 Estetik Reels videosu renderlanıyor ({duration:.1f} saniye, telifsiz müzikli)...")
     proc = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if proc.returncode != 0:
-        raise RuntimeError(f"FFmpeg hatası: {proc.stderr.decode('utf-8', errors='ignore')[-300:]}")
+        err_msg = proc.stderr.decode('utf-8', errors='ignore')[-300:]
+        print(f"⚠️ FFmpeg Detayı: {err_msg}")
+        raise RuntimeError(f"FFmpeg hatası: {err_msg}")
 
     print(f"✅ Video başarıyla oluşturuldu: {output_mp4}")
     return output_mp4

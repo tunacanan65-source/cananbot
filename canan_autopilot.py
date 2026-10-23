@@ -75,9 +75,28 @@ def post_to_instagram_reels(video_path: str, caption: str) -> dict:
     """Canan Tuna Instagram hesabına (@canantuna_official) doğrudan Reels yayınlar."""
     ig_id = getattr(config, "INSTAGRAM_ACCOUNT_ID", "17841458805624158")
     try:
-        with open(video_path, "rb") as f:
-            r_up = requests.post("https://catbox.moe/user/api.php", data={"reqtype": "fileupload"}, files={"fileToUpload": f}, timeout=45)
-            video_url = r_up.text.strip()
+        video_url = None
+        # 1. Catbox dene
+        try:
+            with open(video_path, "rb") as f:
+                r_up = requests.post("https://catbox.moe/user/api.php", data={"reqtype": "fileupload"}, files={"fileToUpload": f}, timeout=45)
+                if r_up.status_code == 200 and r_up.text.strip().startswith("http"):
+                    video_url = r_up.text.strip()
+        except Exception as e:
+            print(f"Catbox yükleme uyarısı: {e}")
+
+        # 2. Tmpfiles fallback
+        if not video_url:
+            with open(video_path, "rb") as f:
+                r_tf = requests.post("https://tmpfiles.org/api/v1/upload", files={"file": f}, timeout=45).json()
+                if r_tf.get("status") == "success":
+                    raw_url = r_tf["data"]["url"]
+                    video_url = raw_url.replace("tmpfiles.org/", "tmpfiles.org/dl/")
+
+        if not video_url:
+            return {"status": "error", "error": "Video public CDN'e yüklenemedi"}
+
+        print(f"🌐 Video CDN URL: {video_url}")
 
         # 1. Reels Container oluştur
         r_c = requests.post(
@@ -87,14 +106,19 @@ def post_to_instagram_reels(video_path: str, caption: str) -> dict:
         ).json()
         container_id = r_c.get("id")
         if not container_id:
+            print(f"❌ Instagram Reels Container Hatası: {r_c}")
             return {"status": "error", "error": r_c}
 
-        # 2. Render bitişini bekle
-        for _ in range(12):
+        # 2. Render bitişini bekle (Instagram video işleme)
+        for i in range(15):
             time.sleep(5)
             st = requests.get(f"https://graph.facebook.com/v21.0/{container_id}?fields=status_code&access_token={config.FACEBOOK_ACCESS_TOKEN}").json()
-            if st.get("status_code") == "FINISHED":
+            code = st.get("status_code")
+            print(f"⏳ Instagram Reels İşleme Durumu ({i+1}/15): {code}")
+            if code == "FINISHED":
                 break
+            if code == "ERROR":
+                return {"status": "error", "error": st}
 
         # 3. Yayınla
         r_pub = requests.post(

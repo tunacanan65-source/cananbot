@@ -59,8 +59,14 @@ def trigger_post():
 @app.get("/api/trigger-reels")
 def trigger_reels():
     """Bulut üzerinden tek tıkla Reels paylaşımı tetikleme API'si"""
-    ok = canan_autopilot.run_single_autopilot_post(force_type="video")
-    return JSONResponse({"ok": ok, "type": "reels"})
+    try:
+        ok = canan_autopilot.run_single_autopilot_post(force_type="video")
+        return JSONResponse({"ok": ok, "type": "reels"})
+    except Exception as e:
+        import traceback
+        err = traceback.format_exc()
+        print(f"❌ [Trigger Reels Error]: {err}")
+        return JSONResponse({"ok": False, "error": str(e), "traceback": err}, status_code=500)
 
 @app.get("/api/trigger-photo")
 def trigger_photo():
