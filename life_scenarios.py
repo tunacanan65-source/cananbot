@@ -138,6 +138,46 @@ SCENARIOS = [
         "image_path": os.path.join(IMAGES_DIR, "canan_tuna_selfie_1792665280198.jpg"),
         "caption": "Güneş açtıysa enerjimiz de yerine gelir! ☀️🌸 Yepyeni hedefler, güzel başlangıçlar... Gününüz harika geçsin canlar! 💖✨",
         "tags": "#güneş #pozitifenerji #selfie #balkonkeyfi #canantuna #gününkaresi"
+    },
+
+    # 14. Vanity Aynası & Parfüm (Lüks Giyinme Odası - Reels Videosu)
+    {
+        "id": "lifestyle_vanity_mirror_makyaj",
+        "category": "ev",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_vanity_mirror.jpg"),
+        "caption": "Hazırlanırken aynaya bir bakış ve günün enerjisini yakalama anı... ✨💄 Kendinize değer verdiğiniz her an çok kıymetli. Akşam planları yapıldı mı canlar? 💋👠",
+        "tags": "#vanity #grwm #lifestyle #makyaj #güzellik #canantuna #mirrorselfie"
+    },
+
+    # 15. Tenis / Padel Kortu (Kort Şıklığı & Raket - Spor Videosu)
+    {
+        "id": "spor_kortta_tenis_padel",
+        "category": "spor",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_tennis_court.jpg"),
+        "caption": "Kortta maç bitti ama enerji hala tavan! 🎾🔥 Spor sadece bedenine değil ruhuna da iyi gelen en güzel terapi. Bugün hareket ettik mi? 💪✨",
+        "tags": "#tennis #padel #tenis #fitgirl #sportystyle #canantuna #fitnessmotivation"
+    },
+
+    # 16. Sonsuzluk Havuzu & Gün Batımı (Lüks Tatil & Ege Manzarası - Reels Videosu)
+    {
+        "id": "tatil_sonsuzluk_havuzu_gunbatimi",
+        "category": "tatil",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_infinity_pool.jpg"),
+        "caption": "Gün batımında sonsuzluğa karşı durup derin bir nefes almak... 🌅🌊 Hayat koşturmacasında durup anın tadını çıkarmayı unutmayın. Huzur dolu bir akşam olsun hepimize 🧡✨",
+        "tags": "#sunset #infinitypool #tatil #manzara #huzur #canantuna #travelgram #goldenhour"
+    },
+
+    # 17. Çağdaş Sanat Galerisi (Bej Blazer & Modern Sanat - Kültür Sokak Fotoğrafı)
+    {
+        "id": "kultur_cagdas_sanat_galerisi",
+        "category": "sokak",
+        "type": "photo",
+        "image_path": os.path.join(IMAGES_DIR, "canan_art_gallery.jpg"),
+        "caption": "Sanatın içinde kaybolduğum, renklerin hikayesini dinlediğim bir gün... 🎨🖼️ Modern sanat bana her zaman yeni bakış açıları kazandırıyor. Galerileri gezmeyi sevenler burda mı? 🤍✨",
+        "tags": "#artgallery #sanat #istanbul #modernart #kultur #canantuna #streetstyle #ootd"
     }
 ]
 

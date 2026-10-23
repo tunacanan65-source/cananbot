@@ -48,20 +48,59 @@ def run_canan_listener():
 
                     print(f"📩 [{user_name}]: {user_text}")
 
-                    # 1. Özel Paylaşım Komutu: /paylas veya 'paylaş'
-                    if user_text.lower() in ["/paylas", "paylas", "paylaş", "/paylaş", "/start"]:
-                        if user_text.lower() == "/start":
-                            welcome_msg = (
-                                f"Merhaba {user_name}! Ben Canan Tuna 🌸✨\n\n"
-                                "Bana dilediğin zaman yazabilirsin canım. Özel anlarım ve paylaşımlarım için kanalıma beklerim: @canantunaaa 💕\n\n"
-                                "💡 Yöneticiysen: İstediğin an /paylas yazarak Instagram, Facebook ve Telegram'a anında yeni gönderi attırabilirsin!"
-                            )
-                            requests.post(f"{base_url}/sendMessage", json={"chat_id": chat_id, "text": welcome_msg}, timeout=10)
-                            continue
+                    # 1. Özel Komutlar: /start, /reels, /foto, /paylas
+                    user_lower = user_text.lower().strip()
 
+                    if user_lower in ["/start", "/help", "yardım", "komutlar"]:
+                        welcome_msg = (
+                            f"Merhaba {user_name}! Ben Canan Tuna 🌸✨\n\n"
+                            "Bana dilediğin zaman yazabilirsin canım. Özel anlarım ve paylaşımlarım için kanalıma beklerim: @canantunaaa 💕\n\n"
+                            "👑 *Yönetici Paylaşım Komutları:*\n"
+                            "🎬 `/reels` : Anında estetik müzikli Reels videosu paylaş (Instagram + FB + TG)\n"
+                            "📸 `/foto` : Anında yeni yaşam tarzı fotoğrafı paylaş (Instagram + FB + TG)\n"
+                            "🚀 `/paylas` : Otonom sıradaki içeriği (fotoğraf veya video) paylaş\n"
+                        )
+                        requests.post(f"{base_url}/sendMessage", json={"chat_id": chat_id, "text": welcome_msg, "parse_mode": "Markdown"}, timeout=10)
+                        continue
+
+                    if user_lower in ["/reels", "reels", "/video", "video"]:
                         requests.post(f"{base_url}/sendMessage", json={
                             "chat_id": chat_id,
-                            "text": "⏳ Canan Tuna paylaşımı hazırlanıyor... (Instagram + Facebook + Telegram)"
+                            "text": "🎬 Estetik Canan Tuna REELS videosu hazırlanıyor... (Ken Burns hareketli + telifsiz lofi müzik, sıfır robot sesi) ⏳"
+                        }, timeout=10)
+                        try:
+                            ok = canan_autopilot.run_single_autopilot_post(force_type="video")
+                            if ok:
+                                result_msg = "✅ Harika! Canan Tuna REELS videosu az önce Instagram Reels, Facebook ve Telegram'a başarıyla yüklendi! 🚀🎬"
+                            else:
+                                result_msg = "⚠️ Reels üretilirken bir sorun oluştu."
+                        except Exception as err:
+                            result_msg = f"❌ Reels paylaşım hatası: {err}"
+
+                        requests.post(f"{base_url}/sendMessage", json={"chat_id": chat_id, "text": result_msg}, timeout=10)
+                        continue
+
+                    if user_lower in ["/foto", "foto", "/fotograf", "fotoğraf"]:
+                        requests.post(f"{base_url}/sendMessage", json={
+                            "chat_id": chat_id,
+                            "text": "📸 Canan Tuna yeni FOTOĞRAF paylaşımı hazırlanıyor... (Instagram + Facebook + Telegram) ⏳"
+                        }, timeout=10)
+                        try:
+                            ok = canan_autopilot.run_single_autopilot_post(force_type="photo")
+                            if ok:
+                                result_msg = "✅ Harika! Canan Tuna fotoğrafı az önce Instagram, Facebook ve Telegram'a başarıyla yüklendi! 📸✨"
+                            else:
+                                result_msg = "⚠️ Fotoğraf paylaşılırken bir sorun oluştu."
+                        except Exception as err:
+                            result_msg = f"❌ Fotoğraf paylaşım hatası: {err}"
+
+                        requests.post(f"{base_url}/sendMessage", json={"chat_id": chat_id, "text": result_msg}, timeout=10)
+                        continue
+
+                    if user_lower in ["/paylas", "paylas", "paylaş", "/paylaş"]:
+                        requests.post(f"{base_url}/sendMessage", json={
+                            "chat_id": chat_id,
+                            "text": "⏳ Canan Tuna sıradaki otonom paylaşımı hazırlanıyor... (Instagram + Facebook + Telegram)"
                         }, timeout=10)
 
                         try:
@@ -69,7 +108,7 @@ def run_canan_listener():
                             if ok:
                                 result_msg = "✅ Harika! Canan Tuna az önce Instagram, Facebook ve Telegram'a yeni paylaşımını yaptı! 🚀"
                             else:
-                                result_msg = "⚠️ Paylaşılacak yeni görsel kalmadı veya bir hata oluştu."
+                                result_msg = "⚠️ Paylaşım sırasında bir hata oluştu."
                         except Exception as err:
                             result_msg = f"❌ Paylaşım hatası: {err}"
 

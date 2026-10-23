@@ -56,6 +56,18 @@ def trigger_post():
     ok = canan_autopilot.run_single_autopilot_post()
     return JSONResponse({"ok": ok})
 
+@app.get("/api/trigger-reels")
+def trigger_reels():
+    """Bulut üzerinden tek tıkla Reels paylaşımı tetikleme API'si"""
+    ok = canan_autopilot.run_single_autopilot_post(force_type="video")
+    return JSONResponse({"ok": ok, "type": "reels"})
+
+@app.get("/api/trigger-photo")
+def trigger_photo():
+    """Bulut üzerinden tek tıkla Fotoğraf paylaşımı tetikleme API'si"""
+    ok = canan_autopilot.run_single_autopilot_post(force_type="photo")
+    return JSONResponse({"ok": ok, "type": "photo"})
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run("main:app", host="0.0.0.0", port=port)

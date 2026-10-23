@@ -34,7 +34,7 @@ def save_history(history: list):
     with open(HISTORY_FILE, "w", encoding="utf-8") as f:
         json.dump(history, f, ensure_ascii=False, indent=2)
 
-def pick_next_scenario() -> dict:
+def pick_next_scenario(force_type: str = None) -> dict:
     history = load_history()
     used_ids = {h.get("scenario_id") for h in history}
     used_images = {os.path.basename(h.get("image_path", "")) for h in history if h.get("image_path")}
@@ -44,8 +44,20 @@ def pick_next_scenario() -> dict:
         if s["id"] not in used_ids and os.path.basename(s.get("image_path", "")) not in used_images
     ]
     if not available:
-        print("⚠️ [ÖNEMLİ] Mevcut tüm benzersiz görseller paylaşıldı! Eski görsel tekrar edilmeyecek şekilde kilitlendi.")
-        return None
+        print("⚠️ [BİLGİ] Tüm senaryolar paylaşıldı. Döngü devamı için geçmiş sıfırlanıyor...")
+        history = []
+        save_history([])
+        available = list(life_scenarios.SCENARIOS)
+
+    # force_type verilmişse ("video" veya "photo") öncelikle ona uygun senaryoyu seç
+    if force_type:
+        type_candidates = [s for s in available if s.get("type") == force_type]
+        if type_candidates:
+            return random.choice(type_candidates)
+        # Eğer available içinde o tipten kalmamışsa tüm listeden o tipe ait olanı al
+        all_type_candidates = [s for s in life_scenarios.SCENARIOS if s.get("type") == force_type]
+        if all_type_candidates:
+            return random.choice(all_type_candidates)
 
     hour = datetime.now().hour
     if 7 <= hour < 12:
@@ -96,17 +108,17 @@ def post_to_instagram_reels(video_path: str, caption: str) -> dict:
     except Exception as e:
         return {"status": "error", "error": str(e)}
 
-def run_single_autopilot_post():
+def run_single_autopilot_post(force_type: str = None):
     """Günün saatine ve senaryosuna göre Canan Tuna adına 3 platforma (Instagram, Facebook, Telegram) otonom paylaşım yapar."""
-    scenario = pick_next_scenario()
+    scenario = pick_next_scenario(force_type=force_type)
     if not scenario:
-        print("🛑 Paylaşılacak yeni benzersiz görsel kalmadığı için işlem durduruldu (Asla eski görsel kullanılmaz).")
+        print("🛑 Paylaşılacak senaryo bulunamadı.")
         return False
     sc_id = scenario["id"]
-    media_type = scenario.get("type", "photo")
+    media_type = force_type if force_type else scenario.get("type", "photo")
 
     print("\n" + "="*60)
-    print(f"🌟 Canan Tuna Otonom Yaşam Adımı: [{scenario.get('category').upper()}] {sc_id}")
+    print(f"🌟 Canan Tuna Otonom Yaşam Adımı: [{scenario.get('category').upper()}] {sc_id} (Format: {media_type})")
     print("="*60)
 
     chosen_img = scenario.get("image_path")
@@ -116,10 +128,10 @@ def run_single_autopilot_post():
 
     full_caption = f"{scenario['caption']}\n\n{scenario.get('tags', '')}"
 
-    if media_type == "video" and scenario.get("voice"):
+    if media_type == "video":
         out_video = os.path.join(OUTPUT_DIR, f"auto_{sc_id}.mp4")
-        print(f"🎬 Senaryo için sesli Reels videosu üretiliyor: {sc_id}...")
-        create_canan_reel.create_reels_video(chosen_img, scenario["voice"], out_video)
+        print(f"🎬 Senaryo için estetik lofi müzikli Reels videosu üretiliyor: {sc_id}...")
+        create_canan_reel.create_reels_video(chosen_img, output_mp4=out_video)
 
         # 1. Telegram
         print("📲 Telegram'a Video Gönderiliyor...")
