@@ -191,8 +191,63 @@ def post_to_instagram_reels(video_path: str, caption: str) -> dict:
 
     return {"status": "error", "error": last_error or "Reels yüklenemedi"}
 
-def post_to_facebook_video(video_path: str, caption: str) -> dict:
-    """Canan Tuna Facebook Sayfasına (Canan tunau) doğrudan Reels/Video yayınlar."""
+def post_to_facebook_reels(video_path: str, caption: str) -> dict:
+    """Canan Tuna Facebook Sayfasına (Canan tunau) doğrudan resmi Facebook REELS yayınlar (Reels sekmesinde görünür)."""
+    page_id = getattr(config, "FACEBOOK_PAGE_ID", "1355526950985735")
+    token = getattr(config, "FACEBOOK_ACCESS_TOKEN", "")
+    try:
+        file_size = os.path.getsize(video_path)
+
+        # 1. Faz: Başlat (Init Session)
+        r_start = requests.post(
+            f"https://graph.facebook.com/v21.0/{page_id}/video_reels",
+            data={"upload_phase": "start", "access_token": token},
+            timeout=25
+        ).json()
+
+        video_id = r_start.get("video_id")
+        upload_url = r_start.get("upload_url")
+        if not video_id or not upload_url:
+            print(f"❌ Facebook Reels Start Hatası: {r_start}")
+            return _post_to_facebook_video_fallback(video_path, caption)
+
+        # 2. Faz: İkili Video Yükleme (Upload Binary to rupload)
+        with open(video_path, "rb") as vf:
+            headers = {
+                "Authorization": f"OAuth {token}",
+                "offset": "0",
+                "file_size": str(file_size)
+            }
+            r_up = requests.post(upload_url, headers=headers, data=vf, timeout=120)
+            if r_up.status_code not in (200, 201):
+                print(f"❌ Facebook Reels Upload Hatası: {r_up.text}")
+                return _post_to_facebook_video_fallback(video_path, caption)
+
+        # 3. Faz: Yayınlama ve Yayına Alma (Publish as Reel)
+        r_finish = requests.post(
+            f"https://graph.facebook.com/v21.0/{page_id}/video_reels",
+            data={
+                "upload_phase": "finish",
+                "video_id": video_id,
+                "video_state": "PUBLISHED",
+                "description": caption,
+                "share_to_feed": "true",
+                "access_token": token
+            },
+            timeout=30
+        ).json()
+
+        if r_finish.get("success") or "id" in r_finish or "video_id" in r_finish or "post_id" in r_finish:
+            print(f"🎉 Facebook REELS Başarıyla Yayınlandı! Video ID: {video_id}")
+            return {"status": "success", "post_id": video_id}
+        else:
+            print(f"❌ Facebook Reels Finish Hatası: {r_finish}")
+            return {"status": "error", "error": r_finish}
+    except Exception as e:
+        print(f"❌ Facebook Reels İstisnası: {e}")
+        return _post_to_facebook_video_fallback(video_path, caption)
+
+def _post_to_facebook_video_fallback(video_path: str, caption: str) -> dict:
     page_id = getattr(config, "FACEBOOK_PAGE_ID", "1355526950985735")
     token = getattr(config, "FACEBOOK_ACCESS_TOKEN", "")
     try:
@@ -200,7 +255,7 @@ def post_to_facebook_video(video_path: str, caption: str) -> dict:
             r_fb = requests.post(
                 f"https://graph-video.facebook.com/v21.0/{page_id}/videos",
                 files={"source": ("video.mp4", vf, "video/mp4")},
-                data={"description": caption, "access_token": token},
+                data={"description": caption, "published": "true", "access_token": token},
                 timeout=120
             ).json()
         if "id" in r_fb:
@@ -259,7 +314,7 @@ def run_single_autopilot_post(force_type: str = None):
 
         # 2. Facebook
         print("📘 Facebook Sayfasına Reels/Video Gönderiliyor (Canan tunau)...")
-        r_fb = post_to_facebook_video(out_video, full_caption)
+        r_fb = post_to_facebook_reels(out_video, full_caption)
         if r_fb.get("status") == "success":
             success_summary["facebook"] = True
             print(f"📘 Facebook Sonucu: ✅ BAŞARILI (ID: {r_fb.get('post_id')})")

@@ -116,6 +116,22 @@ def trigger_photo():
     ok = canan_autopilot.run_single_autopilot_post(force_type="photo")
     return JSONResponse({"ok": ok, "type": "photo"})
 
+@app.get("/privacy")
+def privacy_policy():
+    from fastapi.responses import HTMLResponse
+    return HTMLResponse("""
+    <!DOCTYPE html>
+    <html>
+    <head><title>Canan Tuna Privacy Policy</title><meta charset='utf-8'></head>
+    <body style='font-family:sans-serif; max-width:800px; margin:40px auto; line-height:1.6; padding:0 20px;'>
+        <h2>Canan Tuna Gizlilik Politikası (Privacy Policy)</h2>
+        <p>Canan Tuna AI Influencer uygulaması kullanıcı verilerinin gizliliğine saygı duyar.</p>
+        <p>Bu uygulama yalnızca Instagram ve Facebook Graph API üzerinden içerik paylaşımı amacıyla kullanılmaktadır. Herhangi bir kişisel veri toplanmaz veya üçüncü taraflarla paylaşılmaz.</p>
+        <p>İletişim: tunacanan65@gmail.com</p>
+    </body>
+    </html>
+    """)
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run("main:app", host="0.0.0.0", port=port)
