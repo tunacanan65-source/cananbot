@@ -3,9 +3,12 @@ import sys
 import threading
 import time
 from contextlib import asynccontextmanager
+import requests
 import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
+import config
 import canan_scheduler
 import canan_listener
 import canan_autopilot
@@ -15,6 +18,12 @@ if sys.stdout.encoding != 'utf-8':
         sys.stdout.reconfigure(encoding='utf-8')
     except Exception:
         pass
+
+BASE_DIR = os.path.dirname(__file__)
+OUTPUT_DIR = os.path.join(BASE_DIR, "output")
+IMAGES_DIR = os.path.join(BASE_DIR, "assets", "images")
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+os.makedirs(IMAGES_DIR, exist_ok=True)
 
 def start_scheduler_thread():
     print("⏰ [Canan Cloud] 7/24 Zamanlayıcı başlatılıyor...")
@@ -39,6 +48,10 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Canan Tuna AI Influencer Cloud Engine", lifespan=lifespan)
 
+# Meta / Instagram ve Facebook doğrudan medya CDN servisi (Catbox/Tmpfiles bağımlılığını ve Cloudflare engellerini yok eder)
+app.mount("/media", StaticFiles(directory=OUTPUT_DIR), name="media")
+app.mount("/images", StaticFiles(directory=IMAGES_DIR), name="images")
+
 @app.get("/")
 @app.get("/health")
 def health():
@@ -46,9 +59,38 @@ def health():
         "status": "online",
         "bot": "Canan Tuna AI Influencer",
         "platforms": ["Instagram", "Facebook", "Telegram"],
-        "schedule": "13:00 (Hikaye) & 20:30 (Reels)",
+        "schedule": "13:00 (Hikaye/Fotoğraf) & 20:30 (Reels)",
         "command": "Telegram'dan /paylas ile anında tetiklenebilir"
     })
+
+@app.get("/api/token-status")
+def token_status():
+    """Facebook & Instagram Meta Token canlı sağlık durumunu raporlar."""
+    token = getattr(config, "FACEBOOK_ACCESS_TOKEN", "")
+    page_id = getattr(config, "FACEBOOK_PAGE_ID", "")
+    ig_id = getattr(config, "INSTAGRAM_ACCOUNT_ID", "")
+
+    status = {"facebook": False, "instagram": False, "page_name": None, "ig_username": None, "error": None}
+    if not token:
+        status["error"] = "Token tanımlı değil"
+        return JSONResponse(status)
+
+    try:
+        r_page = requests.get(f"https://graph.facebook.com/v21.0/{page_id}?fields=id,name&access_token={token}", timeout=8).json()
+        if "error" not in r_page:
+            status["facebook"] = True
+            status["page_name"] = r_page.get("name")
+        else:
+            status["error"] = r_page["error"].get("message")
+
+        r_ig = requests.get(f"https://graph.facebook.com/v21.0/{ig_id}?fields=id,username&access_token={token}", timeout=8).json()
+        if "error" not in r_ig:
+            status["instagram"] = True
+            status["ig_username"] = r_ig.get("username")
+    except Exception as e:
+        status["error"] = str(e)
+
+    return JSONResponse(status)
 
 @app.get("/api/trigger-post")
 def trigger_post():

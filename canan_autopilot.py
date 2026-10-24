@@ -21,6 +21,40 @@ HISTORY_FILE = os.path.join(BASE_DIR, "posted_history.json")
 OUTPUT_DIR = os.path.join(BASE_DIR, "output")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
+def send_telegram_alert(text: str):
+    """Kritik sistem uyarılarını doğrudan Telegram kanalına/yöneticiye iletir."""
+    try:
+        requests.post(
+            f"https://api.telegram.org/bot{config.TELEGRAM_BOT_TOKEN}/sendMessage",
+            data={"chat_id": config.TELEGRAM_CHANNEL, "text": text},
+            timeout=10
+        )
+    except Exception:
+        pass
+
+def check_meta_token_health() -> bool:
+    """Paylaşım öncesi Meta API token'ının aktif olup olmadığını test eder."""
+    token = getattr(config, "FACEBOOK_ACCESS_TOKEN", "")
+    page_id = getattr(config, "FACEBOOK_PAGE_ID", "")
+    if not token or not page_id:
+        return False
+    try:
+        r = requests.get(f"https://graph.facebook.com/v21.0/{page_id}?fields=id,name&access_token={token}", timeout=8).json()
+        if "error" in r:
+            err_msg = r["error"].get("message", "Bilinmeyen hata")
+            print(f"⚠️ [Meta Token Hatası]: {err_msg}")
+            send_telegram_alert(
+                f"🚨 [CANAN TUNA DİKKAT]\n"
+                f"Facebook/Instagram Meta Token oturumu kapanmış!\n"
+                f"Hata: {err_msg}\n"
+                f"Lütfen Meta Developer sayfasından yeni token alıp güncelleyin."
+            )
+            return False
+        return True
+    except Exception as e:
+        print(f"⚠️ Token kontrol istisnası: {e}")
+        return True
+
 def load_history() -> list:
     if os.path.exists(HISTORY_FILE):
         try:
@@ -49,12 +83,10 @@ def pick_next_scenario(force_type: str = None) -> dict:
         save_history([])
         available = list(life_scenarios.SCENARIOS)
 
-    # force_type verilmişse ("video" veya "photo") öncelikle ona uygun senaryoyu seç
     if force_type:
         type_candidates = [s for s in available if s.get("type") == force_type]
         if type_candidates:
             return random.choice(type_candidates)
-        # Eğer available içinde o tipten kalmamışsa tüm listeden o tipe ait olanı al
         all_type_candidates = [s for s in life_scenarios.SCENARIOS if s.get("type") == force_type]
         if all_type_candidates:
             return random.choice(all_type_candidates)
@@ -74,66 +106,114 @@ def pick_next_scenario(force_type: str = None) -> dict:
 def post_to_instagram_reels(video_path: str, caption: str) -> dict:
     """Canan Tuna Instagram hesabına (@canantuna_official) doğrudan Reels yayınlar."""
     ig_id = getattr(config, "INSTAGRAM_ACCOUNT_ID", "17841458805624158")
+    token = getattr(config, "FACEBOOK_ACCESS_TOKEN", "")
+    video_filename = os.path.basename(video_path)
+
+    # 1. Video URL belirleme: Öncelikle Render'ın kendi güvenli HTTPS linki
+    candidate_urls = []
+    base_url = getattr(config, "BASE_URL", "https://cananbot.onrender.com").rstrip("/")
+    candidate_urls.append(f"{base_url}/media/{video_filename}")
+
+    # Fallback CDN'ler
     try:
-        video_url = None
-        # 1. Catbox dene
+        with open(video_path, "rb") as f:
+            r_up = requests.post("https://catbox.moe/user/api.php", data={"reqtype": "fileupload"}, files={"fileToUpload": f}, timeout=40)
+            if r_up.status_code == 200 and r_up.text.strip().startswith("http"):
+                candidate_urls.append(r_up.text.strip())
+    except Exception as e:
+        print(f"Catbox uyarısı: {e}")
+
+    try:
+        with open(video_path, "rb") as f:
+            r_tf = requests.post("https://tmpfiles.org/api/v1/upload", files={"file": f}, timeout=40).json()
+            if r_tf.get("status") == "success":
+                candidate_urls.append(r_tf["data"]["url"].replace("tmpfiles.org/", "tmpfiles.org/dl/"))
+    except Exception as e:
+        print(f"Tmpfiles uyarısı: {e}")
+
+    last_error = None
+    for video_url in candidate_urls:
         try:
-            with open(video_path, "rb") as f:
-                r_up = requests.post("https://catbox.moe/user/api.php", data={"reqtype": "fileupload"}, files={"fileToUpload": f}, timeout=45)
-                if r_up.status_code == 200 and r_up.text.strip().startswith("http"):
-                    video_url = r_up.text.strip()
-        except Exception as e:
-            print(f"Catbox yükleme uyarısı: {e}")
+            print(f"🌐 Instagram Reels Video URL deneniyor: {video_url}")
+            # 1. Reels Container oluştur
+            r_c = requests.post(
+                f"https://graph.facebook.com/v21.0/{ig_id}/media",
+                data={
+                    "media_type": "REELS",
+                    "video_url": video_url,
+                    "caption": caption,
+                    "share_to_feed": "true",
+                    "access_token": token
+                },
+                timeout=30
+            ).json()
 
-        # 2. Tmpfiles fallback
-        if not video_url:
-            with open(video_path, "rb") as f:
-                r_tf = requests.post("https://tmpfiles.org/api/v1/upload", files={"file": f}, timeout=45).json()
-                if r_tf.get("status") == "success":
-                    raw_url = r_tf["data"]["url"]
-                    video_url = raw_url.replace("tmpfiles.org/", "tmpfiles.org/dl/")
+            container_id = r_c.get("id")
+            if not container_id:
+                print(f"❌ Instagram Reels Container Hatası ({video_url}): {r_c}")
+                last_error = r_c
+                continue
 
-        if not video_url:
-            return {"status": "error", "error": "Video public CDN'e yüklenemedi"}
+            # 2. Render / Video işleme bitişini bekle (30 x 5 sn = 150 saniye)
+            is_ready = False
+            for i in range(30):
+                time.sleep(5)
+                st = requests.get(f"https://graph.facebook.com/v21.0/{container_id}?fields=status_code&access_token={token}", timeout=15).json()
+                code = st.get("status_code")
+                print(f"⏳ Instagram Reels İşleme Durumu ({i+1}/30): {code}")
+                if code == "FINISHED":
+                    is_ready = True
+                    break
+                if code == "ERROR":
+                    print(f"❌ Instagram Video Kodlama Hatası: {st}")
+                    last_error = st
+                    break
 
-        print(f"🌐 Video CDN URL: {video_url}")
+            if not is_ready:
+                print("⚠️ Video işleme zaman aşımına uğradı, diğer URL deneniyor...")
+                continue
 
-        # 1. Reels Container oluştur
-        r_c = requests.post(
-            f"https://graph.facebook.com/v21.0/{ig_id}/media",
-            data={"media_type": "REELS", "video_url": video_url, "caption": caption, "access_token": config.FACEBOOK_ACCESS_TOKEN},
-            timeout=25
-        ).json()
-        container_id = r_c.get("id")
-        if not container_id:
-            print(f"❌ Instagram Reels Container Hatası: {r_c}")
-            return {"status": "error", "error": r_c}
+            # 3. Yayınla
+            r_pub = requests.post(
+                f"https://graph.facebook.com/v21.0/{ig_id}/media_publish",
+                data={"creation_id": container_id, "access_token": token},
+                timeout=30
+            ).json()
 
-        # 2. Render bitişini bekle (Instagram video işleme)
-        for i in range(15):
-            time.sleep(5)
-            st = requests.get(f"https://graph.facebook.com/v21.0/{container_id}?fields=status_code&access_token={config.FACEBOOK_ACCESS_TOKEN}").json()
-            code = st.get("status_code")
-            print(f"⏳ Instagram Reels İşleme Durumu ({i+1}/15): {code}")
-            if code == "FINISHED":
-                break
-            if code == "ERROR":
-                return {"status": "error", "error": st}
+            if "id" in r_pub:
+                print(f"🎉 Instagram Reels Başarıyla Yayınlandı! ID: {r_pub['id']}")
+                return {"status": "success", "post_id": r_pub["id"]}
+            else:
+                last_error = r_pub
+        except Exception as ex:
+            print(f"Instagram Reels deneme istisnası: {ex}")
+            last_error = str(ex)
 
-        # 3. Yayınla
-        r_pub = requests.post(
-            f"https://graph.facebook.com/v21.0/{ig_id}/media_publish",
-            data={"creation_id": container_id, "access_token": config.FACEBOOK_ACCESS_TOKEN},
-            timeout=25
-        ).json()
-        if "id" in r_pub:
-            return {"status": "success", "post_id": r_pub["id"]}
-        return {"status": "error", "error": r_pub}
+    return {"status": "error", "error": last_error or "Reels yüklenemedi"}
+
+def post_to_facebook_video(video_path: str, caption: str) -> dict:
+    """Canan Tuna Facebook Sayfasına (Canan tunau) doğrudan Reels/Video yayınlar."""
+    page_id = getattr(config, "FACEBOOK_PAGE_ID", "1355526950985735")
+    token = getattr(config, "FACEBOOK_ACCESS_TOKEN", "")
+    try:
+        with open(video_path, "rb") as vf:
+            r_fb = requests.post(
+                f"https://graph-video.facebook.com/v21.0/{page_id}/videos",
+                files={"source": ("video.mp4", vf, "video/mp4")},
+                data={"description": caption, "access_token": token},
+                timeout=120
+            ).json()
+        if "id" in r_fb:
+            return {"status": "success", "post_id": r_fb["id"]}
+        return {"status": "error", "error": r_fb}
     except Exception as e:
         return {"status": "error", "error": str(e)}
 
 def run_single_autopilot_post(force_type: str = None):
     """Günün saatine ve senaryosuna göre Canan Tuna adına 3 platforma (Instagram, Facebook, Telegram) otonom paylaşım yapar."""
+    # Ön kontrol: Token geçerliliği
+    check_meta_token_health()
+
     scenario = pick_next_scenario(force_type=force_type)
     if not scenario:
         print("🛑 Paylaşılacak senaryo bulunamadı.")
@@ -152,6 +232,8 @@ def run_single_autopilot_post(force_type: str = None):
 
     full_caption = f"{scenario['caption']}\n\n{scenario.get('tags', '')}"
 
+    success_summary = {"telegram": False, "facebook": False, "instagram": False}
+
     if media_type == "video":
         out_video = os.path.join(OUTPUT_DIR, f"auto_{sc_id}.mp4")
         print(f"🎬 Senaryo için estetik lofi müzikli Reels videosu üretiliyor: {sc_id}...")
@@ -159,31 +241,54 @@ def run_single_autopilot_post(force_type: str = None):
 
         # 1. Telegram
         print("📲 Telegram'a Video Gönderiliyor...")
-        r_tg = requests.post(
-            f"https://api.telegram.org/bot{config.TELEGRAM_BOT_TOKEN}/sendVideo",
-            files={"video": open(out_video, "rb")},
-            data={"chat_id": config.TELEGRAM_CHANNEL, "caption": full_caption},
-            timeout=60
-        ).json()
-        print("📲 Telegram Sonucu:", "✅ BAŞARILI" if r_tg.get("ok") else r_tg)
+        try:
+            with open(out_video, "rb") as vf:
+                r_tg = requests.post(
+                    f"https://api.telegram.org/bot{config.TELEGRAM_BOT_TOKEN}/sendVideo",
+                    files={"video": vf},
+                    data={"chat_id": config.TELEGRAM_CHANNEL, "caption": full_caption},
+                    timeout=60
+                ).json()
+            if r_tg.get("ok"):
+                success_summary["telegram"] = True
+                print("📲 Telegram Sonucu: ✅ BAŞARILI")
+            else:
+                print("📲 Telegram Sonucu: ❌", r_tg)
+        except Exception as e:
+            print("📲 Telegram Hatası:", e)
 
         # 2. Facebook
         print("📘 Facebook Sayfasına Reels/Video Gönderiliyor (Canan tunau)...")
-        r_fb = requests.post(
-            f"https://graph-video.facebook.com/v21.0/{config.FACEBOOK_PAGE_ID}/videos",
-            files={"source": open(out_video, "rb")},
-            data={"description": full_caption, "access_token": config.FACEBOOK_ACCESS_TOKEN},
-            timeout=90
-        ).json()
-        print("📘 Facebook Sonucu:", "✅ BAŞARILI" if "id" in r_fb else r_fb)
+        r_fb = post_to_facebook_video(out_video, full_caption)
+        if r_fb.get("status") == "success":
+            success_summary["facebook"] = True
+            print(f"📘 Facebook Sonucu: ✅ BAŞARILI (ID: {r_fb.get('post_id')})")
+        else:
+            print(f"📘 Facebook Sonucu: ❌ {r_fb}")
+            send_telegram_alert(f"⚠️ [Canan Tuna] Facebook Reels Yüklenemedi!\nHata: {r_fb.get('error')}")
 
         # 3. Instagram Reels
         print("📸 Instagram'a Doğrudan Reels Gönderiliyor (@canantuna_official)...")
         r_ig = post_to_instagram_reels(out_video, full_caption)
-        print("📸 Instagram Sonucu:", "✅ BAŞARILI" if r_ig.get("status") == "success" else r_ig)
+        if r_ig.get("status") == "success":
+            success_summary["instagram"] = True
+            print(f"📸 Instagram Sonucu: ✅ BAŞARILI (ID: {r_ig.get('post_id')})")
+        else:
+            print(f"📸 Instagram Sonucu: ❌ {r_ig}")
+            send_telegram_alert(f"⚠️ [Canan Tuna] Instagram Reels Yüklenemedi!\nHata: {r_ig.get('error')}")
     else:
         print("📸 Fotoğraf Paylaşımı Yapılıyor (Instagram + Facebook + Telegram)...")
-        canan_engine.publish_lifestyle_update(chosen_img, full_caption)
+        res = canan_engine.publish_lifestyle_update(chosen_img, full_caption)
+        if res.get("telegram", {}).get("status") == "success":
+            success_summary["telegram"] = True
+        if res.get("facebook", {}).get("status") == "success":
+            success_summary["facebook"] = True
+        else:
+            send_telegram_alert(f"⚠️ [Canan Tuna] Facebook Fotoğraf Yüklenemedi!\nHata: {res.get('facebook')}")
+        if res.get("instagram", {}).get("status") == "success":
+            success_summary["instagram"] = True
+        else:
+            send_telegram_alert(f"⚠️ [Canan Tuna] Instagram Fotoğraf Yüklenemedi!\nHata: {res.get('instagram')}")
 
     # Geçmişe kaydet
     history = load_history()
@@ -193,10 +298,11 @@ def run_single_autopilot_post(force_type: str = None):
         "image_path": chosen_img,
         "image_name": os.path.basename(chosen_img),
         "timestamp": datetime.now().isoformat(),
-        "caption": full_caption
+        "caption": full_caption,
+        "platforms": success_summary
     })
     save_history(history)
-    print(f"✅ [{sc_id}] senaryosu başarıyla tamamlandı ve geçmişe işlendi!")
+    print(f"✅ [{sc_id}] senaryosu işlendi! Özet: {success_summary}")
     return True
 
 if __name__ == "__main__":

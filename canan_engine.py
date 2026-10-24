@@ -49,33 +49,51 @@ def post_to_facebook(image_path: str, caption: str) -> dict:
 def post_to_instagram_photo(image_path: str, caption: str) -> dict:
     """Canan Tuna Instagram hesabına (@canantuna_official) doğrudan fotoğraf yayınlar."""
     ig_id = getattr(config, "INSTAGRAM_ACCOUNT_ID", "17841458805624158")
+    token = getattr(config, "FACEBOOK_ACCESS_TOKEN", "")
+    img_name = os.path.basename(image_path)
+    base_url = getattr(config, "BASE_URL", "https://cananbot.onrender.com").rstrip("/")
+
+    candidate_urls = [
+        f"{base_url}/images/{img_name}",
+        f"{base_url}/media/{img_name}"
+    ]
+
     try:
         with open(image_path, "rb") as f:
             r_up = requests.post("https://catbox.moe/user/api.php", data={"reqtype": "fileupload"}, files={"fileToUpload": f}, timeout=25)
-            img_url = r_up.text.strip()
-
-        # 1. Container oluştur
-        r_c = requests.post(
-            f"https://graph.facebook.com/v21.0/{ig_id}/media",
-            data={"image_url": img_url, "caption": caption, "access_token": config.FACEBOOK_ACCESS_TOKEN},
-            timeout=25
-        ).json()
-        container_id = r_c.get("id")
-        if not container_id:
-            return {"status": "error", "error": r_c}
-
-        time.sleep(3)
-        # 2. Yayınla
-        r_pub = requests.post(
-            f"https://graph.facebook.com/v21.0/{ig_id}/media_publish",
-            data={"creation_id": container_id, "access_token": config.FACEBOOK_ACCESS_TOKEN},
-            timeout=25
-        ).json()
-        if "id" in r_pub:
-            return {"status": "success", "post_id": r_pub["id"]}
-        return {"status": "error", "error": r_pub}
+            if r_up.status_code == 200 and r_up.text.strip().startswith("http"):
+                candidate_urls.append(r_up.text.strip())
     except Exception as e:
-        return {"status": "error", "error": str(e)}
+        print(f"Catbox uyarısı: {e}")
+
+    last_error = None
+    for img_url in candidate_urls:
+        try:
+            # 1. Container oluştur
+            r_c = requests.post(
+                f"https://graph.facebook.com/v21.0/{ig_id}/media",
+                data={"image_url": img_url, "caption": caption, "access_token": token},
+                timeout=25
+            ).json()
+            container_id = r_c.get("id")
+            if not container_id:
+                last_error = r_c
+                continue
+
+            time.sleep(3)
+            # 2. Yayınla
+            r_pub = requests.post(
+                f"https://graph.facebook.com/v21.0/{ig_id}/media_publish",
+                data={"creation_id": container_id, "access_token": token},
+                timeout=25
+            ).json()
+            if "id" in r_pub:
+                return {"status": "success", "post_id": r_pub["id"]}
+            last_error = r_pub
+        except Exception as e:
+            last_error = str(e)
+
+    return {"status": "error", "error": last_error or "Fotoğraf yüklenemedi"}
 
 def publish_lifestyle_update(image_path: str, caption: str) -> dict:
     """Hem Instagram, hem Facebook hem Telegram kanalına eşzamanlı yayınlar."""
