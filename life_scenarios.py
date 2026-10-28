@@ -34,10 +34,10 @@ SCENARIOS = [
     {
         "id": "sokak_alacati_sari_elbise",
         "category": "tatil",
-        "type": "photo",
+        "type": "video",
         "image_path": os.path.join(IMAGES_DIR, "canan_alacati_yellow_dress.jpg"),
-        "caption": "Alaçatı sokakları, pembe begonviller ve güneş sarısı bir yaz günü... ☀️🌸 Sarı renk bana inanılmaz pozitif enerji veriyor! Sizin en sevdiğiniz yaz rengi hangisi? Yorumlarda buluşalım 💛👇",
-        "tags": "#alaçatı #çeşme #sarıelbise #yazmodası #begonvil #tatil #canantuna #enerji"
+        "caption": "Yazdan kalan sarı sıcak anlar... 🌸☀️ Begonviller, Alaçatı sokakları ve güneş... Soğuk kış günlerinde içinizi ısıtacak bir nostalji olsun. En çok özlediğiniz tatil yeri neresi? 💛👇",
+        "tags": "#alaçatı #yazadönüş #tb #çeşme #sarıkombin #yazmodası #canantuna #enerji #reels"
     },
 
     # 🌟 8. YENİ: Pastel Lila Dikişsiz Spor Takımı - Sabah Park Egzersizi (Fitness)
@@ -75,8 +75,8 @@ SCENARIOS = [
         "category": "tatil",
         "type": "video",
         "image_path": os.path.join(IMAGES_DIR, "canan_yacht_summer.jpg"),
-        "caption": "Rüzgar saçımda, masmavi deniz önümde... 🛥️🌊 Bazen her şeyi geride bırakıp denize açılmak en güzel terapi! Yaz tatilini en çok nerede geçirmeyi seviyorsunuz? Yorumları görelim ☀️⚓👇",
-        "tags": "#yatturu #deniz #tatil #yaz #summervibes #canantuna #reels #mavi"
+        "caption": "Yazdan kalanlar... 🌊🛥️ Havalar iyice soğudu ama aklım hala Ege\'nin o masmavi sularında ve rüzgarın kokusunda... 💙 Siz de yazı şimdiden çok özleyenlerden misiniz? ✨ Yorumlarda buluşalım 👇",
+        "tags": "#yazadönüş #throwback #tb #yatturu #deniz #tatil #yazözlemi #canantuna #reels #summervibes"
     },
 
     # 🌟 4. YENİ: Boğaz Manzaralı Çatı Terası Golden Hour (Müzikli Reels Videosu)
@@ -92,10 +92,10 @@ SCENARIOS = [
     {
         "id": "tatil_bodrum_beach",
         "category": "tatil",
-        "type": "photo",
+        "type": "video",
         "image_path": os.path.join(IMAGES_DIR, "canan_tuna_bodrum_beach_1792678870147.jpg"),
-        "caption": "Deniz, güneş ve biraz kafa dinlemece... ☀️🌊 Bodrum bana her zaman çok iyi geliyor. Siz tatilde deniz insanı mısınız havuz mu? 🏖️👇",
-        "tags": "#bodrum #tatil #beachvibes #güneş #yaz #canantuna #lifestyle"
+        "caption": "Yazdan kalanlar serisi... ☀️🌊 Dışarıda buz gibi kış havası varken bu sıcak günleri hatırlamak ruhuma iyi geldi. Deniz mi havuz mu deseler siz hangisini seçerdiniz? 🌊👇",
+        "tags": "#yazadönüş #throwback #tb #bodrum #tatil #beachvibes #güneş #yaz #canantuna #reels"
     },
 
     # 2. Yağmurlu Karaköy Akşamı (Trenchcoat & Şeffaf Şemsiye - Sokak Fotoğrafı)
@@ -244,8 +244,8 @@ SCENARIOS = [
         "category": "tatil",
         "type": "video",
         "image_path": os.path.join(IMAGES_DIR, "canan_infinity_pool.jpg"),
-        "caption": "Gün batımında sonsuzluğa karşı durup derin bir nefes almak... 🌅🌊 Hayat koşturmacasında durup anın tadını çıkarmayı unutmayın. Huzur dolu bir akşam olsun hepimize 🧡✨",
-        "tags": "#sunset #infinitypool #tatil #manzara #huzur #canantuna #travelgram #goldenhour"
+        "caption": "Yazdan kalan sıcacık anlar... 🌅🌊 Kış geldi ama o gün batımları hala içimi ısıtıyor. Bir kahve alıp güneşi böyle batırmayı özleyenler kimler? ☕💛",
+        "tags": "#tb #yazadönüş #sunset #infinitypool #tatil #yazözlemi #canantuna #travelgram #goldenhour #reels"
     },
 
     # 17. Çağdaş Sanat Galerisi (Bej Blazer & Modern Sanat - Kültür Sokak Fotoğrafı)

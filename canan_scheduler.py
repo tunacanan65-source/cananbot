@@ -13,20 +13,23 @@ if sys.stdout.encoding != 'utf-8':
 # Türkiye Saati (TSİ / UTC+3)
 TR_TZ = timezone(timedelta(hours=3))
 
-# Günlük 2 Paylaşım: 1 Hikaye (Öğlen) + 1 Reels Videosu (Akşam)
-# 13:00 -> Fotoğraf / Hikaye (Günlük Yaşam / Kombin / Kafe)
-# 20:30 -> Reels Videosu (Sesli Dikey Video / Gece / Spor / Motivasyon)
+# Günlük 2 Reels Videosu (Öğlen + Akşam) + Haftada 1 Vitrin Fotoğrafı (Pazar)
+# 13:00 -> Öğlen Reels Videosu (Tatil / Yaşam / Estetik Dikey Video)
+# 20:30 -> Akşam Reels Videosu (Gece / Spor / Lifestyle Dikey Video)
+# Pazar 16:30 -> Haftalık Vitrin Fotoğrafı (Estetik Ana Akış Gönderisi)
 SCHEDULE_SLOTS = [
-    {"hour": 13, "minute": 0, "label": "Öğlen Hikayesi", "type": "photo"},
-    {"hour": 20, "minute": 30, "label": "Akşam Reels Videosu", "type": "video"}
+    {"hour": 13, "minute": 0, "label": "Öğlen Reels Videosu", "type": "video"},
+    {"hour": 20, "minute": 30, "label": "Akşam Reels Videosu", "type": "video"},
+    {"hour": 16, "minute": 30, "label": "Pazar Haftalık Vitrin Fotoğrafı", "type": "photo", "day_of_week": 6}
 ]
 
 def run_scheduler():
     print("="*60)
-    print("⏰ Canan Tuna 7/24 Otonom Zamanlayıcı Devrede!")
+    print("🚀 Canan Tuna 7/24 Otonom Zamanlayıcı Devrede!")
     print("📅 Günlük Plan (Türkiye Saati - TSİ):")
-    print("   - 13:00: Öğlen Hikayesi (Fotoğraf)")
-    print("   - 20:30: Akşam Reels Videosu (Sesli Video)")
+    print("   - 13:00: Öğlen Reels Videosu (Dikey Video)")
+    print("   - 20:30: Akşam Reels Videosu (Dikey Video)")
+    print("   - Pazar 16:30: Haftalık Vitrin Fotoğrafı")
     print("="*60)
 
     last_posted_date_slot = {}
@@ -38,14 +41,13 @@ def run_scheduler():
             today_str = now.strftime("%Y-%m-%d")
 
             for slot in SCHEDULE_SLOTS:
+                # Belirli bir güne özgüyse kontrol et (Örn: Pazar vitrin fotoğrafı)
+                if "day_of_week" in slot and now.weekday() != slot["day_of_week"]:
+                    continue
+
                 slot_key = f"{today_str}_{slot['hour']}_{slot['minute']}"
 
-                # Eğer o vaktin saati geldiyse ve bugün bu slot henüz atılmadıysa
-                # (1 dakikalık dar aralık yerine o saat içinde kaçırılmadan tetikleme kalkanı)
-                is_slot_time = (now.hour == slot["hour"] and now.minute >= slot["minute"]) or (now.hour > slot["hour"])
-                
-                # Ancak bir sonraki slotun vaktine geçildiyse eski slotu tetikleme
-                # (Örn: Gece yarısı açılınca öğlen 13:00'ü gece 01:00'de tetiklemesin)
+                # Slot saati kontrolü
                 if now.hour == slot["hour"] and now.minute >= slot["minute"]:
                     if slot_key not in last_posted_date_slot:
                         print(f"\n🚀 [VAKİT GELDİ - TSİ {now.strftime('%H:%M')}] {slot['label']} ateşleniyor... (Tip: {slot['type']})")
