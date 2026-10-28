@@ -10,6 +10,16 @@ BASE_DIR = os.path.dirname(__file__)
 IMAGES_DIR = os.path.join(BASE_DIR, "assets", "images")
 
 SCENARIOS = [
+    # 🏺 YENİ MASTER REELS (+ Seviye): Sanat & Seramik Atölyesi
+    {
+        "id": "hobi_seramik_atolyesi_heykel",
+        "category": "sanat",
+        "type": "video",
+        "season": "all",
+        "image_path": os.path.join(IMAGES_DIR, "canan_ceramics_studio.jpg"),
+        "caption": "Ellerim çamurlu ama ruhum kuş gibi hafif... 🏺✨ Bugün kendime harika bir seramik atölyesi molası verdim. Kendi ellerinle çamura şekil vermek, sıfırdan bir şey yaratmak o kadar dinlendirici bir terapi ki! Siz en son kendiniz için ne zaman yeni bir şey denediniz? 🤍🌿",
+        "tags": "#seramik #çömlek #atölye #hobi #sanat #ceramics #mindfulness #lifestyle #canantuna #reels"
+    },
     # ❄️ YENİ KIŞ REELS: Uludağ Dağ Evi Terası & Sıcak Çikolata
     {
         "id": "kis_uludag_dag_evi_kar",
