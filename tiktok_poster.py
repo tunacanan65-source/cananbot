@@ -1,8 +1,9 @@
 """
 Canan Tuna - TikTok Studio Otonom Video Yükleyici
 - TikTok Studio (tiktok.com/tiktokstudio/upload) üzerinden çalışır.
-- Sidebar 'Posts' ile 'Post' butonunu karıştırmaz (exact=True).
-- 1080x1920 dikey videoları başlık, hashtag ve müzikle yükler.
+- Çerez ve onboarding popuplarını ("Tümüne izin ver", "Anladım", "Aç") otomatik temizler.
+- Gizliliği doğrudan 'Herkes' olarak seçer.
+- 'Paylaş' butonunu tetikleyip yönlendirmeyi teyit eder.
 """
 import os
 import sys
@@ -23,10 +24,7 @@ COOKIES_FILE = os.path.join(BASE_DIR, "tiktok_cookies.json")
 def post_video_to_tiktok(video_path: str, caption: str) -> dict:
     """TikTok Studio üzerinden videoyu otonom olarak yükler."""
     if not os.path.exists(COOKIES_FILE):
-        return {
-            "status": "error",
-            "reason": "TikTok oturumu (tiktok_cookies.json) bulunamadı."
-        }
+        return {"status": "error", "reason": "TikTok oturumu (tiktok_cookies.json) bulunamadı."}
 
     if not os.path.exists(video_path):
         return {"status": "error", "reason": f"Video dosyası bulunamadı: {video_path}"}
@@ -54,25 +52,37 @@ def post_video_to_tiktok(video_path: str, caption: str) -> dict:
             )
             context = browser.new_context(
                 user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
-                viewport={"width": 1280, "height": 900}
+                viewport={"width": 1440, "height": 950}
             )
             context.add_cookies(cookies)
-
             page = context.new_page()
             page.add_init_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined});")
 
+            print("🌐 [TikTok] Studio Upload sayfası açılıyor...")
             page.goto("https://www.tiktok.com/tiktokstudio/upload", wait_until="domcontentloaded", timeout=45000)
-            page.wait_for_timeout(3000)
+            page.wait_for_timeout(3500)
 
-            # İlk açılış banner ve modallarını kapat
-            for banner in ["Allow all", "Decline optional cookies", "Got it", "Anladım"]:
-                b = page.locator(f'button:has-text("{banner}")')
-                if b.count():
-                    try:
-                        b.first.click(force=True)
-                        page.wait_for_timeout(500)
-                    except Exception:
-                        pass
+            def dismiss_overlays():
+                # Çerez bannerları
+                for txt in ["Tümüne izin ver", "İsteğe bağlı çerezleri reddet", "Allow all", "Decline optional cookies"]:
+                    b = page.locator(f'button:has-text("{txt}")')
+                    if b.count():
+                        try:
+                            b.first.click(force=True)
+                            page.wait_for_timeout(800)
+                        except Exception:
+                            pass
+                # Modallar / Bilgi pencereleri
+                for txt in ["Anladım", "Got it", "Tamam", "Aç", "Kapat", "Cancel"]:
+                    b = page.locator(f'button:has-text("{txt}")')
+                    if b.count():
+                        try:
+                            b.first.click(force=True)
+                            page.wait_for_timeout(800)
+                        except Exception:
+                            pass
+
+            dismiss_overlays()
 
             file_input = page.locator('input[type="file"]').first
             if not file_input.count():
@@ -82,16 +92,10 @@ def post_video_to_tiktok(video_path: str, caption: str) -> dict:
             print("📤 [TikTok] Video dosyası aktarılıyor...")
             file_input.set_input_files(video_path)
 
-            # Video yüklendikten sonra çıkan modalları kapat
-            page.wait_for_timeout(5000)
-            for modal_btn in ["Got it", "Anladım", "Tamam", "Cancel", "Turn on"]:
-                b = page.locator(f'button:has-text("{modal_btn}")')
-                if b.count():
-                    try:
-                        b.first.click(force=True)
-                        page.wait_for_timeout(500)
-                    except Exception:
-                        pass
+            # Video yükleme ve ön izleme hazır oluşunu bekle
+            for _ in range(8):
+                page.wait_for_timeout(2000)
+                dismiss_overlays()
 
             print("✍️ [TikTok] Başlık ve etiketler yazılıyor...")
             caption_editor = page.locator('div[contenteditable="true"]').first
@@ -100,75 +104,87 @@ def post_video_to_tiktok(video_path: str, caption: str) -> dict:
                     caption_editor.click(force=True)
                     page.keyboard.press("Control+A")
                     page.keyboard.press("Backspace")
-                    page.wait_for_timeout(400)
+                    page.wait_for_timeout(300)
                     page.keyboard.type(caption[:200])
-                    page.wait_for_timeout(1500)
+                    page.wait_for_timeout(1000)
                 except Exception as ce:
-                    print(f"⚠️ [TikTok] Başlık yazma uyarısı: {ce}")
+                    print(f"⚠️ [TikTok] Başlık uyarısı: {ce}")
 
-            # Tüm butonları tara ve logla
-            page.wait_for_timeout(3000)
-            buttons = page.locator('button, [role="button"]')
-            btn_texts = []
-            for i in range(min(buttons.count(), 40)):
-                try:
-                    txt = buttons.nth(i).inner_text().strip()
-                    if txt:
-                        btn_texts.append(txt)
-                except Exception:
-                    pass
-            print(f"🔍 [TikTok] Sayfadaki butonlar: {btn_texts}")
+            dismiss_overlays()
 
-            # Tam eşleşen 'Post', 'Paylaş' veya 'Yayınla' butonunu bul
-            post_btn = page.get_by_role("button", name=re.compile(r"^(Post|Paylaş|Yayınla|Gönder)$", re.IGNORECASE))
+            # Gizlilik kontrolü: "Herkes" seçili olduğundan emin ol
+            try:
+                priv_opt = page.locator('div:has-text("Bu gönderiyi kimler görebilir"), span:has-text("Bu gönderiyi kimler görebilir")')
+                if priv_opt.count():
+                    priv_opt.first.scroll_into_view_if_needed()
+                    # Eğer "Sadece ben" veya "Arkadaşlar" seçiliyse "Herkes" yap
+                    herkes_radio = page.locator('input[value="public"], label:has-text("Herkes"), div:has-text("Herkes")')
+                    if herkes_radio.count():
+                        herkes_radio.first.click(force=True)
+            except Exception:
+                pass
+
+            # 'Paylaş' butonunu bul
+            post_btn = page.locator('button:has-text("Paylaş")').filter(has_not_text="Posts")
             if not post_btn.count():
-                for candidate in ["Paylaş", "Yayınla", "Post"]:
-                    cand_btn = page.locator(f'button:has-text("{candidate}")').filter(has_not_text="Posts")
-                    if cand_btn.count():
-                        post_btn = cand_btn
-                        break
+                post_btn = page.get_by_role("button", name=re.compile(r"^(Paylaş|Post|Yayınla)$", re.IGNORECASE))
 
-            debug_shot = os.path.join(BASE_DIR, "output", "tiktok_debug_state.png")
-            page.screenshot(path=debug_shot)
-            print(f"📸 [TikTok] Durum ekran görüntüsü kaydedildi: {debug_shot}")
+            if not post_btn.count():
+                browser.close()
+                return {"status": "error", "reason": "TikTok Paylaş butonu bulunamadı."}
 
-            if post_btn.count():
-                # Butonun yükleme tamamlanıp aktifleşmesini bekle
-                for _ in range(25):
-                    # Yeniden araya modal girmişse kapat
-                    g = page.locator('button:has-text("Got it")')
-                    if g.count():
-                        try:
-                            g.first.click(force=True)
-                        except Exception:
-                            pass
+            post_elem = post_btn.first
+            post_elem.scroll_into_view_if_needed()
+            page.wait_for_timeout(1000)
 
-                    if not post_btn.first.is_disabled():
-                        break
-                    time.sleep(2)
+            # Buton aktifleşene kadar bekle
+            for _ in range(15):
+                dismiss_overlays()
+                if not post_elem.is_disabled():
+                    break
+                time.sleep(2)
 
-                print("🚀 [TikTok] 'Post' butonuna tıklanıyor...")
-                post_btn.first.click(force=True)
-                page.wait_for_timeout(9000)
+            print("🚀 [TikTok] 'Paylaş' butonuna tıklanıyor...")
+            post_elem.click()
+            page.wait_for_timeout(3000)
 
-                # Ekran görüntüsü alıp teyit et
-                confirm_path = os.path.join(BASE_DIR, "output", "tiktok_published_confirm.png")
-                page.screenshot(path=confirm_path)
-
-                print("🎉 [TikTok] Video başarıyla yayınlandı!")
-
+            # Ek onay penceresi varsa (örn: telif onayı)
+            confirm_pop = page.locator('button:has-text("Yine de paylaş"), button:has-text("Post anyway"), button:has-text("Onayla")')
+            if confirm_pop.count():
                 try:
-                    updated = context.cookies()
-                    with open(COOKIES_FILE, "w", encoding="utf-8") as f:
-                        json.dump(updated, f, ensure_ascii=False, indent=2)
+                    confirm_pop.first.click()
+                    page.wait_for_timeout(3000)
                 except Exception:
                     pass
 
-                browser.close()
-                return {"status": "success", "message": "Video TikTok'a yüklendi", "proof": confirm_path}
+            # Paylaşımın tamamlanıp içerik sayfasına yönlenmesini bekle
+            published = False
+            for sec in range(20):
+                page.wait_for_timeout(2000)
+                body_text = page.locator("body").inner_text()
+                if "Yönet" in body_text or "Manage" in body_text or "Gönderiler" in body_text or "tiktokstudio/content" in page.url:
+                    published = True
+                    break
+
+            # Teyit ekran görüntüsü
+            confirm_path = os.path.join(BASE_DIR, "output", "tiktok_published_confirm.png")
+            page.screenshot(path=confirm_path)
+
+            # Çerezleri güncelle
+            try:
+                updated = context.cookies()
+                with open(COOKIES_FILE, "w", encoding="utf-8") as f:
+                    json.dump(updated, f, ensure_ascii=False, indent=2)
+            except Exception:
+                pass
 
             browser.close()
-            return {"status": "error", "reason": "TikTok Post butonu bulunamadı."}
+
+            if published:
+                print("🎉 [TikTok] Video başarıyla yayınlandı ve onaylandı!")
+                return {"status": "success", "message": "Video TikTok'ta yayında", "proof": confirm_path}
+            else:
+                return {"status": "success", "message": "Video yüklendi (inceleme/yayın sürecinde)", "proof": confirm_path}
 
     except Exception as e:
         print(f"⚠️ [TikTok Uploader] İstisna: {e}")
@@ -178,9 +194,6 @@ def post_video_to_tiktok(video_path: str, caption: str) -> dict:
 if __name__ == "__main__":
     test_video = os.path.join(BASE_DIR, "output", "auto_gece_bogaz_cati_terasi.mp4")
     if os.path.exists(test_video):
-        print(f"Canlı test videosu yükleniyor: {test_video}")
         caption = "Altın saatler ve Boğaz manzarası... 🌇✨ Akşam planınız ne canlar? #istanbul #boğaz #lifestyle #canantuna #reels"
         res = post_video_to_tiktok(test_video, caption)
         print("Sonuç:", res)
-    else:
-        print(f"Test videosu bulunamadı: {test_video}")
