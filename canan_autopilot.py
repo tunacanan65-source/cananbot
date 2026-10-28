@@ -69,39 +69,43 @@ def save_history(history: list):
         json.dump(history, f, ensure_ascii=False, indent=2)
 
 def pick_next_scenario(force_type: str = None) -> dict:
-    history = load_history()
-    used_ids = {h.get("scenario_id") for h in history}
-    used_images = {os.path.basename(h.get("image_path", "")) for h in history if h.get("image_path")}
+    """
+    Yılın günü ve saatine göre deterministik olarak senaryo seçer.
+    Render sunucusu kapansa veya hafızası silinse bile matematiksel olarak
+    asla dün paylaştığı videoyu bugün tekrar paylaşmaz!
+    """
+    now = datetime.now()
+    day_of_year = now.timetuple().tm_yday
+    hour = now.hour
+    slot_idx = 0 if hour < 16 else 1
 
-    available = [
-        s for s in life_scenarios.SCENARIOS
-        if s["id"] not in used_ids and os.path.basename(s.get("image_path", "")) not in used_images
-    ]
-    if not available:
-        print("⚠️ [BİLGİ] Tüm senaryolar paylaşıldı. Döngü devamı için geçmiş sıfırlanıyor...")
-        history = []
-        save_history([])
-        available = list(life_scenarios.SCENARIOS)
+    all_scenarios = list(life_scenarios.SCENARIOS)
+    if not all_scenarios:
+        return None
 
-    if force_type:
-        type_candidates = [s for s in available if s.get("type") == force_type]
-        if type_candidates:
-            return random.choice(type_candidates)
-        all_type_candidates = [s for s in life_scenarios.SCENARIOS if s.get("type") == force_type]
-        if all_type_candidates:
-            return random.choice(all_type_candidates)
-
-    hour = datetime.now().hour
-    if 7 <= hour < 12:
-        preferred = [s for s in available if s.get("category") in ("ev", "spor")]
-    elif 12 <= hour < 17:
-        preferred = [s for s in available if s.get("category") in ("sokak", "tatil")]
-    elif 17 <= hour < 21:
-        preferred = [s for s in available if s.get("category") in ("spor", "sokak")]
+    # Eğer video isteniyorsa video olanları veya hepsini kapsa
+    if force_type == "video":
+        candidates = [s for s in all_scenarios if s.get("type") == "video"]
+        if not candidates:
+            candidates = all_scenarios
+    elif force_type == "photo":
+        candidates = [s for s in all_scenarios if s.get("type") == "photo"]
+        if not candidates:
+            candidates = all_scenarios
     else:
-        preferred = [s for s in available if s.get("category") in ("gece", "ev")]
+        candidates = all_scenarios
 
-    return random.choice(preferred if preferred else available)
+    # Deterministik indeks hesabı: Her güne ve her slota benzersiz bir senaryo
+    chosen_index = (day_of_year * 2 + slot_idx) % len(candidates)
+    chosen = dict(candidates[chosen_index])
+
+    # ❄️ Mevsimsel Zeka: Sonbahar/Kış aylarında yaz görsellerine otomatik "Yazdan kalanlar" kancası
+    is_winter = now.month in (10, 11, 12, 1, 2, 3)
+    is_summer_content = chosen.get("category") == "tatil" or any(k in chosen.get("id", "") for k in ["yat", "beach", "havuz", "deniz"])
+    if is_winter and is_summer_content and not chosen["caption"].startswith("Yazdan kalanlar"):
+        chosen["caption"] = "Yazdan kalanlar... 🌊☀️ Kış geldi ama aklım hala o sıcak günlerde, denizin kokusunda... 💙 Siz de yazı şimdiden özleyenlerden misiniz? ✨\n\n" + chosen["caption"]
+
+    return chosen
 
 def post_to_instagram_reels(video_path: str, caption: str) -> dict:
     """Canan Tuna Instagram hesabına (@canantuna_official) doğrudan Reels yayınlar."""
@@ -331,6 +335,20 @@ def run_single_autopilot_post(force_type: str = None):
         else:
             print(f"📸 Instagram Sonucu: ❌ {r_ig}")
             send_telegram_alert(f"⚠️ [Canan Tuna] Instagram Reels Yüklenemedi!\nHata: {r_ig.get('error')}")
+    
+        # 4. TikTok Reels / Video
+        print("🎵 TikTok'a Reels/Video Yükleniyor...")
+        try:
+            import tiktok_poster
+            r_tt = tiktok_poster.post_video_to_tiktok(out_video, full_caption)
+            if r_tt.get("status") == "success":
+                success_summary["tiktok"] = True
+                print("🎵 TikTok Sonucu: ✅ BAŞARILI")
+            else:
+                print(f"🎵 TikTok Sonucu: ⚠️ {r_tt.get('reason')}")
+        except Exception as e:
+            print(f"⚠️ TikTok İstisnası: {e}")
+
     else:
         print("📸 Fotoğraf Paylaşımı Yapılıyor (Instagram + Facebook + Telegram)...")
         res = canan_engine.publish_lifestyle_update(chosen_img, full_caption)

@@ -10,6 +10,28 @@ BASE_DIR = os.path.dirname(__file__)
 IMAGES_DIR = os.path.join(BASE_DIR, "assets", "images")
 
 SCENARIOS = [
+    # ❄️ YENİ KIŞ REELS: Uludağ Dağ Evi Terası & Sıcak Çikolata
+    {
+        "id": "kis_uludag_dag_evi_kar",
+        "category": "tatil",
+        "type": "video",
+        "season": "winter",
+        "image_path": os.path.join(IMAGES_DIR, "canan_uludag_winter.jpg"),
+        "caption": "Uludağ'da ilk kar keyfi! ❄️☕ Beyazlar içinde sıcacık bir fincan sıcak çikolata gibisi yok... Dışarısı buz gibi ama ruhuma öyle iyi geldi ki anlatamam. Kış mevsimini ve kar tatilini sevenler kalpleri bıraksın! 🤍✨",
+        "tags": "#uludağ #kartatili #kar #kışmodası #wintervibes #cozy #canantuna #reels #huzur"
+    },
+
+    # 🍂 YENİ SONBAHAR REELS: Nişantaşı Sokak Modası & Sıcak Kahve
+    {
+        "id": "sonbahar_nisantasi_kahve_yuruyusu",
+        "category": "sokak",
+        "type": "video",
+        "season": "autumn",
+        "image_path": os.path.join(IMAGES_DIR, "canan_autumn_nisantasi.jpg"),
+        "caption": "Sonbahar yaprakları, sıcak bir kahve ve Nişantaşı sokakları... 🍂☕ Camel trençkot sezonunu resmen açtım! Havalar hafif serinleyince sokak yürüyüşleri bana inanılmaz ilham veriyor. Sizin en sevdiğiniz sonbahar kombini ne? 🤎👇",
+        "tags": "#nişantaşı #sonbahar #trençkot #sokakstili #kahvekeyfi #streetfashion #canantuna #reels #autumnvibes"
+    },
+
     # 🌟 5. YENİ: Ateş Kırmızısı Saten Abiye - İtalyan Restoranı (Gece Daveti)
     {
         "id": "gece_kirmizi_italyan_restoran",
