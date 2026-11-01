@@ -288,11 +288,140 @@ SCENARIOS = [
         "image_path": os.path.join(IMAGES_DIR, "canan_art_gallery.jpg"),
         "caption": "Sanatın içinde kaybolduğum, renklerin hikayesini dinlediğim bir gün... 🎨🖼️ Modern sanat bana her zaman yeni bakış açıları kazandırıyor. Galerileri gezmeyi sevenler burda mı? 🤍✨",
         "tags": "#artgallery #sanat #istanbul #modernart #kultur #canantuna #streetstyle #ootd"
+    },
+# --- 🌟 YENİ 16 ELİT YAŞAM & REELS SENARYOSU (TOPLAM 44 SENARYO) ---
+    {
+        "id": "hobi_somine_dag_evi",
+        "category": "ev",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_fireplace_chalet.jpg"),
+        "caption": "Dışarıda lapa lapa kar, içeride çıtırdayan şömine ateşi... ❄️🔥 Kışın en sevdiğim yanı bu sıcak sığınaklar. Bir fincan sıcak kahve ve huzur... Siz kış insanı mısınız yoksa yaz aşığı mı? Yorumlarda buluşalım! ☕✨",
+        "tags": "#kış #şömine #dağevi #huzur #cozyvibes #canantuna #wintervibes #reels"
+    },
+    {
+        "id": "sokak_bebek_sonbahar_yuruyusu",
+        "category": "sokak",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_bebek_autumn_walk.jpg"),
+        "caption": "Bebek sahilinde hafif bir Boğaz esintisi ve elimde sıcak kahvem... 🌊☕ İstanbul'un sonbaharı bana her zaman yeni kararlar ve taze umutlar getirir. Bugün kendinize bir iyilik yapıp yürüyüşe çıktınız mı canlar? 🍂💛",
+        "tags": "#bebek #istanbul #boğaz #sonbahar #trenchcoat #sokakmodasıkombin #canantuna #lifestyle #reels"
+    },
+    {
+        "id": "gece_mum_isiginda_aksam_yemegi",
+        "category": "gece",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_candlelight_dinner.jpg"),
+        "caption": "İstanbul ışıl ışıl ayaklarımızın altında... 🌃✨ Bazen sadece durmak, bu anın tadını çıkarmak ve iyi ki demek gerekir. Bu gece kadehlerimizi güzelliklere ve hayallerimize kaldırıyoruz! 🥂💙",
+        "tags": "#istanbul #gece #rooftop #dinner #zarafet #canantuna #gecehayatı #reels"
+    },
+    {
+        "id": "lifestyle_kitap_kafe_karakoy",
+        "category": "lifestyle",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_bookstore_cafe.jpg"),
+        "caption": "Kitap kokusu, taze demlenmiş bir latte ve yeni projeler... 📚☕ Karaköy'ün bu huzurlu köşesinde saatlerin nasıl geçtiğini anlamıyorum. Bu aralar hangi kitabı okuyorsunuz, bana öneriniz var mı? 📖💭",
+        "tags": "#kitap #kafe #karaköy #lifestyle #kahvekeyfi #canantuna #bookstagram #reels"
+    },
+    {
+        "id": "kis_uludag_kayak_zirve_teras",
+        "category": "tatil",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_ski_terrace.jpg"),
+        "caption": "Zirvede hava tertemiz, güneş pırıl pırıl! ⛷️❄️ Karların üzerinde termostan sıcak çay içmenin keyfi hiçbir şeyde yok. Beyaz örtü bana inanılmaz enerji veriyor! Kayak yapmayı sevenler burada mı? 🏔️💙",
+        "tags": "#uludağ #kayak #kıştatili #zirve #snow #kar #canantuna #travelgram #reels"
+    },
+    {
+        "id": "ev_pazar_mutfak_granola",
+        "category": "ev",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_kitchen_morning.jpg"),
+        "caption": "Pazar sabahı mutfakta taze kahve kokusu ve renkli meyveler... 🍓☕ Kendime vakit ayırdığım en tatlı saatler. Güne nasıl başlarsanız öyle gider; gülümsemeyi unutmayın güzellikler! 🌸✨",
+        "tags": "#pazarkahvaltısı #evhali #sağlıklıyaşam #mutfak #granola #canantuna #morningvibes #reels"
+    },
+    {
+        "id": "lifestyle_termal_spa_dinlenme",
+        "category": "lifestyle",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_spa_wellness.jpg"),
+        "caption": "Bütün haftanın yorgunluğunu geride bırakma terapisi... 🧖‍♀️🌿 Sıcak su buharı ve bitki çayı ruhuma o kadar iyi geldi ki. Bedeninizi dinlendirmeyi ve şımartmayı ihmal etmeyin canlar! 💧✨",
+        "tags": "#spa #wellness #kendinezamanayır #dinlenme #sağlık #canantuna #selfcare #reels"
+    },
+    {
+        "id": "sokak_bogaz_koprusu_araba",
+        "category": "sokak",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_car_bosphorus_bridge.jpg"),
+        "caption": "Köprüden geçerken güneş tam batış anında yüzüme vuruyor... 🚗🌅 En sevdiğim şarkı çalıyor ve İstanbul yine büyülemeye devam ediyor. Trafik bile olsa bu manzaraya değer! Sizde akşam nasıl geçiyor? 🎶💫",
+        "tags": "#istanbul #boğazköprüsü #goldenhour #günbatımı #carvibes #canantuna #gününkaresi #reels"
+    },
+    {
+        "id": "sokak_karakoy_mural_grafiti",
+        "category": "sokak",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_karakoy_mural.jpg"),
+        "caption": "Karaköy sokaklarındaki bu renkli duvar sanatı enerjimi ikiye katladı! 🎨☕ Sokak modasını ve canlı renkleri çok seviyorum. Günün kombini nasıl olmuş kızlar? Yorumları görelim! 💚👟",
+        "tags": "#karaköy #sokakmodası #streetstyle #ootd #grafiti #canantuna #lifestyle #reels"
+    },
+    {
+        "id": "is_levent_plaza_yonetim",
+        "category": "is",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_executive_office.jpg"),
+        "caption": "Günün son toplantısı bitti ve arkamda gün batımıyla parlayan Levent silüeti... 💼🌇 Disiplin ve vizyon bir araya gelince imkansız diye bir şey kalmıyor. Hayallerinizin peşini asla bırakmayın! 🚀🤍",
+        "tags": "#business #işkadını #motivasyon #levent #başarı #canantuna #career #reels"
+    },
+    {
+        "id": "tatil_ciragan_sarayi_kahvalti",
+        "category": "tatil",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_ciragan_palace.jpg"),
+        "caption": "Çırağan Sarayı'nın deniz kenarındaki terasında masalsı bir sabah... 🏰🌊 Boğaz'ın mavisi ve saray havası insanın ruhuna dokunuyor. İstanbul'da en sevdiğiniz tarihi mekan neresi? 💙✨",
+        "tags": "#çırağansarayı #boğaz #istanbul #lüksyaşam #saray #canantuna #travel #reels"
+    },
+    {
+        "id": "lifestyle_moda_sahil_gunbatimi",
+        "category": "lifestyle",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_moda_sunset.jpg"),
+        "caption": "Moda sahilinde çimlere serilip gün batımını izlemek paha biçilemez... 🌅🍂 Akustik tınılar, serin rüzgar ve hafif sıcak bir çay. Anadolu yakasının bu dinginliğini çok seviyorum! 🧡🎶",
+        "tags": "#moda #kadıköy #günbatımı #sahil #huzur #canantuna #akustik #reels"
+    },
+    {
+        "id": "lifestyle_otel_lobi_orkide",
+        "category": "lifestyle",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_hotel_lobby.jpg"),
+        "caption": "Zarafet detaylarda gizlidir... ☕🌸 Dev orkideler ve sıcacık bir lobi sohbeti. Kendinizi iyi hissettiren mekanlarda vakit geçirmek enerjinizi anında tazeliyor. Keyifli bir akşam olsun! 🤍✨",
+        "tags": "#zarafet #lifestyle #lüks #otel #kahvesohbeti #canantuna #ootd #reels"
+    },
+    {
+        "id": "ev_kis_pencere_sicak_cikolata",
+        "category": "ev",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_winter_window.jpg"),
+        "caption": "Camın kenarına kıvrılıp yağan karı izlemek ve elinde bol köpüklü sıcak çikolata... 🍫❄️ Peri masalı gibi bir akşam. Kış akşamlarının bu tatlı nostaljisini kimler seviyor? 🕯️🤍",
+        "tags": "#kışakşamı #sıcakçikolata #evkeyfi #nostalji #kar #canantuna #cozynight #reels"
+    },
+    {
+        "id": "spor_kort_tenis_mola",
+        "category": "spor",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_tennis_bench.jpg"),
+        "caption": "Tenis maçında son set bitti, ter su içindeyiz ama mutluluk paha biçilemez! 🎾💪 Spor yapmak günün tüm stresini silip süpürüyor. Bugün hareket ettiniz mi canlar? Haydi harekete geçin! 🔥👟",
+        "tags": "#tenis #kort #fitgirl #sporaşkı #motivasyon #canantuna #workout #reels"
+    },
+    {
+        "id": "gece_galata_kulesi_sokak",
+        "category": "gece",
+        "type": "video",
+        "image_path": os.path.join(IMAGES_DIR, "canan_galata_night.jpg"),
+        "caption": "Galata sokaklarında akşam yürüyüşü ve arkamda asırların şahidi kule... 🗼🌙 Taş sokakların tarihi kokusu büyüleyici. Galata'ya her geldiğimde ilk kez görüyormuş gibi aşık oluyorum! 🖤✨",
+        "tags": "#galata #galatakulesi #istanbulgeceleri #tarih #geceyürüyüşü #canantuna #reels"
     }
 ]
 
 def get_scenario_by_id(scenario_id: str) -> dict:
     for s in SCENARIOS:
-        if s["id"] == scenario_id:
+        if s['id'] == scenario_id:
             return s
     return SCENARIOS[0]

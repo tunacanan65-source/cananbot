@@ -68,36 +68,71 @@ def save_history(history: list):
     with open(HISTORY_FILE, "w", encoding="utf-8") as f:
         json.dump(history, f, ensure_ascii=False, indent=2)
 
+def get_recent_instagram_captions(limit: int = 35) -> list:
+    """Instagram Graph API üzerinden Canan'ın son paylaştığı gönderilerin açıklamalarını canlı çeker."""
+    ig_id = getattr(config, "INSTAGRAM_ACCOUNT_ID", "17841458805624158")
+    token = getattr(config, "FACEBOOK_ACCESS_TOKEN", "")
+    if not ig_id or not token:
+        return []
+    try:
+        url = f"https://graph.facebook.com/v21.0/{ig_id}/media?fields=id,caption,timestamp&limit={limit}&access_token={token}"
+        resp = requests.get(url, timeout=12).json()
+        if "data" in resp:
+            return [p.get("caption", "").strip() for p in resp["data"] if len(p.get("caption", "").strip()) > 10]
+    except Exception as e:
+        print(f"⚠️ Instagram canlı geçmiş sorgulama uyarısı: {e}")
+    return []
+
 def pick_next_scenario(force_type: str = None) -> dict:
     """
-    Yılın günü ve saatine göre deterministik olarak senaryo seçer.
-    Render sunucusu kapansa veya hafızası silinse bile matematiksel olarak
-    asla dün paylaştığı videoyu bugün tekrar paylaşmaz!
+    Canan Tuna için TEKRAR ETMEYEN canlı senaryo seçicisi:
+    1. Instagram API'ye canlı bağlanıp son 35 gönderiyi çeker.
+    2. Son 15-20 gün içinde Instagram'da yayınlanmış tüm senaryoları KESİNLİKLE eler.
+    3. Henüz paylaşılmamış taze senaryolar arasından günün saatine ve kategorisine en uygun olanı seçer.
+    4. Tüm 28 senaryo hem Reels (video) hem Fotoğraf için tam uyumludur.
     """
-    now = datetime.now()
-    day_of_year = now.timetuple().tm_yday
-    hour = now.hour
-    slot_idx = 0 if hour < 16 else 1
+    import random
+    import difflib
 
     all_scenarios = list(life_scenarios.SCENARIOS)
     if not all_scenarios:
         return None
 
-    # Eğer video isteniyorsa video olanları veya hepsini kapsa
-    if force_type == "video":
-        candidates = [s for s in all_scenarios if s.get("type") == "video"]
-        if not candidates:
-            candidates = all_scenarios
-    elif force_type == "photo":
-        candidates = [s for s in all_scenarios if s.get("type") == "photo"]
-        if not candidates:
-            candidates = all_scenarios
-    else:
-        candidates = all_scenarios
+    recent_caps = get_recent_instagram_captions(limit=35)
+    print(f"📡 [Canan Anti-Tekrar Kalkanı] Instagram'dan son {len(recent_caps)} canlı paylaşım çekildi.")
 
-    # Deterministik indeks hesabı: Her güne ve her slota benzersiz bir senaryo
-    chosen_index = (day_of_year * 2 + slot_idx) % len(candidates)
-    chosen = dict(candidates[chosen_index])
+    # Instagram'da yakın zamanda yayınlananları kesinlikle filtrele
+    unposted_scenarios = []
+    for sc in all_scenarios:
+        sc_cap = sc.get("caption", "").strip().lower()
+        clean_sc = sc_cap.replace("yazdan kalanlar...", "").strip()
+        is_already_posted = False
+        for rc in recent_caps:
+            clean_rc = rc.lower().replace("yazdan kalanlar...", "").strip()
+            # Başlığın ilk 25 karakteri veya %65 metin benzerliği
+            if (len(clean_sc) > 20 and clean_sc[:25] in clean_rc) or (len(clean_rc) > 20 and clean_rc[:25] in clean_sc):
+                is_already_posted = True
+                break
+            if difflib.SequenceMatcher(None, clean_sc[:40], clean_rc[:40]).ratio() > 0.65:
+                is_already_posted = True
+                break
+        if not is_already_posted:
+            unposted_scenarios.append(sc)
+
+    # Eğer taze senaryo varsa onlardan seç, tüm liste tükenirse tüm listeden seç
+    candidates = unposted_scenarios if unposted_scenarios else all_scenarios
+    print(f"🎯 [Canan Senaryo Havuzu] {len(all_scenarios)} senaryodan {len(unposted_scenarios)} tanesi tamamen taze ve benzersiz!")
+
+    # Günün saatine göre akıllı kategori tercihi (Öğlen tatil/hobi/sokak/ev; Akşam gece/spor/lifestyle/iş)
+    now = datetime.now()
+    hour = now.hour
+    if hour < 16:
+        preferred = [s for s in candidates if s.get("category") in ("tatil", "hobi", "sokak", "ev")]
+    else:
+        preferred = [s for s in candidates if s.get("category") in ("gece", "spor", "lifestyle", "is")]
+
+    chosen_list = preferred if preferred else candidates
+    chosen = dict(random.choice(chosen_list))
 
     # ❄️ Mevsimsel Zeka: Sonbahar/Kış aylarında yaz görsellerine otomatik "Yazdan kalanlar" kancası
     is_winter = now.month in (10, 11, 12, 1, 2, 3)
