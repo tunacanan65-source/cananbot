@@ -3,6 +3,7 @@ import sys
 import json
 import time
 import random
+import difflib
 from datetime import datetime
 import requests
 import config
@@ -21,6 +22,7 @@ HISTORY_FILE = os.path.join(BASE_DIR, "posted_history.json")
 OUTPUT_DIR = os.path.join(BASE_DIR, "output")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
+
 def send_telegram_alert(text: str):
     """Kritik sistem uyarılarını doğrudan Telegram kanalına/yöneticiye iletir."""
     try:
@@ -32,6 +34,7 @@ def send_telegram_alert(text: str):
     except Exception:
         pass
 
+
 def check_meta_token_health() -> bool:
     """Paylaşım öncesi Meta API token'ının aktif olup olmadığını test eder."""
     token = getattr(config, "FACEBOOK_ACCESS_TOKEN", "")
@@ -39,7 +42,10 @@ def check_meta_token_health() -> bool:
     if not token or not page_id:
         return False
     try:
-        r = requests.get(f"https://graph.facebook.com/v21.0/{page_id}?fields=id,name&access_token={token}", timeout=8).json()
+        r = requests.get(
+            f"https://graph.facebook.com/v21.0/{page_id}?fields=id,name&access_token={token}",
+            timeout=8
+        ).json()
         if "error" in r:
             err_msg = r["error"].get("message", "Bilinmeyen hata")
             print(f"⚠️ [Meta Token Hatası]: {err_msg}")
@@ -55,6 +61,7 @@ def check_meta_token_health() -> bool:
         print(f"⚠️ Token kontrol istisnası: {e}")
         return True
 
+
 def load_history() -> list:
     if os.path.exists(HISTORY_FILE):
         try:
@@ -64,83 +71,151 @@ def load_history() -> list:
             return []
     return []
 
+
 def save_history(history: list):
     with open(HISTORY_FILE, "w", encoding="utf-8") as f:
         json.dump(history, f, ensure_ascii=False, indent=2)
 
-def get_recent_instagram_captions(limit: int = 35) -> list:
-    """Instagram Graph API üzerinden Canan'ın son paylaştığı gönderilerin açıklamalarını canlı çeker."""
+
+def get_recent_instagram_captions(limit: int = 100) -> list:
+    """
+    Instagram Graph API üzerinden Canan'ın son paylaştığı gönderilerin açıklamalarını
+    yeniden eskiye doğru (0 = en son paylaşılan) canlı olarak çeker.
+    """
     ig_id = getattr(config, "INSTAGRAM_ACCOUNT_ID", "17841458805624158")
     token = getattr(config, "FACEBOOK_ACCESS_TOKEN", "")
     if not ig_id or not token:
         return []
+
+    captions = []
+    url = f"https://graph.facebook.com/v21.0/{ig_id}/media?fields=id,caption,timestamp&limit={min(limit, 100)}&access_token={token}"
     try:
-        url = f"https://graph.facebook.com/v21.0/{ig_id}/media?fields=id,caption,timestamp&limit={limit}&access_token={token}"
-        resp = requests.get(url, timeout=12).json()
-        if "data" in resp:
-            return [p.get("caption", "").strip() for p in resp["data"] if len(p.get("caption", "").strip()) > 10]
+        while url and len(captions) < limit:
+            resp = requests.get(url, timeout=15).json()
+            if "data" not in resp:
+                break
+            for p in resp["data"]:
+                cap = (p.get("caption") or "").strip()
+                if len(cap) > 5:
+                    captions.append(cap)
+            url = resp.get("paging", {}).get("next") if len(captions) < limit else None
     except Exception as e:
         print(f"⚠️ Instagram canlı geçmiş sorgulama uyarısı: {e}")
-    return []
+    return captions
+
+
+def _strip_legacy_prefix(text: str) -> str:
+    """Eski sürümlerde eklenmiş olabilen 'Yazdan kalanlar...' ön ek paragrafını temizler."""
+    t = text.strip().lower()
+    if "siz de yazı şimdiden özleyenlerden misiniz?" in t:
+        parts = t.split("siz de yazı şimdiden özleyenlerden misiniz?")
+        if len(parts) > 1:
+            t = parts[-1].lstrip(" ✨\n\r")
+    return t.strip()
+
+
+def _scenario_matches_caption(sc: dict, ig_caption: str) -> bool:
+    """Bir senaryonun Instagram'daki belirli bir gönderiyle eşleşip eşleşmediğini kesin olarak tespit eder."""
+    rc_raw = ig_caption.lower()
+    rc_clean = _strip_legacy_prefix(rc_raw)
+
+    # 1. Senaryoya özel imza kelimeleri (eski ve yeni açıklamalar dahil)
+    for sig in sc.get("signatures", []):
+        if sig.lower() in rc_raw:
+            return True
+
+    # 2. Mevcut açıklamanın ve alternatif açıklamaların çekirdek cümlesi
+    candidate_texts = [sc.get("caption", "")] + sc.get("alt_captions", [])
+    for c_text in candidate_texts:
+        sc_clean = _strip_legacy_prefix(c_text)
+        if not sc_clean:
+            continue
+        # İlk 28 karakter veya ortadaki 30 karakter doğrudan geçiyor mu?
+        snippet_start = sc_clean[:28].strip()
+        snippet_mid = sc_clean[10:42].strip()
+        if len(snippet_start) >= 18 and snippet_start in rc_raw:
+            return True
+        if len(snippet_mid) >= 20 and snippet_mid in rc_raw:
+            return True
+        if difflib.SequenceMatcher(None, sc_clean[:45], rc_clean[:45]).ratio() > 0.62:
+            return True
+
+    return False
+
 
 def pick_next_scenario(force_type: str = None) -> dict:
     """
-    Canan Tuna için TEKRAR ETMEYEN canlı senaryo seçicisi:
-    1. Instagram API'ye canlı bağlanıp son 35 gönderiyi çeker.
-    2. Son 15-20 gün içinde Instagram'da yayınlanmış tüm senaryoları KESİNLİKLE eler.
-    3. Henüz paylaşılmamış taze senaryolar arasından günün saatine ve kategorisine en uygun olanı seçer.
-    4. Tüm 28 senaryo hem Reels (video) hem Fotoğraf için tam uyumludur.
+    Canan Tuna için KESİNLİKLE TEKRAR ETMEYEN canlı senaryo seçicisi:
+    1. Instagram API'ye canlı bağlanıp son 100 gönderiyi çeker.
+    2. Her senaryonun Instagram'da en son kaç gönderi önce paylaşıldığını hesaplar.
+    3. Öncelikle HİÇ PAYLAŞILMAMIŞ (unseen) senaryoları seçer.
+    4. Tüm havuz tamamlandığında yalnızca en eski paylaşılmış senaryolardan seçer ve alternatif taze açıklama kullanır.
     """
-    import random
-    import difflib
-
-    all_scenarios = list(life_scenarios.SCENARIOS)
+    all_scenarios = [
+        sc for sc in life_scenarios.SCENARIOS
+        if sc.get("image_path") and os.path.exists(sc.get("image_path"))
+    ]
     if not all_scenarios:
         return None
 
-    recent_caps = get_recent_instagram_captions(limit=35)
+    recent_caps = get_recent_instagram_captions(limit=100)
     print(f"📡 [Canan Anti-Tekrar Kalkanı] Instagram'dan son {len(recent_caps)} canlı paylaşım çekildi.")
 
-    # Instagram'da yakın zamanda yayınlananları kesinlikle filtrele
-    unposted_scenarios = []
+    # Yerel geçmişi de yedek olarak oku
+    local_hist = load_history()
+    local_recent_ids = [h.get("scenario_id") for h in local_hist[-30:] if h.get("scenario_id")]
+
+    unseen_scenarios = []
+    scored_scenarios = []  # (distance_from_latest, scenario)
+
     for sc in all_scenarios:
-        sc_cap = sc.get("caption", "").strip().lower()
-        clean_sc = sc_cap.replace("yazdan kalanlar...", "").strip()
-        is_already_posted = False
-        for rc in recent_caps:
-            clean_rc = rc.lower().replace("yazdan kalanlar...", "").strip()
-            # Başlığın ilk 25 karakteri veya %65 metin benzerliği
-            if (len(clean_sc) > 20 and clean_sc[:25] in clean_rc) or (len(clean_rc) > 20 and clean_rc[:25] in clean_sc):
-                is_already_posted = True
+        last_seen_idx = None
+        for idx, rc in enumerate(recent_caps):
+            if _scenario_matches_caption(sc, rc):
+                last_seen_idx = idx
                 break
-            if difflib.SequenceMatcher(None, clean_sc[:40], clean_rc[:40]).ratio() > 0.65:
-                is_already_posted = True
-                break
-        if not is_already_posted:
-            unposted_scenarios.append(sc)
 
-    # Eğer taze senaryo varsa onlardan seç, tüm liste tükenirse tüm listeden seç
-    candidates = unposted_scenarios if unposted_scenarios else all_scenarios
-    print(f"🎯 [Canan Senaryo Havuzu] {len(all_scenarios)} senaryodan {len(unposted_scenarios)} tanesi tamamen taze ve benzersiz!")
+        # Eğer Instagram'da hiç görülmediyse ve yerel son 15 paylaşımda da yoksa -> TAMAMEN TAZE
+        if last_seen_idx is None and sc["id"] not in local_recent_ids[-15:]:
+            unseen_scenarios.append(sc)
+            scored_scenarios.append((9999, sc))
+        else:
+            dist = last_seen_idx if last_seen_idx is not None else 40
+            scored_scenarios.append((dist, sc))
 
-    # Günün saatine göre akıllı kategori tercihi (Öğlen tatil/hobi/sokak/ev; Akşam gece/spor/lifestyle/iş)
+    print(f"🎯 [Canan Senaryo Havuzu] {len(all_scenarios)} aktif senaryodan {len(unseen_scenarios)} tanesi hiç paylaşılmamış (100% Taze)!")
+
     now = datetime.now()
     hour = now.hour
-    if hour < 16:
-        preferred = [s for s in candidates if s.get("category") in ("tatil", "hobi", "sokak", "ev")]
+    day_categories = ("tatil", "hobi", "sanat", "sokak", "ev", "lifestyle")
+    evening_categories = ("gece", "spor", "lifestyle", "is", "sanat", "ev")
+    target_cats = day_categories if hour < 16 else evening_categories
+
+    if unseen_scenarios:
+        preferred = [s for s in unseen_scenarios if s.get("category") in target_cats]
+        chosen_pool = preferred if preferred else unseen_scenarios
     else:
-        preferred = [s for s in candidates if s.get("category") in ("gece", "spor", "lifestyle", "is")]
+        # Tüm senaryolar en az 1 kez paylaşıldıysa, en eski paylaşılmış olan en üst 10 senaryodan seç
+        scored_scenarios.sort(key=lambda x: x[0], reverse=True)
+        oldest_pool = [sc for dist, sc in scored_scenarios[:12] if dist >= 20] or [sc for _, sc in scored_scenarios[:10]]
+        preferred = [s for s in oldest_pool if s.get("category") in target_cats]
+        chosen_pool = preferred if preferred else oldest_pool
 
-    chosen_list = preferred if preferred else candidates
-    chosen = dict(random.choice(chosen_list))
+    chosen = dict(random.choice(chosen_pool))
 
-    # ❄️ Mevsimsel Zeka: Sonbahar/Kış aylarında yaz görsellerine otomatik "Yazdan kalanlar" kancası
-    is_winter = now.month in (10, 11, 12, 1, 2, 3)
-    is_summer_content = chosen.get("category") == "tatil" or any(k in chosen.get("id", "") for k in ["yat", "beach", "havuz", "deniz"])
-    if is_winter and is_summer_content and not chosen["caption"].startswith("Yazdan kalanlar"):
-        chosen["caption"] = "Yazdan kalanlar... 🌊☀️ Kış geldi ama aklım hala o sıcak günlerde, denizin kokusunda... 💙 Siz de yazı şimdiden özleyenlerden misiniz? ✨\n\n" + chosen["caption"]
+    # Eğer bu senaryonun alternatif taze açıklamaları varsa ve ana açıklama daha önce kullanıldıysa, kullanılmamış olanı seç
+    alt_list = [chosen["caption"]] + chosen.get("alt_captions", [])
+    fresh_captions = [
+        c for c in alt_list
+        if not any(c[:25].lower() in rc.lower() for rc in recent_caps[:40])
+    ]
+    if fresh_captions:
+        chosen["caption"] = random.choice(fresh_captions)
+    else:
+        chosen["caption"] = random.choice(alt_list)
 
     return chosen
+
 
 def post_to_instagram_reels(video_path: str, caption: str) -> dict:
     """Canan Tuna Instagram hesabına (@canantuna_official) doğrudan Reels yayınlar."""
@@ -148,15 +223,18 @@ def post_to_instagram_reels(video_path: str, caption: str) -> dict:
     token = getattr(config, "FACEBOOK_ACCESS_TOKEN", "")
     video_filename = os.path.basename(video_path)
 
-    # 1. Video URL belirleme: Öncelikle Render'ın kendi güvenli HTTPS linki
     candidate_urls = []
     base_url = getattr(config, "BASE_URL", "https://cananbot.onrender.com").rstrip("/")
     candidate_urls.append(f"{base_url}/media/{video_filename}")
 
-    # Fallback CDN'ler
     try:
         with open(video_path, "rb") as f:
-            r_up = requests.post("https://catbox.moe/user/api.php", data={"reqtype": "fileupload"}, files={"fileToUpload": f}, timeout=40)
+            r_up = requests.post(
+                "https://catbox.moe/user/api.php",
+                data={"reqtype": "fileupload"},
+                files={"fileToUpload": f},
+                timeout=40
+            )
             if r_up.status_code == 200 and r_up.text.strip().startswith("http"):
                 candidate_urls.append(r_up.text.strip())
     except Exception as e:
@@ -174,7 +252,6 @@ def post_to_instagram_reels(video_path: str, caption: str) -> dict:
     for video_url in candidate_urls:
         try:
             print(f"🌐 Instagram Reels Video URL deneniyor: {video_url}")
-            # 1. Reels Container oluştur
             r_c = requests.post(
                 f"https://graph.facebook.com/v21.0/{ig_id}/media",
                 data={
@@ -193,11 +270,13 @@ def post_to_instagram_reels(video_path: str, caption: str) -> dict:
                 last_error = r_c
                 continue
 
-            # 2. Render / Video işleme bitişini bekle (30 x 5 sn = 150 saniye)
             is_ready = False
             for i in range(30):
                 time.sleep(5)
-                st = requests.get(f"https://graph.facebook.com/v21.0/{container_id}?fields=status_code&access_token={token}", timeout=15).json()
+                st = requests.get(
+                    f"https://graph.facebook.com/v21.0/{container_id}?fields=status_code&access_token={token}",
+                    timeout=15
+                ).json()
                 code = st.get("status_code")
                 print(f"⏳ Instagram Reels İşleme Durumu ({i+1}/30): {code}")
                 if code == "FINISHED":
@@ -212,7 +291,6 @@ def post_to_instagram_reels(video_path: str, caption: str) -> dict:
                 print("⚠️ Video işleme zaman aşımına uğradı, diğer URL deneniyor...")
                 continue
 
-            # 3. Yayınla
             r_pub = requests.post(
                 f"https://graph.facebook.com/v21.0/{ig_id}/media_publish",
                 data={"creation_id": container_id, "access_token": token},
@@ -230,14 +308,14 @@ def post_to_instagram_reels(video_path: str, caption: str) -> dict:
 
     return {"status": "error", "error": last_error or "Reels yüklenemedi"}
 
+
 def post_to_facebook_reels(video_path: str, caption: str) -> dict:
-    """Canan Tuna Facebook Sayfasına (Canan tunau) doğrudan resmi Facebook REELS yayınlar (Reels sekmesinde görünür)."""
+    """Canan Tuna Facebook Sayfasına (Canan tunau) doğrudan resmi Facebook REELS yayınlar."""
     page_id = getattr(config, "FACEBOOK_PAGE_ID", "1355526950985735")
     token = getattr(config, "FACEBOOK_ACCESS_TOKEN", "")
     try:
         file_size = os.path.getsize(video_path)
 
-        # 1. Faz: Başlat (Init Session)
         r_start = requests.post(
             f"https://graph.facebook.com/v21.0/{page_id}/video_reels",
             data={"upload_phase": "start", "access_token": token},
@@ -250,7 +328,6 @@ def post_to_facebook_reels(video_path: str, caption: str) -> dict:
             print(f"❌ Facebook Reels Start Hatası: {r_start}")
             return _post_to_facebook_video_fallback(video_path, caption)
 
-        # 2. Faz: İkili Video Yükleme (Upload Binary to rupload)
         with open(video_path, "rb") as vf:
             headers = {
                 "Authorization": f"OAuth {token}",
@@ -262,7 +339,6 @@ def post_to_facebook_reels(video_path: str, caption: str) -> dict:
                 print(f"❌ Facebook Reels Upload Hatası: {r_up.text}")
                 return _post_to_facebook_video_fallback(video_path, caption)
 
-        # 3. Faz: Yayınlama ve Yayına Alma (Publish as Reel)
         r_finish = requests.post(
             f"https://graph.facebook.com/v21.0/{page_id}/video_reels",
             data={
@@ -286,6 +362,7 @@ def post_to_facebook_reels(video_path: str, caption: str) -> dict:
         print(f"❌ Facebook Reels İstisnası: {e}")
         return _post_to_facebook_video_fallback(video_path, caption)
 
+
 def _post_to_facebook_video_fallback(video_path: str, caption: str) -> dict:
     page_id = getattr(config, "FACEBOOK_PAGE_ID", "1355526950985735")
     token = getattr(config, "FACEBOOK_ACCESS_TOKEN", "")
@@ -303,9 +380,9 @@ def _post_to_facebook_video_fallback(video_path: str, caption: str) -> dict:
     except Exception as e:
         return {"status": "error", "error": str(e)}
 
+
 def run_single_autopilot_post(force_type: str = None):
-    """Günün saatine ve senaryosuna göre Canan Tuna adına 3 platforma (Instagram, Facebook, Telegram) otonom paylaşım yapar."""
-    # Ön kontrol: Token geçerliliği
+    """Günün saatine ve senaryosuna göre Canan Tuna adına 3 platforma otonom paylaşım yapar."""
     check_meta_token_health()
 
     scenario = pick_next_scenario(force_type=force_type)
@@ -315,9 +392,9 @@ def run_single_autopilot_post(force_type: str = None):
     sc_id = scenario["id"]
     media_type = force_type if force_type else scenario.get("type", "photo")
 
-    print("\n" + "="*60)
-    print(f"🌟 Canan Tuna Otonom Yaşam Adımı: [{scenario.get('category').upper()}] {sc_id} (Format: {media_type})")
-    print("="*60)
+    print("\n" + "=" * 60)
+    print(f"🌟 Canan Tuna Otonom Yaşam Adımı: [{scenario.get('category', '').upper()}] {sc_id} (Format: {media_type})")
+    print("=" * 60)
 
     chosen_img = scenario.get("image_path")
     if not chosen_img or not os.path.exists(chosen_img):
@@ -325,12 +402,11 @@ def run_single_autopilot_post(force_type: str = None):
         return False
 
     full_caption = f"{scenario['caption']}\n\n{scenario.get('tags', '')}"
-
     success_summary = {"telegram": False, "facebook": False, "instagram": False}
 
     if media_type == "video":
         out_video = os.path.join(OUTPUT_DIR, f"auto_{sc_id}.mp4")
-        print(f"🎬 Senaryo için estetik lofi müzikli Reels videosu üretiliyor: {sc_id}...")
+        print(f"🎬 Senaryo için estetik müzikli Full HD Reels videosu üretiliyor: {sc_id}...")
         create_canan_reel.create_reels_video(chosen_img, output_mp4=out_video)
 
         # 1. Telegram
@@ -370,8 +446,8 @@ def run_single_autopilot_post(force_type: str = None):
         else:
             print(f"📸 Instagram Sonucu: ❌ {r_ig}")
             send_telegram_alert(f"⚠️ [Canan Tuna] Instagram Reels Yüklenemedi!\nHata: {r_ig.get('error')}")
-    
-        # 4. TikTok Reels / Video
+
+        # 4. TikTok Reels / Video (Çerez mevcutsa)
         print("🎵 TikTok'a Reels/Video Yükleniyor...")
         try:
             import tiktok_poster
@@ -398,7 +474,6 @@ def run_single_autopilot_post(force_type: str = None):
         else:
             send_telegram_alert(f"⚠️ [Canan Tuna] Instagram Fotoğraf Yüklenemedi!\nHata: {res.get('instagram')}")
 
-    # Geçmişe kaydet
     history = load_history()
     history.append({
         "scenario_id": sc_id,
@@ -412,6 +487,7 @@ def run_single_autopilot_post(force_type: str = None):
     save_history(history)
     print(f"✅ [{sc_id}] senaryosu işlendi! Özet: {success_summary}")
     return True
+
 
 if __name__ == "__main__":
     run_single_autopilot_post()
