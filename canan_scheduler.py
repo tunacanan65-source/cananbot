@@ -16,29 +16,30 @@ if sys.stdout.encoding != 'utf-8':
 # Türkiye Saati (TSİ / UTC+3)
 TR_TZ = timezone(timedelta(hours=3))
 
-# Günlük 2 Reels Videosu (Öğlen + Akşam) + Haftada 1 Vitrin Fotoğrafı (Pazar)
-# window_start - window_end: Sunucu o an uyuyakalsa bile bu saat aralığında uyanınca telafi (catch-up) yapar!
+# Günlük 3 Paylaşım = Haftalık 21 Gönderi (Facebook 17 Gönderi Hedefini %100 Otomatik Tamamlar):
+# - 13:00 -> Öğlen Reels Videosu (Tatil / Yaşam / Estetik Dikey Video)
+# - 16:30 -> Her Gün Akşamüstü Vitrin Fotoğrafı (Estetik Fotoğraf Gönderisi)
+# - 20:30 -> Akşam Reels Videosu (Gece / Spor / Lifestyle Dikey Video)
 SCHEDULE_SLOTS = [
     {
         "id": "noon_reels",
         "hour": 13,
         "minute": 0,
-        "window_end_hour": 17,
+        "window_end_hour": 16,
         "check_start_hour": 11,
-        "check_end_hour": 17,
+        "check_end_hour": 16,
         "label": "Öğlen Reels Videosu",
         "type": "video"
     },
     {
-        "id": "sunday_photo",
+        "id": "daily_afternoon_photo",
         "hour": 16,
         "minute": 30,
         "window_end_hour": 19,
         "check_start_hour": 16,
         "check_end_hour": 19,
-        "label": "Pazar Haftalık Vitrin Fotoğrafı",
-        "type": "photo",
-        "day_of_week": 6
+        "label": "Günlük Akşamüstü Vitrin Fotoğrafı",
+        "type": "photo"
     },
     {
         "id": "evening_reels",
@@ -73,7 +74,6 @@ def get_today_instagram_posts_tr() -> list:
             ts_str = item.get("timestamp", "")
             if not ts_str:
                 continue
-            # Örn: 2026-11-04T10:01:54+0000
             dt_utc = datetime.strptime(ts_str[:19], "%Y-%m-%dT%H:%M:%S").replace(tzinfo=timezone.utc)
             dt_tr = dt_utc.astimezone(TR_TZ)
             if dt_tr.date() == today_tr:
@@ -116,10 +116,10 @@ def start_self_keepalive():
 def run_scheduler():
     print("=" * 60)
     print("🚀 Canan Tuna 7/24 Otonom Zamanlayıcı & Telafi Kalkanı Devrede!")
-    print("📅 Günlük Plan (Türkiye Saati - TSİ):")
-    print("   - 13:00 (Telafi penceresi 13:00-17:00): Öğlen Reels Videosu")
+    print("📅 Günlük Plan (Türkiye Saati - TSİ | Haftalık 21 Paylaşım):")
+    print("   - 13:00 (Telafi penceresi 13:00-16:15): Öğlen Reels Videosu")
+    print("   - 16:30 (Telafi penceresi 16:30-19:15): Günlük Vitrin Fotoğrafı")
     print("   - 20:30 (Telafi penceresi 20:30-23:15): Akşam Reels Videosu")
-    print("   - Pazar 16:30: Haftalık Vitrin Fotoğrafı")
     print("=" * 60)
 
     start_self_keepalive()

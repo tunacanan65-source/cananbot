@@ -59,7 +59,7 @@ def health():
         "status": "online",
         "bot": "Canan Tuna AI Influencer",
         "platforms": ["Instagram", "Facebook", "Telegram"],
-        "schedule": "13:00 (Hikaye/Fotoğraf) & 20:30 (Reels)",
+        "schedule": "13:00 (Reels) & 16:30 (Fotoğraf) & 20:30 (Reels) - Haftalık 21 Gönderi",
         "command": "Telegram'dan /paylas ile anında tetiklenebilir"
     })
 
