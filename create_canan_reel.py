@@ -42,83 +42,96 @@ def _load_font(size: int = 32):
     return ImageFont.load_default()
 
 
-def get_short_hook_for_image(image_path: str, is_last_scene: bool = False, custom_hook: str = None) -> str:
-    """Görselin temasına göre ekrana taşmayan, kısa ve yüksek etkileşimli cümle seçer."""
+def get_short_hook_for_image(
+    image_path: str,
+    scene_index: int = 0,
+    num_scenes: int = 4,
+    custom_hook: str = None
+) -> str:
+    """
+    4 karelik 'Adım Adım Hazırlanma' kurgusuna ve görselin temasına göre
+    ekrana taşmayan, kısa ve yüksek etkileşimli cümle seçer.
+    """
+    is_last_scene = (scene_index == num_scenes - 1)
     if is_last_scene:
         final_hooks = [
-            "1, 2, 3 yoksa 4. kare mi? Favorini yaz!",
+            "Hazırım! 1, 2, 3 yoksa 4. kare mi? Favorini yaz!",
             "En çok hangi karede gözün kaldı? Yoruma yaz!",
-            "4 pozdan hangisi 10/10? Seç bakalım!",
-            "İlk kare mi son kare mi? Yorumda buluşalım!"
+            "4 pozdan hangisi 10/10 olmuş? Seç bakalım!",
+            "Baştan sona izledin mi? Favori karen hangisi?"
         ]
         return random.choice(final_hooks)
 
-    if custom_hook and len(custom_hook.strip()) <= 55:
+    if scene_index == 0 and custom_hook and len(custom_hook.strip()) <= 55:
         return custom_hook.strip()
 
     fname = os.path.basename(image_path).lower()
 
     if any(k in fname for k in ("feet", "polish", "pedi", "toes", "anklet")):
-        feet_hooks = [
-            "Yeni sürdüm, ojem nasıl olmuş?",
-            "Ojemin rengi yakışmış mı? Puanın kaç?",
-            "Bakım şart dedik, ojem nasıl görünüyor?",
-            "Bu renk ojeyi beğendin mi tatlım?",
-            "Ayak bakımım bitti, sence nasıl olmuş?"
-        ]
-        return random.choice(feet_hooks)
+        if scene_index == 0:
+            feet_start_hooks = [
+                "Bakım saati! Ojemin rengi nasıl oluyor?",
+                "Oje sürerken yakalandım, bu renk yakışır mı?",
+                "Ayak bakımına başladık, rengi beğendin mi?"
+            ]
+            return random.choice(feet_start_hooks)
+        else:
+            feet_done_hooks = [
+                "Ojem bitti, nasıl olmuş? Puanın kaç?",
+                "Yeni sürdüm, ojemin rengi yakışmış mı?",
+                "Bakım tamamlandı! Ayaklarıma 10 üzerinden kaç?",
+                "Bu renk ojeyi beğendin mi tatlım?"
+            ]
+            return random.choice(feet_done_hooks)
 
     if any(k in fname for k in ("bikini", "swim", "pool", "yacht", "beach", "sunbed", "hammock", "shower")):
         summer_hooks = [
             "Güneş mi daha sıcak yoksa bu poz mu?",
-            "Bu fiziği korumak kolay değil tatlım!",
+            "Biraz da güneşlenelim, fizik nasıl?",
             "Deniz mi havuz mu? Sen hangisisin?",
             "Tatil modunu açtık, puanın kaç?"
         ]
         return random.choice(summer_hooks)
 
-    if any(k in fname for k in ("gym", "pilates", "yoga", "fitness", "workout", "cycling", "tennis", "rug")):
+    if any(k in fname for k in ("gym", "pilates", "yoga", "fitness", "workout", "cycling", "tennis")):
         sport_hooks = [
             "Antrenman bitti, sence emeğime değmiş mi?",
-            "Spor sonrası dinlenme, enerji nasıl?",
-            "Bu spor takımının rengi yakışmış mı?",
-            "Bahane yok, fiziğe yatırım var!"
+            "Spor sonrası enerji tavan, nasılım?",
+            "Bu spor takımının rengi yakışmış mı?"
         ]
         return random.choice(sport_hooks)
 
-    if any(k in fname for k in ("satin", "silk", "lace", "cami", "slip", "robe", "bed", "bath")):
+    if any(k in fname for k in ("satin", "silk", "lace", "cami", "slip", "robe", "bed", "bath", "rug", "couch", "shirt")):
         lounge_hooks = [
+            "Ev haliyle başlıyoruz, nasılım?",
             "Ev hali mi dışarı hali mi? Hangisi?",
-            "Günün en huzurlu saatleri, nasılım?",
             "İpek rahatlığı diye bir gerçek var!",
             "Yanıma bir kahve alıp gelecek var mı?"
         ]
         return random.choice(lounge_hooks)
 
     general_hooks = [
-        "Bu kombinle akşam yemeğine çıkılır mı?",
+        "Akşam için hazırlanıyoruz, bu kombin nasıl?",
+        "Bu elbiseyle dışarı çıkılır mı tatlım?",
         "Sence bu renk bana yakışmış mı?",
-        "Tarzıma 10 üzerinden kaç veriyorsun?",
-        "Gözlüklerim ve kombinim nasıl olmuş?"
+        "Tarzıma 10 üzerinden kaç veriyorsun?"
     ]
     return random.choice(general_hooks)
 
 
-def create_overlay_png(text: str, out_png_path: str):
+def create_overlay_png(text: str, out_png_path: str, y_pos: int = 1470):
     """
-    1080x1920 şeffaf katman üzerine, asla ekrandan taşmayan (maksimum 820px genişlik),
+    1080x1920 şeffaf katman üzerine, asla ekrandan taşmayan (maksimum 900px genişlik),
     ufak, zarif, yarı saydam koyu kapsül içinde net beyaz Türkçe etkileşim yazısı çizer.
     """
     canvas = Image.new("RGBA", (1080, 1920), (0, 0, 0, 0))
     draw = ImageDraw.Draw(canvas)
     font = _load_font(size=31)
 
-    # Emojileri temizle (standart TTF fontlarda kare çıkmaması için sadece saf Türkçe metin + noktalama)
     clean_text = "".join(ch for ch in text if ord(ch) < 0x1F000).strip()
     if not clean_text:
         clean_text = "Sence nasıl olmuş? Yorumda buluşalım!"
 
-    # Satır sarma: maksimum 34 karakter (1080px içinde ~740px genişlik, kenarlardan 170px güvenli boşluk)
     lines = textwrap.wrap(clean_text, width=34)
     if len(lines) > 2:
         lines = lines[:2]
@@ -136,12 +149,10 @@ def create_overlay_png(text: str, out_png_path: str):
     box_h = total_h + pad_y * 2
 
     box_x1 = (1080 - box_w) // 2
-    # Alt-orta güvenli bölge (y=1470: hem yüzü/vücudu/ayakları kapatmaz hem Instagram/FB alt yazı alanına çarpmaz)
-    box_y1 = 1470 - (box_h // 2)
+    box_y1 = y_pos - (box_h // 2)
     box_x2 = box_x1 + box_w
     box_y2 = box_y1 + box_h
 
-    # Yarı saydam şık kapsül arka plan + ince zarif çerçeve
     draw.rounded_rectangle(
         [box_x1, box_y1, box_x2, box_y2],
         radius=26,
@@ -155,7 +166,6 @@ def create_overlay_png(text: str, out_png_path: str):
         lw = line_widths[i]
         lh = line_heights[i]
         tx = (1080 - lw) // 2
-        # Hafif gölge
         draw.text((tx + 2, curr_y + 2), ln, font=font, fill=(0, 0, 0, 210))
         draw.text((tx, curr_y), ln, font=font, fill=(255, 255, 255, 255))
         curr_y += lh + 10
@@ -164,17 +174,51 @@ def create_overlay_png(text: str, out_png_path: str):
     return out_png_path
 
 
+def create_story_image(image_path: str, story_text: str, output_jpg: str = None) -> str:
+    """
+    Günlük Otomatik Hikaye (Story) için 1080x1920 dikey görselin üzerine
+    şık ve taşmayan bir hikaye notu ("Günaydın tatlım", "İyi geceler, uyuyan var mı?") işler.
+    """
+    if not output_jpg:
+        output_jpg = os.path.join(OUTPUT_DIR, f"story_{random.randint(1000, 9999)}.jpg")
+
+    img = Image.open(image_path).convert("RGB")
+    target_w, target_h = 1080, 1920
+    src_w, src_h = img.size
+    scale = max(target_w / src_w, target_h / src_h)
+    new_w, new_h = int(src_w * scale), int(src_h * scale)
+    img = img.resize((new_w, new_h), Image.Resampling.LANCZOS)
+    left = (new_w - target_w) // 2
+    top = (new_h - target_h) // 2
+    img = img.crop((left, top, left + target_w, top + target_h)).convert("RGBA")
+
+    ovl_path = os.path.join(OUTPUT_DIR, f"_tmp_story_ovl_{random.randint(1000, 9999)}.png")
+    try:
+        create_overlay_png(story_text, ovl_path, y_pos=1520)
+        ovl = Image.open(ovl_path).convert("RGBA")
+        combined = Image.alpha_composite(img, ovl).convert("RGB")
+        combined.save(output_jpg, "JPEG", quality=88, optimize=True)
+    finally:
+        if os.path.exists(ovl_path):
+            try:
+                os.remove(ovl_path)
+            except Exception:
+                pass
+    return output_jpg
+
+
 def get_motion_filter(style_index: int, total_frames: int) -> str:
-    """8 Farklı Sinematik Kamera Hareketi (1080x1920 Full HD)."""
+    """8 Farklı Sinematik Kamera Hareketi + Canlı/Aydınlık Renk Dokunuşu (1080x1920 Full HD)."""
+    bright_eq = ",eq=brightness=0.025:contrast=1.03:saturation=1.05"
     styles = [
-        f"zoompan=z='min(zoom+0.0010,1.14)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d={total_frames}:s=1080x1920:fps=30",
-        f"zoompan=z='min(zoom+0.0010,1.15)':x='iw/2-(iw/zoom/2)':y='ih/3-(ih/zoom/3)':d={total_frames}:s=1080x1920:fps=30",
-        f"zoompan=z='min(zoom+0.0008,1.12)':x='(iw-iw/zoom)*(on/{total_frames})':y='ih/2-(ih/zoom/2)':d={total_frames}:s=1080x1920:fps=30",
-        f"zoompan=z='min(zoom+0.0008,1.12)':x='iw/2-(iw/zoom/2)':y='(ih-ih/zoom)*(on/{total_frames})':d={total_frames}:s=1080x1920:fps=30",
-        f"zoompan=z='max(1.15-0.0011*on,1.0)':x='iw/2-(iw/zoom/2)':y='ih/2.3-(ih/zoom/2.3)':d={total_frames}:s=1080x1920:fps=30",
-        f"zoompan=z='min(zoom+0.0008,1.12)':x='(iw-iw/zoom)*(1-on/{total_frames})':y='ih/2.1-(ih/zoom/2.1)':d={total_frames}:s=1080x1920:fps=30",
-        f"zoompan=z='min(zoom+0.0009,1.14)':x='iw/2-(iw/zoom/2)':y='(ih-ih/zoom)*(1-on/{total_frames})':d={total_frames}:s=1080x1920:fps=30",
-        f"zoompan=z='min(zoom+0.0009,1.12)':x='iw/2-(iw/zoom/2)':y='ih/2.5-(ih/zoom/2.5)':d={total_frames}:s=1080x1920:fps=30,eq=saturation=1.06:contrast=1.02"
+        f"zoompan=z='min(zoom+0.0010,1.14)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d={total_frames}:s=1080x1920:fps=30{bright_eq}",
+        f"zoompan=z='min(zoom+0.0010,1.15)':x='iw/2-(iw/zoom/2)':y='ih/3-(ih/zoom/3)':d={total_frames}:s=1080x1920:fps=30{bright_eq}",
+        f"zoompan=z='min(zoom+0.0008,1.12)':x='(iw-iw/zoom)*(on/{total_frames})':y='ih/2-(ih/zoom/2)':d={total_frames}:s=1080x1920:fps=30{bright_eq}",
+        f"zoompan=z='min(zoom+0.0008,1.12)':x='iw/2-(iw/zoom/2)':y='(ih-ih/zoom)*(on/{total_frames})':d={total_frames}:s=1080x1920:fps=30{bright_eq}",
+        f"zoompan=z='max(1.15-0.0011*on,1.0)':x='iw/2-(iw/zoom/2)':y='ih/2.3-(ih/zoom/2.3)':d={total_frames}:s=1080x1920:fps=30{bright_eq}",
+        f"zoompan=z='min(zoom+0.0008,1.12)':x='(iw-iw/zoom)*(1-on/{total_frames})':y='ih/2.1-(ih/zoom/2.1)':d={total_frames}:s=1080x1920:fps=30{bright_eq}",
+        f"zoompan=z='min(zoom+0.0009,1.14)':x='iw/2-(iw/zoom/2)':y='(ih-ih/zoom)*(1-on/{total_frames})':d={total_frames}:s=1080x1920:fps=30{bright_eq}",
+        f"zoompan=z='min(zoom+0.0009,1.12)':x='iw/2-(iw/zoom/2)':y='ih/2.5-(ih/zoom/2.5)':d={total_frames}:s=1080x1920:fps=30{bright_eq}"
     ]
     return styles[style_index % len(styles)]
 
@@ -195,8 +239,16 @@ def pick_background_music() -> str:
 
 def pick_companion_images(primary_image: str, count: int = 3, extra_candidates: list = None) -> list:
     """
-    Ana görsele eşlik edecek 3 farklı çekici/cesur Canan Tuna görseli seçer.
-    Önceliği 'feet', 'bold', 'bikini', 'yacht', 'pool', 'satin', 'mini', 'rug', 'gym', 'silk', 'corset' görsellerine verir.
+    4 Karede 'Adım Adım Hazırlanma' (Öncesi/Sonrası Hikaye Kurgusu):
+    İzleyiciyi 16 saniye boyunca ekranda tutmak için sahneleri hikaye sırasıyla seçer:
+    - Eğer 1. kare oje/ayak bakımı ise:
+      2. kare -> Bitmiş oje/pedikür pozu
+      3. kare -> Plaj / Bikini / Spor / Gündüz bacak pozu
+      4. kare -> Gece mini elbise / korse / saten final pozu
+    - Eğer 1. kare başka bir poz ise:
+      2. kare -> Oje / ayak bakımı pozu (her Reels'te mutlaka oje/ayak sahnesi yer alır)
+      3. kare -> Plaj / Bikini / Spor pozu
+      4. kare -> Gece mini elbise / korse / saten final pozu
     """
     primary_abs = os.path.abspath(primary_image)
     if extra_candidates:
@@ -209,23 +261,38 @@ def pick_companion_images(primary_image: str, count: int = 3, extra_candidates: 
         ]
         pool = [p for p in all_imgs if os.path.abspath(p) != primary_abs]
 
-    primary_name = os.path.basename(primary_abs).lower()
     feet_pool = [p for p in pool if "canan_feet_" in os.path.basename(p).lower()]
-    new_bold_pool = [p for p in pool if os.path.basename(p).lower().startswith(("canan_feet_", "canan_bold_"))]
+    day_glam_pool = [
+        p for p in pool
+        if os.path.basename(p).lower().startswith("canan_bold_")
+        and any(k in os.path.basename(p).lower() for k in ("bikini", "pool", "yacht", "beach", "sunbed", "hammock", "shower", "gym", "yoga", "tennis", "shorts"))
+    ]
+    night_glam_pool = [
+        p for p in pool
+        if os.path.basename(p).lower().startswith("canan_bold_")
+        and any(k in os.path.basename(p).lower() for k in ("mini", "corset", "satin", "backless", "plunge", "cutout", "chainmail", "mesh", "halter", "bodycon", "leather", "velvet", "silk"))
+    ]
+    all_bold_pool = [p for p in pool if os.path.basename(p).lower().startswith(("canan_feet_", "canan_bold_"))]
 
-    if "canan_feet_" in primary_name and len(feet_pool) >= 1 and len(new_bold_pool) >= count:
-        # İlk sahne oje sürerken ise 2. sahnede bitmiş oje/ayak pozu, 3 ve 4. sahnede cesur bacak/kombin pozu gelsin
-        second_feet = random.choice(feet_pool)
-        other_bold = [p for p in new_bold_pool if p != second_feet]
-        return [second_feet] + random.sample(other_bold, count - 1)
+    chosen = []
+    if len(feet_pool) >= 1:
+        chosen.append(random.choice(feet_pool))
+    if len(day_glam_pool) >= 1:
+        c_day = [p for p in day_glam_pool if p not in chosen]
+        if c_day:
+            chosen.append(random.choice(c_day))
+    if len(night_glam_pool) >= 1:
+        c_night = [p for p in night_glam_pool if p not in chosen]
+        if c_night:
+            chosen.append(random.choice(c_night))
 
-    source_pool = new_bold_pool if len(new_bold_pool) >= count else pool
-    if len(source_pool) >= count:
-        return random.sample(source_pool, count)
-    chosen = list(source_pool)
-    while len(chosen) < count and pool:
-        chosen.append(random.choice(pool))
-    return chosen
+    fallback_source = [p for p in (all_bold_pool or pool) if p not in chosen]
+    while len(chosen) < count and fallback_source:
+        pick = random.choice(fallback_source)
+        chosen.append(pick)
+        fallback_source.remove(pick)
+
+    return chosen[:count]
 
 
 def create_reels_video(
@@ -239,7 +306,8 @@ def create_reels_video(
 ) -> str:
     """
     Facebook & Instagram Para Kazanma ve Yüksek Etkileşim Kriterlerine Özel:
-    - 4 farklı çekici Canan Tuna görseli (4 x 4.0 sn = 16.0 saniye)
+    - 4 karede 'Adım Adım Hazırlanma' kurgusu (4 x 4.0 sn = 16.0 saniye)
+    - İlk kareden (0.00 sn) itibaren %100 parlak ve net başlangıç (karanlık başlangıç yok)
     - Her sahnede ekrana taşmayan, ufak ve şık etkileşim sorusu (Pillow PNG katmanı)
     - 1080x1920 Full HD (CRF 19) + telifsiz arka plan müziği
     """
@@ -262,7 +330,7 @@ def create_reels_video(
         available_motions[0] = motion_index % 8
 
     print(
-        f"🎬 [4 Sahneli 16sn Etkileşimli Reels] Üretiliyor: {[os.path.basename(p) for p in scene_images]} "
+        f"🎬 [4 Sahneli 16sn Hikaye Kurgulu Reels] Üretiliyor: {[os.path.basename(p) for p in scene_images]} "
         f"| Müzik: {os.path.basename(music_file)}"
     )
 
@@ -275,10 +343,10 @@ def create_reels_video(
             m_style = available_motions[idx % len(available_motions)]
             zoom_filter = get_motion_filter(m_style, frames_per_scene)
 
-            is_last = (idx == num_scenes - 1)
             scene_hook = get_short_hook_for_image(
                 img_p,
-                is_last_scene=is_last,
+                scene_index=idx,
+                num_scenes=num_scenes,
                 custom_hook=(hook_text if idx == 0 else None)
             )
 
@@ -286,13 +354,11 @@ def create_reels_video(
             create_overlay_png(scene_hook, overlay_png)
             temp_files.append(overlay_png)
 
-            fade_in = "fade=t=in:st=0:d=0.35," if idx > 0 else "fade=t=in:st=0:d=0.25,"
-            fade_out = f"fade=t=out:st={scene_duration - 0.35:.2f}:d=0.35,"
-
+            # İlk kareden itibaren %100 parlak ve net başlasın (karanlık başlangıç olmasın)
             filter_complex = (
                 f"[0:v]scale=1080:1920:force_original_aspect_ratio=increase:flags=lanczos,crop=1080:1920,"
                 f"{zoom_filter}[bg];"
-                f"[bg][1:v]overlay=0:0,{fade_in}{fade_out}format=yuv420p[v]"
+                f"[bg][1:v]overlay=0:0,format=yuv420p[v]"
             )
 
             tmp_clip = os.path.join(OUTPUT_DIR, f"_tmp_scene_{idx}_{random.randint(1000,9999)}.mp4")
@@ -352,12 +418,12 @@ def create_reels_video(
                 except Exception:
                     pass
 
-    print(f"✅ 4 Sahneli 16 Saniyelik Etkileşim Yazılı Reels videosu üretildi: {output_mp4}")
+    print(f"✅ 4 Sahneli 16 Saniyelik Hikaye Kurgulu Reels videosu üretildi: {output_mp4}")
     return output_mp4
 
 
 if __name__ == "__main__":
-    test_img = os.path.join(IMAGES_DIR, "canan_royal_blue_yacht_sunset.jpg")
+    test_img = os.path.join(IMAGES_DIR, "canan_feet_red_polish_couch.jpg")
     if os.path.exists(test_img):
         out = os.path.join(OUTPUT_DIR, "test_4scene_16s_text.mp4")
         create_reels_video(test_img, output_mp4=out)

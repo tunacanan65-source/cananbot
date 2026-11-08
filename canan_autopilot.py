@@ -9,6 +9,7 @@ import requests
 import config
 import life_scenarios
 import canan_engine
+import canan_community
 import create_canan_reel
 
 if sys.stdout.encoding != 'utf-8':
@@ -301,6 +302,8 @@ def post_to_instagram_reels(video_path: str, caption: str) -> dict:
 
             if "id" in r_pub:
                 print(f"🎉 Instagram Reels Başarıyla Yayınlandı! ID: {r_pub['id']}")
+                time.sleep(2)
+                canan_community.post_first_comment_instagram(r_pub["id"], is_video=True)
                 return {"status": "success", "post_id": r_pub["id"]}
             else:
                 last_error = r_pub
@@ -356,6 +359,8 @@ def post_to_facebook_reels(video_path: str, caption: str) -> dict:
 
         if r_finish.get("success") or "id" in r_finish or "video_id" in r_finish or "post_id" in r_finish:
             print(f"🎉 Facebook REELS Başarıyla Yayınlandı! Video ID: {video_id}")
+            time.sleep(2)
+            canan_community.post_first_comment_facebook(video_id, is_video=True)
             return {"status": "success", "post_id": video_id}
         else:
             print(f"❌ Facebook Reels Finish Hatası: {r_finish}")
@@ -377,10 +382,65 @@ def _post_to_facebook_video_fallback(video_path: str, caption: str) -> dict:
                 timeout=120
             ).json()
         if "id" in r_fb:
+            time.sleep(2)
+            canan_community.post_first_comment_facebook(r_fb["id"], is_video=True)
             return {"status": "success", "post_id": r_fb["id"]}
         return {"status": "error", "error": r_fb}
     except Exception as e:
         return {"status": "error", "error": str(e)}
+
+
+def run_daily_story_post(slot_mode: str = "morning") -> bool:
+    """
+    Sabah 10:30 ('morning') ve Gece 23:00 ('night') saatlerinde Canan Tuna adına
+    Instagram ve Facebook Hikaye (Story) paylaşımı yapar.
+    """
+    images_dir = os.path.join(BASE_DIR, "assets", "images")
+    if not os.path.exists(images_dir):
+        return False
+
+    all_imgs = [
+        os.path.join(images_dir, f)
+        for f in os.listdir(images_dir)
+        if f.lower().startswith(("canan_feet_", "canan_bold_")) and f.lower().endswith((".jpg", ".jpeg", ".png"))
+    ]
+    if not all_imgs:
+        return False
+
+    if slot_mode == "morning":
+        morning_candidates = [
+            p for p in all_imgs
+            if any(k in os.path.basename(p).lower() for k in ("morning", "bed", "robe", "couch", "coffee", "feet", "sunbed", "balcony"))
+        ]
+        chosen_img = random.choice(morning_candidates or all_imgs)
+        greetings = [
+            "Günaydın tatlım! Günün nasıl başladı?",
+            "Sabah kahvem ve ben... Günaydınlar!",
+            "Yeni güne enerjik başladık, günaydın!",
+            "Bakım saatiyle güne merhaba, günaydın tatlım!"
+        ]
+    else:
+        night_candidates = [
+            p for p in all_imgs
+            if any(k in os.path.basename(p).lower() for k in ("night", "satin", "silk", "lace", "cami", "slip", "feet", "mirror", "couch"))
+        ]
+        chosen_img = random.choice(night_candidates or all_imgs)
+        greetings = [
+            "İyi geceler tatlım, hala uyanık olan var mı?",
+            "Günün yorgunluğunu atma vakti, iyi geceler!",
+            "Bu saatte uyumayanlar burada mı? İyi geceler!",
+            "Tatlı rüyalar, yarın yine buluşalım mı?"
+        ]
+
+    story_text = random.choice(greetings)
+    story_out = os.path.join(OUTPUT_DIR, f"story_{slot_mode}.jpg")
+    create_canan_reel.create_story_image(chosen_img, story_text, output_jpg=story_out)
+
+    print(f"📲 [Otonom Hikaye - {slot_mode.upper()}] Paylaşılıyor: {os.path.basename(chosen_img)} | Not: '{story_text}'")
+    r_ig = canan_engine.post_to_instagram_story(story_out)
+    r_fb = canan_engine.post_to_facebook_story(story_out)
+    print(f"📲 [Story Sonucu] IG: {r_ig.get('status')} | FB: {r_fb.get('status')}")
+    return r_ig.get("status") == "success" or r_fb.get("status") == "success"
 
 
 def run_single_autopilot_post(force_type: str = None):

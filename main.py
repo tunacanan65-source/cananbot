@@ -12,6 +12,7 @@ import config
 import canan_scheduler
 import canan_listener
 import canan_autopilot
+import canan_community
 
 if sys.stdout.encoding != 'utf-8':
     try:
@@ -25,32 +26,34 @@ IMAGES_DIR = os.path.join(BASE_DIR, "assets", "images")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 os.makedirs(IMAGES_DIR, exist_ok=True)
 
+
 def start_scheduler_thread():
     print("⏰ [Canan Cloud] 7/24 Zamanlayıcı başlatılıyor...")
     canan_scheduler.run_scheduler()
+
 
 def start_listener_thread():
     print("🎧 [Canan Cloud] Telegram Dinleyici & /paylas Komut Takipçisi başlatılıyor...")
     canan_listener.run_canan_listener()
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # 1. 7/24 Zamanlayıcıyı arka plan iş parçacığı olarak başlat
     t_sched = threading.Thread(target=start_scheduler_thread, daemon=True)
     t_sched.start()
 
-    # 2. Telegram DM & Komut dinleyicisini arka planda başlat
     t_list = threading.Thread(target=start_listener_thread, daemon=True)
     t_list.start()
 
     print("🚀 [Canan Cloud] Canan Tuna 7/24 Bulut Servisi Tamamen Aktif Edildi!")
     yield
 
+
 app = FastAPI(title="Canan Tuna AI Influencer Cloud Engine", lifespan=lifespan)
 
-# Meta / Instagram ve Facebook doğrudan medya CDN servisi (Catbox/Tmpfiles bağımlılığını ve Cloudflare engellerini yok eder)
 app.mount("/media", StaticFiles(directory=OUTPUT_DIR), name="media")
 app.mount("/images", StaticFiles(directory=IMAGES_DIR), name="images")
+
 
 @app.get("/")
 @app.get("/health")
@@ -59,9 +62,10 @@ def health():
         "status": "online",
         "bot": "Canan Tuna AI Influencer",
         "platforms": ["Instagram", "Facebook", "Telegram"],
-        "schedule": "13:00 (Reels) & 16:30 (Fotoğraf) & 20:30 (Reels) - Haftalık 21 Gönderi",
+        "schedule": "13:00 (4-Kare 16sn Reels) & 16:30 (Fotoğraf) & 20:30 (4-Kare 16sn Reels) + 10:30/23:00 Story + 7/24 Yorum Yanıtlayıcı",
         "command": "Telegram'dan /paylas ile anında tetiklenebilir"
     })
+
 
 @app.get("/api/token-status")
 def token_status():
@@ -92,11 +96,13 @@ def token_status():
 
     return JSONResponse(status)
 
+
 @app.get("/api/trigger-post")
 def trigger_post():
     """Bulut üzerinden tek tıkla paylaşımı tetikleme API'si"""
     ok = canan_autopilot.run_single_autopilot_post()
     return JSONResponse({"ok": ok})
+
 
 @app.get("/api/trigger-reels")
 def trigger_reels():
@@ -110,11 +116,27 @@ def trigger_reels():
         print(f"❌ [Trigger Reels Error]: {err}")
         return JSONResponse({"ok": False, "error": str(e), "traceback": err}, status_code=500)
 
+
 @app.get("/api/trigger-photo")
 def trigger_photo():
     """Bulut üzerinden tek tıkla Fotoğraf paylaşımı tetikleme API'si"""
     ok = canan_autopilot.run_single_autopilot_post(force_type="photo")
     return JSONResponse({"ok": ok, "type": "photo"})
+
+
+@app.get("/api/trigger-story")
+def trigger_story():
+    """Bulut üzerinden tek tıkla Story (Hikaye) paylaşımı tetikleme API'si"""
+    ok = canan_autopilot.run_daily_story_post(slot_mode="morning")
+    return JSONResponse({"ok": ok, "type": "story"})
+
+
+@app.get("/api/trigger-comments")
+def trigger_comments():
+    """Bulut üzerinden tek tıkla Yorum Yanıtlayıcıyı tetikleme API'si"""
+    canan_community.check_and_reply_comments()
+    return JSONResponse({"ok": True, "type": "comments_checked"})
+
 
 @app.get("/privacy")
 def privacy_policy():
@@ -131,6 +153,7 @@ def privacy_policy():
     </body>
     </html>
     """)
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))

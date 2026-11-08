@@ -6,6 +6,7 @@ from datetime import datetime, timezone, timedelta
 import requests
 import config
 import canan_autopilot
+import canan_community
 
 if sys.stdout.encoding != 'utf-8':
     try:
@@ -16,10 +17,10 @@ if sys.stdout.encoding != 'utf-8':
 # Türkiye Saati (TSİ / UTC+3)
 TR_TZ = timezone(timedelta(hours=3))
 
-# Günlük 3 Paylaşım = Haftalık 21 Gönderi (Facebook 17 Gönderi Hedefini %100 Otomatik Tamamlar):
-# - 13:00 -> Öğlen Reels Videosu (Tatil / Yaşam / Estetik Dikey Video)
-# - 16:30 -> Her Gün Akşamüstü Vitrin Fotoğrafı (Estetik Fotoğraf Gönderisi)
-# - 20:30 -> Akşam Reels Videosu (Gece / Spor / Lifestyle Dikey Video)
+# Günlük 3 Ana Gönderi = Haftalık 21 Gönderi (Facebook 17 Gönderi Hedefini %100 Otomatik Tamamlar):
+# - 13:00 -> Öğlen Reels Videosu (4 Kare Hikaye Kurgulu, 16 sn, Etkileşim Yazılı)
+# - 16:30 -> Her Gün Akşamüstü Vitrin Fotoğrafı
+# - 20:30 -> Akşam Reels Videosu (4 Kare Hikaye Kurgulu, 16 sn, Etkileşim Yazılı)
 SCHEDULE_SLOTS = [
     {
         "id": "noon_reels",
@@ -51,6 +52,12 @@ SCHEDULE_SLOTS = [
         "label": "Akşam Reels Videosu",
         "type": "video"
     }
+]
+
+# Günlük 2 Otomatik Hikaye (Story) Slotu (Sabah 10:30 & Gece 23:00)
+STORY_SLOTS = [
+    {"id": "morning_story", "hour": 10, "minute": 30, "end_hour": 12, "mode": "morning", "label": "Sabah Günaydın Hikayesi (Story)"},
+    {"id": "night_story", "hour": 23, "minute": 0, "end_hour": 23, "mode": "night", "label": "Gece İyi Geceler Hikayesi (Story)"}
 ]
 
 
@@ -114,16 +121,20 @@ def start_self_keepalive():
 
 
 def run_scheduler():
-    print("=" * 60)
-    print("🚀 Canan Tuna 7/24 Otonom Zamanlayıcı & Telafi Kalkanı Devrede!")
-    print("📅 Günlük Plan (Türkiye Saati - TSİ | Haftalık 21 Paylaşım):")
-    print("   - 13:00 (Telafi penceresi 13:00-16:15): Öğlen Reels Videosu")
-    print("   - 16:30 (Telafi penceresi 16:30-19:15): Günlük Vitrin Fotoğrafı")
-    print("   - 20:30 (Telafi penceresi 20:30-23:15): Akşam Reels Videosu")
-    print("=" * 60)
+    print("=" * 65)
+    print("🚀 Canan Tuna 7/24 Otonom Zamanlayıcı, Story & Yorum Yanıtlayıcı Devrede!")
+    print("📅 Günlük Ana Gönderi Planı (TSİ | Haftalık 21 Paylaşım):")
+    print("   - 13:00 (Telafi 13:00-16:15): Öğlen 4-Sahneli 16sn Reels + İlk Yorum")
+    print("   - 16:30 (Telafi 16:30-19:15): Günlük Vitrin Fotoğrafı + İlk Yorum")
+    print("   - 20:30 (Telafi 20:30-23:15): Akşam 4-Sahneli 16sn Reels + İlk Yorum")
+    print("📲 Günlük Hikaye (Story) Planı: 10:30 Sabah & 23:00 Gece Story")
+    print("💬 7/24 Otomatik Yorum Yanıtlayıcı: Her 12 dakikada bir FB + IG yorum taraması")
+    print("=" * 65)
 
     start_self_keepalive()
     last_posted_date_slot = {}
+    last_story_date_slot = {}
+    last_comment_check_ts = 0.0
 
     while True:
         try:
@@ -131,10 +142,13 @@ def run_scheduler():
             today_str = now.strftime("%Y-%m-%d")
             now_minutes = now.hour * 60 + now.minute
 
-            for slot in SCHEDULE_SLOTS:
-                if "day_of_week" in slot and now.weekday() != slot["day_of_week"]:
-                    continue
+            # 1. Her 12 dakikada bir Instagram ve Facebook yorumlarını otomatik yanıtla
+            if time.time() - last_comment_check_ts >= 720:
+                last_comment_check_ts = time.time()
+                canan_community.check_and_reply_comments()
 
+            # 2. Günlük Ana Gönderiler (13:00 Reels, 16:30 Fotoğraf, 20:30 Reels)
+            for slot in SCHEDULE_SLOTS:
                 slot_key = f"{today_str}_{slot['id']}"
                 if slot_key in last_posted_date_slot:
                     continue
@@ -142,7 +156,6 @@ def run_scheduler():
                 target_minutes = slot["hour"] * 60 + slot["minute"]
                 end_minutes = slot["window_end_hour"] * 60 + 15
 
-                # Paylaşım vakti geldiyse veya telafi penceresi içindeysek
                 if target_minutes <= now_minutes <= end_minutes:
                     today_posts = get_today_instagram_posts_tr()
                     if has_slot_posted_today(slot, today_posts):
@@ -155,6 +168,19 @@ def run_scheduler():
                     if ok:
                         last_posted_date_slot[slot_key] = True
                     time.sleep(65)
+
+            # 3. Günlük Otomatik Hikaye (Story) Paylaşımları (10:30 Sabah & 23:00 Gece)
+            for st_slot in STORY_SLOTS:
+                st_key = f"{today_str}_{st_slot['id']}"
+                if st_key in last_story_date_slot:
+                    continue
+                st_target = st_slot["hour"] * 60 + st_slot["minute"]
+                st_end = st_slot["end_hour"] * 60 + 45
+                if st_target <= now_minutes <= st_end:
+                    print(f"\n📲 [HİKAYE VAKTİ - TSİ {now.strftime('%H:%M')}] {st_slot['label']} paylaşılıyor...")
+                    canan_autopilot.run_daily_story_post(slot_mode=st_slot["mode"])
+                    last_story_date_slot[st_key] = True
+                    time.sleep(30)
 
             time.sleep(25)
         except Exception as e:
