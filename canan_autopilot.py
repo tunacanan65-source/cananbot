@@ -192,8 +192,10 @@ def pick_next_scenario(force_type: str = None) -> dict:
     target_cats = day_categories if hour < 16 else evening_categories
 
     if unseen_scenarios:
-        preferred = [s for s in unseen_scenarios if s.get("category") in target_cats]
-        chosen_pool = preferred if preferred else unseen_scenarios
+        bold_unseen = [s for s in unseen_scenarios if s.get("bold")]
+        base_unseen = bold_unseen if bold_unseen else unseen_scenarios
+        preferred = [s for s in base_unseen if s.get("category") in target_cats]
+        chosen_pool = preferred if preferred else base_unseen
     else:
         # Tüm senaryolar en az 1 kez paylaşıldıysa, en eski paylaşılmış olan en üst 10 senaryodan seç
         scored_scenarios.sort(key=lambda x: x[0], reverse=True)
@@ -407,7 +409,7 @@ def run_single_autopilot_post(force_type: str = None):
     if media_type == "video":
         out_video = os.path.join(OUTPUT_DIR, f"auto_{sc_id}.mp4")
         print(f"🎬 Senaryo için estetik müzikli Full HD Reels videosu üretiliyor: {sc_id}...")
-        create_canan_reel.create_reels_video(chosen_img, output_mp4=out_video)
+        create_canan_reel.create_reels_video(chosen_img, output_mp4=out_video, hook_text=scenario.get("hook"))
 
         # 1. Telegram
         print("📲 Telegram'a Video Gönderiliyor...")

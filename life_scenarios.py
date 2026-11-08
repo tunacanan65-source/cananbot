@@ -1,622 +1,1198 @@
 import os
 
 """
-Canan Tuna - Genişletilmiş Otonom Yaşam Simülasyonu Senaryo Kütüphanesi (61 Benzersiz Senaryo)
-Her senaryo kendine özel, sıfırdan üretilmiş BİRİNCİL GÖRSELİNE,
-eski paylaşımları da tanıyan 'signatures' imzalarına ve alternatif taze açıklamalara ('alt_captions') sahiptir.
-Tüm görseller assets/images/ altında bağımsız ve taşınabilir olarak saklanır.
+Canan Tuna - Dev Otonom Yaşam & Glamour Simülasyonu Senaryo Kütüphanesi (117 Benzersiz Senaryo)
+- 16 Özel Oje / Ayak Bakımı / Barefoot Senaryosu
+- 40 Özel Cesur / Glamour / Bacak & Dekolte Detaylı Senaryo
+- 61 Klasik Lüks Yaşam & Spor Senaryosu
 """
 
 BASE_DIR = os.path.dirname(__file__)
 IMAGES_DIR = os.path.join(BASE_DIR, "assets", "images")
 
 SCENARIOS = [
-    # --- 🌟 YEPYENİ 17 ÖZEL TASARIM SENARYO (TÜM RENKLER, KOMBİNLER & ÇEKİCİ POZLAR) ---
     {
-        "id": "spor_bordo_gym_ayna_selfie",
-        "category": "spor",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_burgundy_gym_mirror.jpg"),
-        "signatures": ["bordo spor takımım", "antrenman sonrası aynada kendime"],
-        "caption": "Bordo spor takımım ve ben bugün salonda fırtına gibi estik! 🔥💪 Emek verilen her ter damlası fiziğime fazlasıyla değiyor. Bugün spora gidenler kimler bakalım? 😉👇",
-        "alt_captions": [
-            "Antrenman sonrası aynada kendime bakınca bütün yorgunluğum uçup gidiyor... 🍷✨ Bordo bana yakışmış mı aşklar, puanınız kaç? 🔥👇"
-        ],
-        "tags": "#fitness #gymgirl #bordotakım #fitbody #motivasyon #spor #canantuna #reels #mirrorselfie"
+        "id": 'oje_kirmizi_koltuk_bakim',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Yeni sürdüm, kırmızı ojem nasıl olmuş?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_feet_red_polish_couch.jpg'),
+        "signatures": ['kırmızı ojemi yeni sürdüm', 'ayak bakımımı bitirdim nasıl olmuş'],
+        "caption": 'Kırmızı ojemi yeni sürdüm, kurumalarını beklerken koltuğa kıvrıldım... 💅❤️ Bakımlı olmak her kadının kendine borcu bence! Sence kırmızı oje mi daha çekici yoksa başka renk mi? Yorumlarda puanını bekliyorum tatlım 😉👇',
+        "tags": '#oje #pedikür #kırmızıoje #bakım #evhali #çekicilik #canantuna #reels #keşfet'
     },
     {
-        "id": "ev_beyaz_triko_koltuk_keyfi",
-        "category": "ev",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_white_knit_couch.jpg"),
-        "signatures": ["omzu açık beyaz trikom", "zümrüt koltuğuma kıvrıldım"],
-        "caption": "Omzu açık beyaz trikom, sıcak çayım ve evimin huzuru... 🤍🍵 Dışarıdaki koşturmacadan kaçıp zümrüt koltuğuma kıvrıldım. Yanıma bir kahve alıp sohbete gelecek var mı? 😉✨",
-        "alt_captions": [
-            "Evde rahat ama şık olmayı sevenler kulübü! 🤍✨ Beyaz triko elbisemle akşam dinlenmesine geçtim, gününüz nasıl geçti canlar? 🌸👇"
-        ],
-        "tags": "#evhali #beyazelbise #triko #cozyvibes #zarafet #huzur #canantuna #lifestyle #reels"
+        "id": 'oje_kiraz_kirmizi_yesil_koltuk',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Son katı sürüyorum, ojem nasıl olmuş?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_feet_cherry_polish_sofa.jpg'),
+        "signatures": ['kiraz kırmızısı ojemi sürerken', 'son katı da sürdüm mü tamamdır'],
+        "caption": 'Kiraz kırmızısı ojemi sürerken yakalandım! 🍒💅 Son katı da sürdüm mü bakımım tamamdır. Beyaz kombinimle kırmızı ojenin uyumunu nasıl buldun? 10 üzerinden puanla bakalım! 🔥👇',
+        "tags": '#ojekeyfi #bakımlıkadın #kırmızı #evşıklığı #güzellik #canantuna #reels'
     },
     {
-        "id": "tatil_saks_mavisi_yat_gunbatimi",
-        "category": "tatil",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_royal_blue_yacht_sunset.jpg"),
-        "signatures": ["saks mavisi ve gün batımının", "güvertede rüzgarı dinlerken"],
-        "caption": "Saks mavisi ve gün batımının büyüleyici uyumu... 💙🌅 Güvertede hafif esen rüzgarı dinlerken zaman dursun istedim. Mavinin bu tonunu benim kadar seven var mı? ✨👇",
-        "alt_captions": [
-            "Deniz üstünde batan güneşin verdiği o tatlı huzur... 🛥️💙 Arşivden içimi ısıtan en özel karelerden biri, nasıl buldunuz? 🌅👇"
-        ],
-        "tags": "#saksmavisi #günbatımı #yatturu #deniz #zarafet #summervibes #canantuna #reels"
+        "id": 'oje_beyaz_pedikur_yatak',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Beyaz oje yakışmış mı? Puanın kaç?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_feet_white_pedicure_bed.jpg'),
+        "signatures": ['beyaz oje kadar temiz ve şık', 'pedikürüm bitti, beyaz ojelerimle'],
+        "caption": 'Pedikürüm bitti, beyaz ojelerimle yatağımda dinlenme moduna geçtim... 🤍💅 Beyaz oje kadar zarif ve dikkat çekici bir detay yok bence. Sen beyaz ojeyi beğeniyor musun yoksa koyu tonlar mı favorin? ✨👇',
+        "tags": '#beyazoje #pedikür #ipekşort #yatakkeyfi #bakım #canantuna #reels #lifestyle'
     },
     {
-        "id": "spor_cikolata_kahve_yoga_tulum",
-        "category": "spor",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_chocolate_brown_pilates.jpg"),
-        "signatures": ["çikolata kahve tulumumla", "esneklik ve denge seansı"],
-        "caption": "Çikolata kahve tulumumla esneklik ve denge seansı tamamlandı! 🍫🧘‍♀️ Vücudumu dinlendiren ve formda tutan en güzel saatler. Spor tulumumu nasıl buldunuz tatlım? ✨👇",
-        "alt_captions": [
-            "Matın üzerinde geçen her dakika bedenime ayrı bir enerji katıyor... 🤎💪 Kahve tonları bu sezon favorim, sizce nasıl durmuş? 👇"
-        ],
-        "tags": "#yoga #pilates #fitlife #kahvetonları #athleisure #esneklik #canantuna #reels"
+        "id": 'oje_bordo_pelus_hali',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Bordo ojem bitti, sence nasıl görünüyor?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_feet_burgundy_polish_rug.jpg'),
+        "signatures": ['yumuşacık halının üstünde bordo oje', 'bordo ojelerimi sürüp dinlenmeye'],
+        "caption": 'Yumuşacık halının üstünde bordo ojelerimi sürüp dinlenmeye çekildim... 🍷💅 Bordo tonunun tenime çok yakıştığını söylüyorlar, sence de öyle mi? Gözün hangi karede kaldıysa yoruma yaz bakalım 😉👇',
+        "tags": '#bordooje #halıkeyfi #evmodu #bakımzamanı #fitgirl #canantuna #reels'
     },
     {
-        "id": "gece_siyah_saten_penthouse_balkon",
-        "category": "gece",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_black_satin_penthouse.jpg"),
-        "signatures": ["siyah satenin asaleti", "penthouse terasında şehir"],
-        "caption": "Siyah satenin asaleti ve ayaklarımın altında parlayan İstanbul gecesi... 🖤🍸 Penthouse terasında hafif müzik eşliğinde geceye başladık. Bu gece planlar ne bakalım? 😉✨",
-        "alt_captions": [
-            "Geceye siyah bir imza bırakalım... 🌃🖤 Şehir ışıkları mı daha parlak yoksa enerjimiz mi? Yorumları bekliyorum aşklar 👇"
-        ],
-        "tags": "#siyahsaten #geceşıklığı #istanbulgeceleri #penthouse #zarafet #canantuna #reels"
+        "id": 'oje_pembe_balkon_uzanma',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Pembe ojem ve balkon keyfim, nasılım?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_feet_pink_polish_balcony.jpg'),
+        "signatures": ['balkonda ayakları uzatıp pembe oje', 'toz pembe ojelerim güneşte'],
+        "caption": 'Balkonda ayakları uzatıp güneşin tadını çıkarma saati! 🌸💅 Toz pembe ojelerimi yeni bitirdim, şişesi bile hala elimde. Pembe tonlarını sevenler kalpleri bıraksın, bakalım kaç kişiyiz? 💕👇',
+        "tags": '#pembeoje #balkonkeyfi #güneş #yazmodu #pedikür #canantuna #reels'
     },
     {
-        "id": "sokak_haki_crop_etiler_yuruyus",
-        "category": "sokak",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_olive_cargo_street.jpg"),
-        "signatures": ["haki ve beyazın enerjisi", "etiler sokaklarında buzlu"],
-        "caption": "Haki ve beyazın enerjisiyle Etiler sokaklarında buzlu kahve turu! 🌿☕ Hem spor hem çekici kombinleri günlük hayatta çok seviyorum. Tarzıma 10 üzerinden kaç veriyorsunuz? 😎👇",
-        "alt_captions": [
-            "Güneşli havayı yakalayınca sokaklara taşan enerji! 🍃🕶️ Bugünkü sokak stilimi beğendiniz mi canlar? 👇"
-        ],
-        "tags": "#sokakstili #etiler #bebek #kombin #streetfashion #ootd #canantuna #reels"
+        "id": 'oje_siyah_mini_elbise_puf',
+        "category": 'gece',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Siyah elbise ve siyah oje uyumu nasıl?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_feet_black_polish_mirror.jpg'),
+        "signatures": ['siyah mini elbisem ve parlak siyah oje', 'siyah ojenin verdiği o iddialı'],
+        "caption": 'Siyah mini elbisem ve parlak siyah ojelerimle geceye hazırım! 🖤💅 Siyah ojenin verdiği o iddialı ve çekici havayı tek geçerim. Sence siyah oje mi yoksa klasik kırmızı mı kazanır? 👇🔥',
+        "tags": '#siyahoje #minielbise #gecehazırlığı #iddialı #tarz #canantuna #reels'
     },
     {
-        "id": "ev_pembe_ipek_sabah_yatak_kahvalti",
-        "category": "ev",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_pink_silk_morning_bed.jpg"),
-        "signatures": ["pudra pembesi ipek pijamam", "yatakta kruvasan ve latte"],
-        "caption": "Pudra pembesi ipek pijamam, yatakta taze kruvasan ve latte keyfi... 🌸🥐 Bugün kendimi biraz şımartmaya karar verdim. Bana günaydın yok mu bakalım? 😉💕",
-        "alt_captions": [
-            "Sabah güneşinin odaya vurduğu en tatlı dakikalar... 💕☕ Güne böyle huzurlu başlamak gibisi yok, hepinize öpücükler! 🌸👇"
-        ],
-        "tags": "#günaydın #sabahkeyfi #ipekpijama #kahvaltı #evhali #canantuna #morningvibes #reels"
+        "id": 'oje_mercan_havuz_kenari',
+        "category": 'tatil',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Havuz başında ojemizi de tazeledik!',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_feet_coral_polish_pool.jpg'),
+        "signatures": ['havuz kenarında mercan rengi oje', 'suya girmeden önce ojelerimi'],
+        "caption": 'Havuz kenarında güneşlenirken mercan rengi ojelerimi de tazeledim! 🧡🌊 Bronz tende canlı renk ojelerin duruşuna bayılıyorum. Tatilde bile bakımından ödün vermeyenler burada mı? ✨👇',
+        "tags": '#havuzbaşı #yazbakımı #oje #tatilkeyfi #beachvibes #canantuna #reels'
     },
     {
-        "id": "gece_altin_payet_otel_daveti",
-        "category": "gece",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_gold_sequin_gala.jpg"),
-        "signatures": ["şampanya altını ışıltısı", "avizelerin altında büyüleyici"],
-        "caption": "Şampanya altını ışıltısı ve özel bir davet gecesi... ✨🥂 Avizelerin altında parlamayı seviyorum. Bu elbisenin sırt detayına bayıldım, sizce nasıl olmuş? 💛👇",
-        "alt_captions": [
-            "Özel gecelerde altın tonlarının yeri bende hep ayrı... 🌟🥂 Gözlerinizi alamadığınız o kare bu olsun mu? 😉👇"
-        ],
-        "tags": "#altınelbise #gala #gecedaveti #ışıltı #lüksyaşam #zarafet #canantuna #reels"
+        "id": 'oje_french_pedikur_pencere_kahve',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": 'French pedikür mü düz renk mi? Seç bakalım!',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_feet_french_pedi_morning.jpg'),
+        "signatures": ['pencere önünde sabah kahvem ve french', 'klasik french pedikürden vazgeçemeyen'],
+        "caption": 'Pencere önünde sabah kahvem, ipek sabahlığım ve tertemiz French pedikürüm... ☕🤍 Klasik French bakımdan vazgeçemeyen bir tek ben miyim? Doğal ve bakımlı görünümü sevenler yoruma gelsin! 🌸👇',
+        "tags": '#frenchpedicure #sabahkahvesi #ipeksabahlık #zarafet #bakım #canantuna #reels'
     },
     {
-        "id": "ev_lavanta_hali_uzanma_keyfi",
-        "category": "spor",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_lavender_rug_stretch.jpg"),
-        "signatures": ["lavanta takımım ve yumuşacık halı", "halıya uzanıp biraz mola"],
-        "caption": "Esnetme hareketlerinden sonra yumuşacık halıya uzanıp biraz mola verdim... 💜✨ Lavanta takımım hem çok rahat hem de fiziği harika sarıyor. Kimler bugün tembellik modunda? 😉👇",
-        "alt_captions": [
-            "Evde antrenman biter, halı üstünde tatlı yorgunluk başlar! 💜🙈 Gözlerimin içine bakanlara selam olsun, gününüz nasıl geçiyor? 👇"
-        ],
-        "tags": "#lavanta #evsporu #fitgirl #halıkeyfi #çekicilik #motivasyon #canantuna #reels"
+        "id": 'oje_murdum_makyaj_aynasi_minder',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Mürdüm rengi ojem nasıl olmuş tatlım?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_feet_plum_polish_vanity.jpg'),
+        "signatures": ['ayna karşısında minderime oturdum, mürdüm', 'mürdüm rengi ojemi yeni sürdüm'],
+        "caption": 'Ayna karşısında minderime oturdum, mürdüm rengi ojemi yeni sürdüm! 💜💅 İpek şort takımım ve yeni ojelerimle evde bakım gecesi yapıyorum. Mürdüm rengi sence nasıl durmuş? 😉👇',
+        "tags": '#mürdümoje #bakımgecesi #evşıklığı #güzelliksırları #canantuna #reels'
     },
     {
-        "id": "sokak_kirmizi_trenckot_pastane",
-        "category": "sokak",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_red_trench_rain_paris.jpg"),
-        "signatures": ["kırmızı trençkotumla sokaklarda", "uzun çizmeler ve kırmızı"],
-        "caption": "Kırmızı trençkotum ve uzun çizmelerimle sonbahar sokaklarında dikkatleri üzerimize çekelim biraz! ❤️👢 Serin havalarda koyu kırmızı giymeye bayılıyorum. Kombinim geçer not aldı mı? 🔥👇",
-        "alt_captions": [
-            "Butik pastane önünde kısa bir kahve molası... ❤️🥐 Kırmızı trençkot enerjisi diye bir gerçek var, katılıyor musunuz? 👇"
-        ],
-        "tags": "#kırmızıtrençkot #sonbaharmodası #çizmekombini #nişantaşı #tarz #canantuna #reels"
+        "id": 'oje_nude_sezlong_plaj',
+        "category": 'tatil',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Plajda bile ojemiz eksik olmaz, nasıl?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_feet_nude_pedi_sunbed.jpg'),
+        "signatures": ['şezlongda uzanırken nude pembe oje', 'turkuaz kombinim ve bakımlı'],
+        "caption": "Şezlongda uzanırken nude-pembe ojelerimle güneşin keyfini çıkarıyorum... 🏖️💅 Turkuaz plaj kombinim ve bakımlı ayaklarımla yaz enerjisi tam gaz! Bu kareye 1'den 10'a kadar kaç puan verirsin? ☀️👇",
+        "tags": '#plajşıklığı #sezlong #pedikür #yazgüneşi #tatil #canantuna #reels'
     },
     {
-        "id": "tatil_turkuaz_havuz_sezlong",
-        "category": "tatil",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_turquoise_poolside_lounger.jpg"),
-        "signatures": ["turkuaz takımım ve palmiyeler", "şezlongda güneşin tadını"],
-        "caption": "Turkuaz takımım, palmiyeler ve suyun verdiği o eşsiz dinginlik... 🩵🌴 Şezlongda uzanıp güneşin tadını çıkardığım anları hiçbir şeye değişmem. Turkuaz rengi bana yakışmış mı? ✨👇",
-        "alt_captions": [
-            "Sıcak bir tatil molası her zaman ruhu gençleştirir... 🌊🩵 Havuz başı stilime puanınız kaç aşklar? 👇"
-        ],
-        "tags": "#turkuaz #havuzbaşı #resortwear #tatilkeyfi #beachstyle #canantuna #reels"
+        "id": 'oje_kirmizi_bornoz_spa_banyo',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Duş sonrası kırmızı oje keyfi, beğendin mi?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_feet_red_toes_bathrobe.jpg'),
+        "signatures": ['banyo sonrası ipek bornozumla kırmızı oje', 'duş sonrası kendime bakım saati'],
+        "caption": 'Banyo sonrası ipek bornozumla kendime bakım saati ayırdım... 🛁❤️ Parlak kırmızı ojemi sürdüm, şimdi keyif zamanı! Kadında en çok dikkat ettiğiniz bakım detayı ne? Doğruyu söyleyin bakalım 😉👇',
+        "tags": '#spakeyfi #bornoz #kırmızıoje #bakımrutini #çekicilik #canantuna #reels'
     },
     {
-        "id": "spor_antrasit_bisiklet_sahil_park",
-        "category": "spor",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_charcoal_cycling_park.jpg"),
-        "signatures": ["bisikletimle sahil turu", "antrasit şort takımım"],
-        "caption": "Güneşli havada bisikletimle sahil parkuru tamamlandı! 🚲🔥 Antrasit şort takımım ve bitmeyen enerjimle harika bir turdu. Benimle sahilde pedal çevirmeye var mısın? 😉👇",
-        "alt_captions": [
-            "Açık havada spor yapmanın tadı bambaşka! 🌿🚲 Bacak antrenmanını bugün sahilde bisikletle yaptık, nasıl görünüyor? 💪👇"
-        ],
-        "tags": "#bisiklet #sahilturu #bikershorts #fitlife #moda #enerji #canantuna #reels"
+        "id": 'oje_lila_yatak_ustunde',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Lila takımım ve lila ojem uyumlu mu?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_feet_lilac_polish_mattress.jpg'),
+        "signatures": ['lila ev takımım ve birebir aynı tonda lila oje', 'renk uyumuna takıntılı olanlar'],
+        "caption": 'Lila ev takımım ve birebir aynı tonda sürdüğüm lila ojelerim! 💜💅 Renk uyumuna bu kadar dikkat eden bir tek ben olamam değil mi? Yeni ojelerim nasıl olmuş, yorumları görelim! ✨👇',
+        "tags": '#lilaoje #renkuyumu #evkombin #tatlılık #bakım #canantuna #reels'
     },
     {
-        "id": "lifestyle_terrakota_elbise_bahce_kafe",
-        "category": "lifestyle",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_terracotta_pottery_cafe.jpg"),
-        "signatures": ["tarçın rengi kruvaze elbisem", "çiçekli bahçe kafede"],
-        "caption": "Tarçın rengi kruvaze elbisem ve çiçekler içinde huzurlu bir bahçe kafe... 🌺☕ Sıcak tonlar tenime çok uyuyor bence, siz ne dersiniz? Bir kahve ısmarlar mısınız bana? 😉🧡",
-        "alt_captions": [
-            "Begonvillerin altında buzlu latte ve tatlı bir tebessüm... 🧡🌸 Gününüz benimki kadar renkli geçsin canlar! 👇"
-        ],
-        "tags": "#kruvazeelbise #bahçekafe #tarçınrengi #zarafet #kahvekeyfi #canantuna #reels"
+        "id": 'oje_yat_guvertesi_ciplak_ayak',
+        "category": 'tatil',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Gün batımı, tekne ve kırmızı oje... Puanın?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_feet_barefoot_wooden_deck.jpg'),
+        "signatures": ['yat güvertesinde çıplak ayak gün batımı', 'saks mavisi mayom ve kırmızı ojelerim'],
+        "caption": 'Yat güvertesinde ayakları uzatıp gün batımını izlemek gibisi yok... 🛥️🌅 Saks mavisi mayom ve kırmızı ojelerimle denizin ortasında huzuru buldum. Yanımda olsaydın ne konuşurduk? 😉👇',
+        "tags": '#yatturu #günbatımı #kırmızıoje #mavi #denizkeyfi #canantuna #reels'
     },
     {
-        "id": "lifestyle_lacivert_blazer_marina_yat_kulubu",
-        "category": "is",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_navy_blazer_yacht_club.jpg"),
-        "signatures": ["lacivert blazer ve beyaz", "marina yat kulübünde akşamüstü"],
-        "caption": "Marina yat kulübünde akşamüstü buluşması... ⚓💙 Lacivert blazer ve beyaz kombininin o asil duruşuna bayılıyorum. Hem klasik hem çekici olmak tam benim tarzım! ✨👇",
-        "alt_captions": [
-            "Deniz kenarında şık bir akşamüstü toplantısı... 🛥️🤍 Lacivert-beyaz uyumu sizce de her zaman kazanmıyor mu? 👇"
-        ],
-        "tags": "#marina #yachtclub #blazer #oldmoney #şıklık #istanbul #canantuna #reels"
+        "id": 'oje_altin_halhal_deri_koltuk',
+        "category": 'gece',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Halhal ve kırmızı oje ikilisi nasıl durmuş?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_feet_gold_anklet_couch.jpg'),
+        "signatures": ['altın halhalım ve yeni sürdüğüm kırmızı oje', 'bordo saten elbisemle halhal'],
+        "caption": 'Bordo saten elbisem, ince altın halhalım ve yeni sürdüğüm kırmızı ojelerim... ✨👠 Halhal detayını kadında çekici bulanlar kimler? Bu akşamki ev şıklığıma puanınızı bekliyorum aşklar! ❤️👇',
+        "tags": '#halhal #satenelbise #kırmızıoje #zarafet #çekici #canantuna #reels'
     },
     {
-        "id": "ev_mint_yesili_mutfak_detoks_smoothie",
-        "category": "spor",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_mint_wellness_smoothie.jpg"),
-        "signatures": ["mint yeşili spor takımım", "yeşil detoks smoothie"],
-        "caption": "Mint yeşili spor takımım ve antrenman sonrası kendi ellerimle hazırladığım detoks smoothie! 🥑💚 Formumu korumak için mutfakta da disiplin şart. Sağlıklı beslenenler burada mı? ✨👇",
-        "alt_captions": [
-            "Sabah enerjisini yeşil içeceğimden, neşemi de sizden alıyorum! 💚🥤 Mint yeşili rengi nasıl buldunuz tatlım? 👇"
-        ],
-        "tags": "#smoothie #detoks #mintyeşili #sağlıklıyaşam #fitkitchen #canantuna #reels"
+        "id": 'oje_gul_kurusu_hali_uzanma',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Halıya uzandım dinleniyorum, nasılım?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_feet_rose_polish_carpet.jpg'),
+        "signatures": ['halıya yüzüstü uzanıp dinlenme', 'gül kurusu ojelerim ve rahat şortum'],
+        "caption": 'Yorucu bir günün ardından yumuşacık halıya yüzüstü uzanıp dinlenme vakti! 🌸✨ Gül kurusu ojelerim ve rahat ev şortumla günün stresini atıyorum. Senin günün nasıl geçti bakalım? 😉👇',
+        "tags": '#evkeyfi #halı #dinlenme #pembeoje #doğallık #canantuna #reels'
     },
     {
-        "id": "gece_murver_mor_elbise_giyinme_odasi",
-        "category": "gece",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_silver_mirror_dressing.jpg"),
-        "signatures": ["mürdüm rengi kokteyl elbisem", "giyinme odasında son dokunuşlar"],
-        "caption": "Giyinme odasında geceye hazırlanırken son dokunuşlar... 💜✨ Mürdüm rengi dar elbisem ve küpelerim hazır! Bakalım bu akşam nereye gidiyoruz, tahminleri alayım? 😉👠",
-        "alt_captions": [
-            "Ayna karşısında hazırlanmak benim için ayrı bir ritüel... 💄💜 Mürdüm tonu sizce de çok çekici değil mi? 👇"
-        ],
-        "tags": "#mürdüm #kokteylelbise #giyinmeodası #grwm #gecehazırlığı #canantuna #reels"
+        "id": 'oje_sarap_kirmizisi_berjer_koltuk',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Şarap rengi ojem bitti, olmuş mu?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_feet_wine_polish_chair.jpg'),
+        "signatures": ['ipek gömleğim ve şarap kırmızısı oje', 'koltuğuma çekildim ojelerimin kurumasını'],
+        "caption": 'İpek gömleğim ve yeni sürdüğüm şarap kırmızısı ojelerim... 🍷💅 Koltuğuma çekildim, ojelerimin kurumasını beklerken mesajlarınızı okuyorum! En sevdiğin oje rengini yoruma yaz, bir sonrakine onu süreyim 😉👇',
+        "tags": '#şarapkırmızısı #oje #ipekgömlek #evhali #sohbet #canantuna #reels'
     },
     {
-        "id": "is_gunbatimi_plaza_masasi",
-        "category": "is",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_executive_sunset_desk.jpg"),
-        "signatures": ["masamda gün batımı kahvesi", "yüksek katlardan şehri izlerken"],
-        "caption": "Ofiste masamda gün batımı kahvesi ve yeni hedefler... ☕🌆 Yüksek katlardan şehri izlerken çalışmak bana ilham veriyor. İş çıkışı planlarınız hazır mı canlar? 💼✨",
-        "alt_captions": [
-            "Hem çalışkan hem bakımlı olmak bizim doğamızda var! 💼🌸 Günün yorgunluğunu bir kahveyle atıyoruz, sizde durumlar ne? 👇"
-        ],
-        "tags": "#ofisşıklığı #plaza #işkadını #günbatımı #motivasyon #canantuna #reels"
-    },
-
-    # --- 🏺 MEVCUT 44 SENARYO (TAM İMZA KORUMALI & YENİLENMİŞ ALTERNATİF AÇIKLAMALI) ---
-    {
-        "id": "hobi_seramik_atolyesi_heykel",
-        "category": "sanat",
-        "type": "video",
-        "season": "all",
-        "image_path": os.path.join(IMAGES_DIR, "canan_ceramics_studio.jpg"),
-        "signatures": ["ellerim çamurlu ama ruhum", "seramik atölyesi molası"],
-        "caption": "Ellerim çamurlu ama ruhum kuş gibi hafif... 🏺✨ Bugün kendime harika bir seramik atölyesi molası verdim. Kendi ellerinle çamura şekil vermek, sıfırdan bir şey yaratmak o kadar dinlendirici bir terapi ki! Siz en son kendiniz için ne zaman yeni bir şey denediniz? 🤍🌿",
-        "tags": "#seramik #çömlek #atölye #hobi #sanat #ceramics #mindfulness #lifestyle #canantuna #reels"
+        "id": 'cesur_kirmizi_bikini_sonsuzluk_havuzu',
+        "category": 'tatil',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Kırmızı bikinimle yaz enerjisi! Puanın kaç?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_red_bikini_pool.jpg'),
+        "signatures": ['yakut kırmızısı bikinim ve sonsuzluk havuzu'],
+        "caption": 'Yakut kırmızısı bikinim ve sonsuzluk havuzunda batan güneş... ❤️🌊 Suyun verdiği tazelik ve kırmızı enerjisi bir başka oluyor. Kırmızı rengin bende duruşuna kaç puan verirsin? 🔥👇',
+        "tags": '#kırmızıbikini #havuz #günbatımı #fitbody #tatil #canantuna #reels'
     },
     {
-        "id": "kis_uludag_dag_evi_kar",
-        "category": "tatil",
-        "type": "video",
-        "season": "winter",
-        "image_path": os.path.join(IMAGES_DIR, "canan_uludag_winter.jpg"),
-        "signatures": ["uludağ'da ilk kar keyfi", "fincan sıcak çikolata gibisi yok"],
+        "id": 'cesur_siyah_dantelli_saten_yatak',
+        "category": 'gece',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Siyah ipek ve dantel uyumu nasıl olmuş?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_black_lace_cami_bed.jpg'),
+        "signatures": ['siyah dantel detaylı ipek takımım', 'gece lambasının loş ışığında'],
+        "caption": 'Gece lambasının loş ışığında siyah dantel detaylı ipek takımım... 🖤✨ Evde kendimi şık ve çekici hissetmeyi çok seviyorum. İyi geceler mesajımı buraya bırakıyorum, kimler uyanık? 😉🌙👇',
+        "tags": '#siyahipek #geceşıklığı #iyigeceler #evhali #zarafet #canantuna #reels'
+    },
+    {
+        "id": 'cesur_zumrut_yirtmacli_gece_elbisesi',
+        "category": 'gece',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Derin yırtmaçlı zümrüt elbisem nasıl?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_emerald_plunge_dress.jpg'),
+        "signatures": ['zümrüt yeşili derin yırtmaçlı elbisem', 'mermer barda geceye başlangıç'],
+        "caption": 'Zümrüt yeşili derin yırtmaçlı elbisemle geceye iddialı bir başlangıç! 💚🥂 Hem bacak dekoltesi hem de zümrüt tonu bir araya gelince gözler üzerimizde. Bu kombinle nereye gidilir? 😉👇',
+        "tags": '#zümrütyeşili #yırtmaçlıelbise #gecehayatı #şıklık #çekici #canantuna #reels'
+    },
+    {
+        "id": 'cesur_beyaz_bikini_yat_guneslenme',
+        "category": 'tatil',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Teknede beyaz bikini şıklığı! Beğendin mi?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_white_bikini_yacht.jpg'),
+        "signatures": ['teknede beyaz bikinimle güneşlenirken'],
+        "caption": 'Teknede beyaz bikinimle güneşlenirken masmavi koyların tadını çıkarıyorum... 🛥️🤍 Bronz tende beyaz bikininin yeri her zaman ayrıdır. Deniz tatilini özleyenler burada mı? 🌊👇',
+        "tags": '#beyazbikini #yatturu #bronz #deniz #yaz #canantuna #reels'
+    },
+    {
+        "id": 'cesur_pembe_korse_mini_etek_ayna',
+        "category": 'sokak',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Pembe korse ve mini etek kombinim nasıl?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_pink_corset_mirror.jpg'),
+        "signatures": ['fuşya korse büstiyerim ve beyaz mini eteğim'],
+        "caption": 'Fuşya korse büstiyerim ve beyaz mini eteğimle çıkmadan önce son ayna kontrolü! 💖🪞 Korse kesim kıyafetlerin beli incecik göstermesine bayılıyorum. Kombinim geçer not aldı mı? 🔥👇',
+        "tags": '#korse #minietek #mirrorselfie #pembe #kombin #canantuna #reels'
+    },
+    {
+        "id": 'cesur_leopar_mayo_beach_cabana',
+        "category": 'tatil',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Leopar desen bana yakışmış mı?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_leopard_swimsuit_beach.jpg'),
+        "signatures": ['leopar desenli mayom ve gün batımı loca'],
+        "caption": 'Plaj locasında gün batımı ve iddialı leopar desenli mayom... 🐆🌅 Leopar deseni taşıması zordur derler ama ben enerjisine bayıldım! Sence nasıl durmuş tatlım? 😉👇',
+        "tags": '#leopar #beachclub #loca #günbatımı #yazstili #canantuna #reels'
+    },
+    {
+        "id": 'cesur_bordo_saten_gecelik_pencere',
+        "category": 'gece',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Bordo saten ve şehir ışıkları... Nasılım?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_burgundy_satin_slip.jpg'),
+        "signatures": ['ince askılı bordo saten elbisemle cam kenarında'],
+        "caption": 'İnce askılı bordo saten elbisemle cam kenarında İstanbul ışıklarını izliyorum... 🍷🌃 Gece ilerledikçe şehrin büyüsü bambaşka oluyor. Bu saatte uyanık olanlara selam olsun! ✨👇',
+        "tags": '#bordosaten #gece #istanbul #penthouse #zarafet #canantuna #reels'
+    },
+    {
+        "id": 'cesur_mavi_spor_takim_kalca_ayna',
+        "category": 'spor',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Squat antrenmanı bitti, formum nasıl?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_blue_gym_booty_pose.jpg'),
+        "signatures": ['elektrik mavisi spor takımım ve bacak günü'],
+        "caption": 'Elektrik mavisi spor takımım ve yoğun bir bacak-kalça antrenmanı sonrası! 💙🍑 Spor salonunda dökülen her ter damlası formumu korumaya değiyor. Spora devam mı, motivasyonunuz nasıl? 💪🔥👇',
+        "tags": '#squat #legday #gymgirl #fitbody #spor #canantuna #reels'
+    },
+    {
+        "id": 'cesur_altin_bikini_jakuzi_spa',
+        "category": 'tatil',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Sıcak jakuzi ve altın ışıltısı... Puanın?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_gold_chain_bikini_spa.jpg'),
+        "signatures": ['altın zincir detaylı bikinimle sıcak spa havuzu'],
+        "caption": 'Altın zincir detaylı bikinimle sıcak spa havuzunda yorgunluk atıyorum... ✨🧖\u200d♀️ Sıcak su ve loş ışık bütün haftanın stresini sildi. Kendini şımartmayı sevenler burada mı? 💛👇',
+        "tags": '#spa #jakuzi #altınbikini #lüks #dinlenme #canantuna #reels'
+    },
+    {
+        "id": 'cesur_beyaz_gomlek_mutfak_sabah',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Sabah kahvesini beraber içelim mi?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_white_shirt_unbuttoned.jpg'),
+        "signatures": ['salaş beyaz gömleğim ve sabah kahvem mutfak'],
+        "caption": 'Sabah mutfakta salaş beyaz gömleğim ve dantelli büstiyerimle ilk kahvemi hazırladım... ☕🤍 Evde böyle rahat takılmayı çok seviyorum. Kahveyi sade mi içersin yoksa sütlü mü? 😉👇',
+        "tags": '#günaydın #beyazgömlek #mutfak #sabahkahvesi #evhali #canantuna #reels'
+    },
+    {
+        "id": 'cesur_mor_ipek_sabahlik_makyaj',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Hazırlanırken yakalandık, mor yakışmış mı?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_purple_silk_robe.jpg'),
+        "signatures": ['lila-mor ipek sabahlığım ve dudak parlatıcım'],
+        "caption": 'Lila-mor ipek sabahlığım ve makyaj masamda son dokunuşlar... 💜💄 Hazırlanırken geçen o tatlı telaşı bile seviyorum. Mor tonları tenime uymuş mu aşklar? ✨👇',
+        "tags": '#ipeksabahlık #makyaj #vanity #güzellik #mor #canantuna #reels'
+    },
+    {
+        "id": 'cesur_siyah_dekolteli_mini_gece',
+        "category": 'gece',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Geceye siyah mini elbiseyle çıktık, nasıl?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_black_cutout_club.jpg'),
+        "signatures": ['bel dekolteli siyah mini elbisemle terasta'],
+        "caption": 'Bel ve göğüs dekolteli siyah mini elbisemle terasta gece havası! 🖤🔥 Siyahın en cesur ve en şık halini üzerimde taşımayı seviyorum. Bu kombine 10 üzerinden kaç veriyorsun? 👇',
+        "tags": '#siyahmini #dekolte #gecehayatı #rooftop #tarz #canantuna #reels'
+    },
+    {
+        "id": 'cesur_turkuaz_plaj_dus_gunes',
+        "category": 'tatil',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Deniz sonrası serinleme anı! Enerji nasıl?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_turquoise_bikini_shower.jpg'),
+        "signatures": ['denizden çıkınca ahşap plaj duşunda'],
+        "caption": 'Denizden çıkınca güneşin altında serinleme molası... 🩵☀️ Turkuaz rengin bronz tenle uyumuna doyum olmuyor. Yaz tatilini dört gözle bekleyenler el kaldırsın! 🌊👇',
+        "tags": '#turkuaz #plaj #yazmodası #güneş #beachclub #canantuna #reels'
+    },
+    {
+        "id": 'cesur_kirmizi_omzu_acik_deri_koltuk',
+        "category": 'gece',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Kırmızı mini elbise mi siyah mı? Seç bakalım!',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_red_satin_couch.jpg'),
+        "signatures": ['omzu açık ateş kırmızısı mini elbisemle koltukta'],
+        "caption": 'Omzu açık ateş kırmızısı mini elbisemle deri koltukta akşam pozu... ❤️🔥 Uzun bacaklar ve kırmızı bir araya gelince başka söze gerek kalmıyor. Bakışları yakaladık mı? 😉👇',
+        "tags": '#kırmızımini #uzunbacak #çekicilik #akşamşıklığı #canantuna #reels'
+    },
+    {
+        "id": 'cesur_gri_sort_beyaz_crop_parke',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Evde spor şort rahatlığı, nasıl görünüyor?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_grey_shorts_floor.jpg'),
+        "signatures": ['beyaz crop atletim ve gri mini şortumla'],
+        "caption": 'Beyaz crop atletim ve gri mini şortumla evde en doğal halim... 🤍✨ Bazen en sade kombinler bile fiziği en güzel şekilde ortaya çıkarıyor. Doğal ev halimi beğendin mi? 👇',
+        "tags": '#evhali #minişort #croptop #doğalgüzellik #fit #canantuna #reels'
+    },
+    {
+        "id": 'cesur_sampanya_sirt_dekolteli_balkon',
+        "category": 'gece',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Sırt dekoltesi mi ön dekolte mi?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_champagne_backless.jpg'),
+        "signatures": ['sırt dekolteli şampanya saten elbisemle'],
+        "caption": 'Sırt dekolteli şampanya saten elbisemle alacakaranlıkta balkon sefası... 🥂✨ Zarif bir sırt dekoltesi her zaman çok asil ve çekici duruyor bence. Sen ne düşünüyorsun tatlım? 😉👇',
+        "tags": '#sırtdekoltesi #şampanyasaten #zarafet #geceelbisesi #canantuna #reels'
+    },
+    {
+        "id": 'cesur_mercan_bikini_havuz_bar',
+        "category": 'tatil',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Mercan rengi plaj kombinim kaç puan alır?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_neon_coral_bikini.jpg'),
+        "signatures": ['mercan rengi plaj takımım ve soğuk kokteylim'],
+        "caption": 'Havuz barında mercan rengi plaj takımım ve buz gibi içeceğim... 🍹🧡 Canlı renkler enerjimi anında ikiye katlıyor! Benimle karşılıklı bir şeyler içmeye var mısın? 😉👇',
+        "tags": '#mercan #havuzbarı #tatilenerjisi #yaz #kokteyl #canantuna #reels'
+    },
+    {
+        "id": 'cesur_siyah_deri_korse_araba',
+        "category": 'sokak',
+        "type": 'video',
+        "bold": True,
+        "hook": "Deri korse ve araba selfie'si! Yan koltuk boş!",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_leather_corset_car.jpg'),
+        "signatures": ['siyah deri korse büstiyerimle direksiyon başında'],
+        "caption": 'Siyah deri korse büstiyerimle direksiyon başında güneşli bir tur! 🚗🖤 Deri korsenin verdiği o asi ve çekici havayı çok seviyorum. Yan koltuk boş, nereye sürüyoruz? 😉🔥👇',
+        "tags": '#derikorse #carselfie #araba #tarz #çekici #canantuna #reels'
+    },
+    {
+        "id": 'cesur_yesil_kadife_straplez_somine',
+        "category": 'gece',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Şömine başında straplez kadife şıklığı!',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_green_velvet_mini.jpg'),
+        "signatures": ['straplez zümrüt kadife mini elbisem ve şömine'],
+        "caption": 'Şömine ateşi önünde straplez yeşil kadife mini elbisem... 🔥💚 Dışarısı soğuk olabilir ama içerisi fazlasıyla sıcak! Straplez kesim bana yakışmış mı canlar? 👇',
+        "tags": '#straplez #kadifeelbise #şömine #kışgecesi #zarafet #canantuna #reels'
+    },
+    {
+        "id": 'cesur_seftali_yoga_esneklik_gunbatimi',
+        "category": 'spor',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Esneklik ve form bir arada! Nasıl görünüyor?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_peach_yoga_arch.jpg'),
+        "signatures": ['şeftali tonu spor takımım ve gün batımı esneme'],
+        "caption": 'Gün batımı ışığında şeftali tonu spor takımımla esneklik çalışması... 🍑🧘\u200d♀️ Vücudun esnek ve sıkı kalması için her gün düzenli hareket şart! Spor yapanları görelim bakalım 💪👇',
+        "tags": '#yoga #esneklik #fitgirl #şeftalitonu #spor #canantuna #reels'
+    },
+    {
+        "id": 'cesur_kobalt_mavi_mini_merdiven',
+        "category": 'gece',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Kobalt mavi mini elbisemle geceye hazırım!',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_cobalt_mini_stairs.jpg'),
+        "signatures": ['kobalt mavisi büzgülü mini elbisem mermer merdiven'],
+        "caption": 'Mermer merdivenlerde kobalt mavisi büzgülü mini elbisem ve topuklularım... 💙👠 Vücudu saran kesimler ve canlı mavi tonu gece davetlerinde favorim! Kombinime puanın kaç? ✨👇',
+        "tags": '#kobaltmavi #minielbise #topukluayakkabı #geceşıklığı #canantuna #reels'
+    },
+    {
+        "id": 'cesur_siyah_bikini_deniz_hamak',
+        "category": 'tatil',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Denizin üstünde hamak keyfi! Gelmek ister misin?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_black_bikini_hammock.jpg'),
+        "signatures": ['turkuaz suyun üzerindeki file hamakta siyah bikini'],
+        "caption": 'Turkuaz suyun üzerindeki file hamakta altın halkalı siyah bikinimle huzur... 🖤🌊 Altımda berrak deniz, üstümde sıcacık güneş! Buraya kiminle gelmek isterdin? 😉👇',
+        "tags": '#siyahbikini #hamak #turkuazdeniz #tatil #yaz #canantuna #reels'
+    },
+    {
+        "id": 'cesur_beyaz_dantelli_korse_balkon',
+        "category": 'tatil',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Beyaz dantel korse ve deniz manzarası!',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_white_corset_balcony.jpg'),
+        "signatures": ['beyaz dantel korse büstiyerim ve ipek mini etek'],
+        "caption": 'Begonvilli taş balkonda beyaz dantel korse büstiyerim ve ipek mini eteğim... 🤍🌺 Hem romantik hem de oldukça çekici bir yaz kombini oldu. Beyaz dantel detayını sevdin mi? 👇',
+        "tags": '#beyazkorse #dantel #ipeketek #akdeniz #yazşıklığı #canantuna #reels'
+    },
+    {
+        "id": 'cesur_sarap_fermuarli_spor_ayna',
+        "category": 'spor',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Evde spor bitti, ayna pozumuz eksik olmasın!',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_wine_gym_squat_mirror.jpg'),
+        "signatures": ['fermuarlı şarap rengi spor büstiyerim ve tayt şort'],
+        "caption": 'Fermuarlı şarap rengi spor büstiyerim ve kısa tayt şortumla ev antrenmanı tamam! 🍷💪 Evde spor yaparken bile şıklığımdan ödün vermem. Bugünkü formumu nasıl buldun? 🔥👇',
+        "tags": '#evsporu #bikershorts #fitbody #aynaselfie #motivasyon #canantuna #reels'
+    },
+    {
+        "id": 'cesur_gumus_metalik_mini_parti',
+        "category": 'gece',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Gümüş ışıltılı mini elbisemle göz kamaştıralım!',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_silver_chainmail_party.jpg'),
+        "signatures": ['gümüş metalik boyundan bağlamalı mini elbisem'],
+        "caption": 'Gümüş metalik boyundan bağlamalı mini elbisemle gece kulübünde tüm bakışları topladık! 🪩✨ Parlamayı ve iddialı seçimler yapmayı seviyorum. Gümüş mü altın mı sana göre? 🥂👇',
+        "tags": '#gümüşelbise #partistili #gecehayatı #ışıltı #minielbise #canantuna #reels'
+    },
+    {
+        "id": 'cesur_sari_bikini_sezlong_bakis',
+        "category": 'tatil',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Sarı bikinim güneşten daha parlak değil mi?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_yellow_bikini_sunbed.jpg'),
+        "signatures": ['güneş sarısı bikinimle şezlongda uzanırken'],
+        "caption": 'Güneş sarısı bikinimle şezlongda uzanırken omzumun üzerinden küçük bir tebessüm... 💛☀️ Sarı renk bronz tende bir başka parlıyor! Bakışımı yakalayanlar yoruma kalp bıraksın 😉👇',
+        "tags": '#sarıbikini #plaj #güneşlenme #summervibes #çekici #canantuna #reels'
+    },
+    {
+        "id": 'cesur_moka_dar_elbise_asansor_selfie',
+        "category": 'gece',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Asansör aynasında tam boy kontrol! Nasılım?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_mocha_bodycon_elevator.jpg'),
+        "signatures": ['moka kahve vücudu saran elbisemle asansör'],
+        "caption": "Otel asansöründe moka kahve vücudu saran elbisemle klasik ayna selfie'si! 🤎🪞 Vücut hatlarını saran triko elbiseler her zaman kurtarıcım. Bu elbiseye 10 üzerinden kaç verirsin? 🔥👇",
+        "tags": '#bodycondress #asansörselfie #kahverengi #kıvrımlar #şıklık #canantuna #reels'
+    },
+    {
+        "id": 'cesur_roze_saten_kuvet_mum_isigi',
+        "category": 'gece',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Mum ışığı, gül yaprakları ve saten... Romantik mi?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_rose_satin_bath.jpg'),
+        "signatures": ['gül yapraklarıyla dolu küvet kenarında roze saten'],
+        "caption": 'Mum ışığında, gül yapraklarıyla dolu mermer küvet kenarında roze saten elbisemle... 🌹🕯️ Kendime hazırladığım en romantik ve huzurlu akşam! Böyle bir atmosferi kim sevmez ki? 💕👇',
+        "tags": '#mumışığı #rozesaten #romantik #lüksbanyo #zarafet #canantuna #reels'
+    },
+    {
+        "id": 'cesur_kot_sort_beyaz_crop_iskele',
+        "category": 'sokak',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Kot şort ve beyaz crop klasiği! Yakışmış mı?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_denim_shorts_crop.jpg'),
+        "signatures": ['düğümlü beyaz crop bluzum ve yüksek bel kot şortum'],
+        "caption": 'Sahil iskelesinde düğümlü beyaz crop bluzum ve yüksek bel kot şortumla altın saatler... 🌅👖 Hem rahat hem de bacak boyunu ortaya çıkaran en sevdiğim yaz kombini! Beğendin mi tatlım? 😉👇',
+        "tags": '#kotşort #croptop #sahil #günbatımı #yazstili #canantuna #reels'
+    },
+    {
+        "id": 'cesur_yakut_halter_Bogaz_teras',
+        "category": 'gece',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Boğaz manzarası mı ben mi? Doğruyu söyle!',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_ruby_halter_rooftop.jpg'),
+        "signatures": ['göğüs pencereli yakut kırmızısı halter elbisemle'],
+        "caption": 'Boğaz terasında göğüs pencereli yakut kırmızısı halter elbisemle akşam sefası... ❤️🌉 Arkamda İstanbul, üzerimde en sevdiğim kırmızı tonu! Gözün manzarada mı kaldı yoksa bende mi? 😉👇',
+        "tags": '#boğaz #kırmızıelbise #rooftop #istanbulgeceleri #çekicilik #canantuna #reels'
+    },
+    {
+        "id": 'cesur_lila_bikini_havuz_merdiveni',
+        "category": 'tatil',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Havuzdan çıkarken yakalandık! Lila nasıl?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_lilac_bikini_pool_steps.jpg'),
+        "signatures": ['havuz merdivenlerinde pastel lila mayo-bikinim'],
+        "caption": 'Havuz merdivenlerinde pastel lila kesimli bikinim ve güneşin ışıltısı... 💜💦 Suyun içinden çıkarken yakalanan en doğal ve çekici kare! Lila rengi plajda nasıl durmuş? ✨👇',
+        "tags": '#lilabikini #havuzkeyfi #su #yaz #fitgirl #canantuna #reels'
+    },
+    {
+        "id": 'cesur_siyah_tul_korse_mum_yemek',
+        "category": 'gece',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Karşımdaki sandalye boş, yemeğe eşlik eder misin?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_black_mesh_night.jpg'),
+        "signatures": ['tül kollu siyah büstiyer elbisemle mum ışığında'],
+        "caption": 'Tül kollu siyah büstiyer elbisemle mum ışığında özel bir akşam yemeği... 🖤🍷 Karşımdaki sandalye senin için ayrılmış olsaydı bana ilk ne söylerdin? Yorumlarda buluşalım 😉👇',
+        "tags": '#akşamyemeği #siyahbüstiyer #romantik #geceşıklığı #canantuna #reels'
+    },
+    {
+        "id": 'cesur_krem_fitilli_sort_takim_hali',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Krem rengi ev takımım nasıl olmuş?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_cream_ribbed_set_rug.jpg'),
+        "signatures": ['krem rengi fitilli büstiyer ve mini şort takımım'],
+        "caption": 'Krem rengi fitilli büstiyer ve mini şort takımımla pofuduk halı üzerinde akşam keyfi... 🤍✨ Evde hem rahat hem de bakımlı olmayı sevenlerdenim. Bu ev kombinime kaç puan verirsin? 👇',
+        "tags": '#evkombin #kremrengi #minişort #huzur #cozy #canantuna #reels'
+    },
+    {
+        "id": 'cesur_zumrut_bikini_altin_zincir_palmiye',
+        "category": 'tatil',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Zümrüt yeşili ve altın zincir detayı nasıl?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_emerald_bikini_palm.jpg'),
+        "signatures": ['palmiye ağacına yaslanmış zümrüt yeşili mayo'],
+        "caption": 'Palmiye gölgesinde zümrüt yeşili plaj şıklığım ve belimdeki altın zincir detayı... 💚🌴 Yeşilin en asil tonu güneşle buluşunca harika bir enerji ortaya çıktı. Beğenenler kalp bıraksın! ✨👇',
+        "tags": '#zümrütyeşili #palmiye #plajmodası #altınzincir #tatil #canantuna #reels'
+    },
+    {
+        "id": 'cesur_fusya_mini_elbise_yatak_odasi_ayna',
+        "category": 'gece',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Fuşya mini elbisemle enerjim tavan! Puanın?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_fuchsia_mini_mirror.jpg'),
+        "signatures": ['fuşya pembe omzu açık mini elbisemle boy aynası'],
+        "caption": 'Fuşya pembe omzu açık mini elbisemle yatak odası boy aynasında son poz! 💗🪞 Canlı pembe tonları içimdeki neşeyi ve enerjiyi dışarı yansıtıyor. Bu elbiseyle dışarı çıkılır mı? 😉👇',
+        "tags": '#fuşya #minielbise #boyaynası #selfie #enerji #canantuna #reels'
+    },
+    {
+        "id": 'cesur_bronz_saten_kruvaze_mini_teras',
+        "category": 'gece',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Bronz saten mini elbisem güneşte nasıl parlıyor?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_bronze_satin_sunset.jpg'),
+        "signatures": ['bronz saten kruvaze mini elbisemle gün batımı teras'],
+        "caption": 'Deniz manzaralı terasta bronz saten kruvaze mini elbisem ve rüzgarın tatlı esintisi... 🌅🤎 Saten kumaşın gün batımı ışığındaki ışıltısına bayılıyorum. Favori rengin hangisi? ✨👇',
+        "tags": '#bronzsaten #kruvazeelbise #günbatımı #teras #zarafet #canantuna #reels'
+    },
+    {
+        "id": 'cesur_lacivert_mini_tenis_etek_kort',
+        "category": 'spor',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Tenis kortunda mini etek şıklığı! Maça var mısın?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_navy_tennis_mini.jpg'),
+        "signatures": ['lacivert spor büstiyerim ve beyaz pileli mini tenis'],
+        "caption": 'Güneşli kortta lacivert spor büstiyerim ve beyaz pileli mini tenis eteğimle maça hazırım! 🎾💙 Tenis kıyafetlerinin hem sportif hem de bu kadar çekici olmasına bayılıyorum. Rakibim olur musun? 😉👇',
+        "tags": '#tenis #minietek #kortşıklığı #sportif #fitgirl #canantuna #reels'
+    },
+    {
+        "id": 'cesur_murdum_ipek_gecelik_balkon_kapi',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Sabah kahvesi ve ipek rahatlığı... Günaydın!',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_plum_velvet_robe_morning.jpg'),
+        "signatures": ['mürdüm rengi ipek geceliğimle balkon kapısında'],
+        "caption": 'Sabah güneşinde mürdüm rengi ipek geceliğimle balkon kapısında espresso keyfi... ☕💜 Güne erken ve enerjik başlayan herkese kocaman günaydın! Bugün planlarınız ne bakalım? 🌸👇',
+        "tags": '#ipekgecelik #sabahgüneşi #espresso #günaydın #evhali #canantuna #reels'
+    },
+    {
+        "id": 'cesur_beyaz_pencereli_mayo_yat_burun',
+        "category": 'tatil',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Beyaz kesimli mayomla koylardayız! Nasıl?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_white_cutout_swim_yacht.jpg'),
+        "signatures": ['bel pencereli beyaz monokini mayomla yatın burnunda'],
+        "caption": 'Turkuaz koylarda bel pencereli beyaz monokini mayomla güneşin tadını çıkarıyorum... 🛥️🤍 Kesimli mayolar vücut hatlarını çok zarif gösteriyor bence. Sen beğendin mi tatlım? 🌊👇',
+        "tags": '#monokini #beyazmayo #yatturu #turkuaz #tatil #canantuna #reels'
+    },
+    {
+        "id": 'cesur_cikolata_deri_mini_etek_lounge',
+        "category": 'gece',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Deri mini etek ve büstiyer uyumu kaç puan?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bold_chocolate_leather_skirt.jpg'),
+        "signatures": ['bej büstiyerim ve çikolata kahve deri mini eteğim'],
+        "caption": 'Bej büstiyerim ve çikolata kahve deri mini eteğimle akşam buluşmasına hazırım! 🤎🔥 Deri mini etek her zaman iddialı ve vazgeçilmez bir parça. Kombinim 10 üzerinden kaç alır? 👇',
+        "tags": '#derietek #minietek #kahvetonları #gecekombini #tarz #canantuna #reels'
+    },
+    {
+        "id": 'spor_bordo_gym_ayna_selfie',
+        "category": 'spor',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_burgundy_gym_mirror.jpg'),
+        "signatures": ['bordo spor takımım', 'antrenman sonrası aynada kendime'],
+        "caption": 'Bordo spor takımım ve ben bugün salonda fırtına gibi estik! 🔥💪 Emek verilen her ter damlası fiziğime fazlasıyla değiyor. Bugün spora gidenler kimler bakalım? 😉👇',
+        "alt_captions": ['Antrenman sonrası aynada kendime bakınca bütün yorgunluğum uçup gidiyor... 🍷✨ Bordo bana yakışmış mı aşklar, puanınız kaç? 🔥👇'],
+        "tags": '#fitness #gymgirl #bordotakım #fitbody #motivasyon #spor #canantuna #reels #mirrorselfie'
+    },
+    {
+        "id": 'ev_beyaz_triko_koltuk_keyfi',
+        "category": 'ev',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_white_knit_couch.jpg'),
+        "signatures": ['omzu açık beyaz trikom', 'zümrüt koltuğuma kıvrıldım'],
+        "caption": 'Omzu açık beyaz trikom, sıcak çayım ve evimin huzuru... 🤍🍵 Dışarıdaki koşturmacadan kaçıp zümrüt koltuğuma kıvrıldım. Yanıma bir kahve alıp sohbete gelecek var mı? 😉✨',
+        "alt_captions": ['Evde rahat ama şık olmayı sevenler kulübü! 🤍✨ Beyaz triko elbisemle akşam dinlenmesine geçtim, gününüz nasıl geçti canlar? 🌸👇'],
+        "tags": '#evhali #beyazelbise #triko #cozyvibes #zarafet #huzur #canantuna #lifestyle #reels'
+    },
+    {
+        "id": 'tatil_saks_mavisi_yat_gunbatimi',
+        "category": 'tatil',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_royal_blue_yacht_sunset.jpg'),
+        "signatures": ['saks mavisi ve gün batımının', 'güvertede rüzgarı dinlerken'],
+        "caption": 'Saks mavisi ve gün batımının büyüleyici uyumu... 💙🌅 Güvertede hafif esen rüzgarı dinlerken zaman dursun istedim. Mavinin bu tonunu benim kadar seven var mı? ✨👇',
+        "alt_captions": ['Deniz üstünde batan güneşin verdiği o tatlı huzur... 🛥️💙 Arşivden içimi ısıtan en özel karelerden biri, nasıl buldunuz? 🌅👇'],
+        "tags": '#saksmavisi #günbatımı #yatturu #deniz #zarafet #summervibes #canantuna #reels'
+    },
+    {
+        "id": 'spor_cikolata_kahve_yoga_tulum',
+        "category": 'spor',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_chocolate_brown_pilates.jpg'),
+        "signatures": ['çikolata kahve tulumumla', 'esneklik ve denge seansı'],
+        "caption": 'Çikolata kahve tulumumla esneklik ve denge seansı tamamlandı! 🍫🧘\u200d♀️ Vücudumu dinlendiren ve formda tutan en güzel saatler. Spor tulumumu nasıl buldunuz tatlım? ✨👇',
+        "alt_captions": ['Matın üzerinde geçen her dakika bedenime ayrı bir enerji katıyor... 🤎💪 Kahve tonları bu sezon favorim, sizce nasıl durmuş? 👇'],
+        "tags": '#yoga #pilates #fitlife #kahvetonları #athleisure #esneklik #canantuna #reels'
+    },
+    {
+        "id": 'gece_siyah_saten_penthouse_balkon',
+        "category": 'gece',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_black_satin_penthouse.jpg'),
+        "signatures": ['siyah satenin asaleti', 'penthouse terasında şehir'],
+        "caption": 'Siyah satenin asaleti ve ayaklarımın altında parlayan İstanbul gecesi... 🖤🍸 Penthouse terasında hafif müzik eşliğinde geceye başladık. Bu gece planlar ne bakalım? 😉✨',
+        "alt_captions": ['Geceye siyah bir imza bırakalım... 🌃🖤 Şehir ışıkları mı daha parlak yoksa enerjimiz mi? Yorumları bekliyorum aşklar 👇'],
+        "tags": '#siyahsaten #geceşıklığı #istanbulgeceleri #penthouse #zarafet #canantuna #reels'
+    },
+    {
+        "id": 'sokak_haki_crop_etiler_yuruyus',
+        "category": 'sokak',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_olive_cargo_street.jpg'),
+        "signatures": ['haki ve beyazın enerjisi', 'etiler sokaklarında buzlu'],
+        "caption": 'Haki ve beyazın enerjisiyle Etiler sokaklarında buzlu kahve turu! 🌿☕ Hem spor hem çekici kombinleri günlük hayatta çok seviyorum. Tarzıma 10 üzerinden kaç veriyorsunuz? 😎👇',
+        "alt_captions": ['Güneşli havayı yakalayınca sokaklara taşan enerji! 🍃🕶️ Bugünkü sokak stilimi beğendiniz mi canlar? 👇'],
+        "tags": '#sokakstili #etiler #bebek #kombin #streetfashion #ootd #canantuna #reels'
+    },
+    {
+        "id": 'ev_pembe_ipek_sabah_yatak_kahvalti',
+        "category": 'ev',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_pink_silk_morning_bed.jpg'),
+        "signatures": ['pudra pembesi ipek pijamam', 'yatakta kruvasan ve latte'],
+        "caption": 'Pudra pembesi ipek pijamam, yatakta taze kruvasan ve latte keyfi... 🌸🥐 Bugün kendimi biraz şımartmaya karar verdim. Bana günaydın yok mu bakalım? 😉💕',
+        "alt_captions": ['Sabah güneşinin odaya vurduğu en tatlı dakikalar... 💕☕ Güne böyle huzurlu başlamak gibisi yok, hepinize öpücükler! 🌸👇'],
+        "tags": '#günaydın #sabahkeyfi #ipekpijama #kahvaltı #evhali #canantuna #morningvibes #reels'
+    },
+    {
+        "id": 'gece_altin_payet_otel_daveti',
+        "category": 'gece',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_gold_sequin_gala.jpg'),
+        "signatures": ['şampanya altını ışıltısı', 'avizelerin altında büyüleyici'],
+        "caption": 'Şampanya altını ışıltısı ve özel bir davet gecesi... ✨🥂 Avizelerin altında parlamayı seviyorum. Bu elbisenin sırt detayına bayıldım, sizce nasıl olmuş? 💛👇',
+        "alt_captions": ['Özel gecelerde altın tonlarının yeri bende hep ayrı... 🌟🥂 Gözlerinizi alamadığınız o kare bu olsun mu? 😉👇'],
+        "tags": '#altınelbise #gala #gecedaveti #ışıltı #lüksyaşam #zarafet #canantuna #reels'
+    },
+    {
+        "id": 'ev_lavanta_hali_uzanma_keyfi',
+        "category": 'spor',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_lavender_rug_stretch.jpg'),
+        "signatures": ['lavanta takımım ve yumuşacık halı', 'halıya uzanıp biraz mola'],
+        "caption": 'Esnetme hareketlerinden sonra yumuşacık halıya uzanıp biraz mola verdim... 💜✨ Lavanta takımım hem çok rahat hem de fiziği harika sarıyor. Kimler bugün tembellik modunda? 😉👇',
+        "alt_captions": ['Evde antrenman biter, halı üstünde tatlı yorgunluk başlar! 💜🙈 Gözlerimin içine bakanlara selam olsun, gününüz nasıl geçiyor? 👇'],
+        "tags": '#lavanta #evsporu #fitgirl #halıkeyfi #çekicilik #motivasyon #canantuna #reels'
+    },
+    {
+        "id": 'sokak_kirmizi_trenckot_pastane',
+        "category": 'sokak',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_red_trench_rain_paris.jpg'),
+        "signatures": ['kırmızı trençkotumla sokaklarda', 'uzun çizmeler ve kırmızı'],
+        "caption": 'Kırmızı trençkotum ve uzun çizmelerimle sonbahar sokaklarında dikkatleri üzerimize çekelim biraz! ❤️👢 Serin havalarda koyu kırmızı giymeye bayılıyorum. Kombinim geçer not aldı mı? 🔥👇',
+        "alt_captions": ['Butik pastane önünde kısa bir kahve molası... ❤️🥐 Kırmızı trençkot enerjisi diye bir gerçek var, katılıyor musunuz? 👇'],
+        "tags": '#kırmızıtrençkot #sonbaharmodası #çizmekombini #nişantaşı #tarz #canantuna #reels'
+    },
+    {
+        "id": 'tatil_turkuaz_havuz_sezlong',
+        "category": 'tatil',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_turquoise_poolside_lounger.jpg'),
+        "signatures": ['turkuaz takımım ve palmiyeler', 'şezlongda güneşin tadını'],
+        "caption": 'Turkuaz takımım, palmiyeler ve suyun verdiği o eşsiz dinginlik... 🩵🌴 Şezlongda uzanıp güneşin tadını çıkardığım anları hiçbir şeye değişmem. Turkuaz rengi bana yakışmış mı? ✨👇',
+        "alt_captions": ['Sıcak bir tatil molası her zaman ruhu gençleştirir... 🌊🩵 Havuz başı stilime puanınız kaç aşklar? 👇'],
+        "tags": '#turkuaz #havuzbaşı #resortwear #tatilkeyfi #beachstyle #canantuna #reels'
+    },
+    {
+        "id": 'spor_antrasit_bisiklet_sahil_park',
+        "category": 'spor',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_charcoal_cycling_park.jpg'),
+        "signatures": ['bisikletimle sahil turu', 'antrasit şort takımım'],
+        "caption": 'Güneşli havada bisikletimle sahil parkuru tamamlandı! 🚲🔥 Antrasit şort takımım ve bitmeyen enerjimle harika bir turdu. Benimle sahilde pedal çevirmeye var mısın? 😉👇',
+        "alt_captions": ['Açık havada spor yapmanın tadı bambaşka! 🌿🚲 Bacak antrenmanını bugün sahilde bisikletle yaptık, nasıl görünüyor? 💪👇'],
+        "tags": '#bisiklet #sahilturu #bikershorts #fitlife #moda #enerji #canantuna #reels'
+    },
+    {
+        "id": 'lifestyle_terrakota_elbise_bahce_kafe',
+        "category": 'lifestyle',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_terracotta_pottery_cafe.jpg'),
+        "signatures": ['tarçın rengi kruvaze elbisem', 'çiçekli bahçe kafede'],
+        "caption": 'Tarçın rengi kruvaze elbisem ve çiçekler içinde huzurlu bir bahçe kafe... 🌺☕ Sıcak tonlar tenime çok uyuyor bence, siz ne dersiniz? Bir kahve ısmarlar mısınız bana? 😉🧡',
+        "alt_captions": ['Begonvillerin altında buzlu latte ve tatlı bir tebessüm... 🧡🌸 Gününüz benimki kadar renkli geçsin canlar! 👇'],
+        "tags": '#kruvazeelbise #bahçekafe #tarçınrengi #zarafet #kahvekeyfi #canantuna #reels'
+    },
+    {
+        "id": 'lifestyle_lacivert_blazer_marina_yat_kulubu',
+        "category": 'is',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_navy_blazer_yacht_club.jpg'),
+        "signatures": ['lacivert blazer ve beyaz', 'marina yat kulübünde akşamüstü'],
+        "caption": 'Marina yat kulübünde akşamüstü buluşması... ⚓💙 Lacivert blazer ve beyaz kombininin o asil duruşuna bayılıyorum. Hem klasik hem çekici olmak tam benim tarzım! ✨👇',
+        "alt_captions": ['Deniz kenarında şık bir akşamüstü toplantısı... 🛥️🤍 Lacivert-beyaz uyumu sizce de her zaman kazanmıyor mu? 👇'],
+        "tags": '#marina #yachtclub #blazer #oldmoney #şıklık #istanbul #canantuna #reels'
+    },
+    {
+        "id": 'ev_mint_yesili_mutfak_detoks_smoothie',
+        "category": 'spor',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_mint_wellness_smoothie.jpg'),
+        "signatures": ['mint yeşili spor takımım', 'yeşil detoks smoothie'],
+        "caption": 'Mint yeşili spor takımım ve antrenman sonrası kendi ellerimle hazırladığım detoks smoothie! 🥑💚 Formumu korumak için mutfakta da disiplin şart. Sağlıklı beslenenler burada mı? ✨👇',
+        "alt_captions": ['Sabah enerjisini yeşil içeceğimden, neşemi de sizden alıyorum! 💚🥤 Mint yeşili rengi nasıl buldunuz tatlım? 👇'],
+        "tags": '#smoothie #detoks #mintyeşili #sağlıklıyaşam #fitkitchen #canantuna #reels'
+    },
+    {
+        "id": 'gece_murver_mor_elbise_giyinme_odasi',
+        "category": 'gece',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_silver_mirror_dressing.jpg'),
+        "signatures": ['mürdüm rengi kokteyl elbisem', 'giyinme odasında son dokunuşlar'],
+        "caption": 'Giyinme odasında geceye hazırlanırken son dokunuşlar... 💜✨ Mürdüm rengi dar elbisem ve küpelerim hazır! Bakalım bu akşam nereye gidiyoruz, tahminleri alayım? 😉👠',
+        "alt_captions": ['Ayna karşısında hazırlanmak benim için ayrı bir ritüel... 💄💜 Mürdüm tonu sizce de çok çekici değil mi? 👇'],
+        "tags": '#mürdüm #kokteylelbise #giyinmeodası #grwm #gecehazırlığı #canantuna #reels'
+    },
+    {
+        "id": 'is_gunbatimi_plaza_masasi',
+        "category": 'is',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_executive_sunset_desk.jpg'),
+        "signatures": ['masamda gün batımı kahvesi', 'yüksek katlardan şehri izlerken'],
+        "caption": 'Ofiste masamda gün batımı kahvesi ve yeni hedefler... ☕🌆 Yüksek katlardan şehri izlerken çalışmak bana ilham veriyor. İş çıkışı planlarınız hazır mı canlar? 💼✨',
+        "alt_captions": ['Hem çalışkan hem bakımlı olmak bizim doğamızda var! 💼🌸 Günün yorgunluğunu bir kahveyle atıyoruz, sizde durumlar ne? 👇'],
+        "tags": '#ofisşıklığı #plaza #işkadını #günbatımı #motivasyon #canantuna #reels'
+    },
+    {
+        "id": 'hobi_seramik_atolyesi_heykel',
+        "category": 'sanat',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_ceramics_studio.jpg'),
+        "signatures": ['ellerim çamurlu ama ruhum', 'seramik atölyesi molası'],
+        "caption": 'Ellerim çamurlu ama ruhum kuş gibi hafif... 🏺✨ Bugün kendime harika bir seramik atölyesi molası verdim. Kendi ellerinle çamura şekil vermek, sıfırdan bir şey yaratmak o kadar dinlendirici bir terapi ki! Siz en son kendiniz için ne zaman yeni bir şey denediniz? 🤍🌿',
+        "tags": '#seramik #çömlek #atölye #hobi #sanat #ceramics #mindfulness #lifestyle #canantuna #reels'
+    },
+    {
+        "id": 'kis_uludag_dag_evi_kar',
+        "category": 'tatil',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_uludag_winter.jpg'),
+        "signatures": ["uludağ'da ilk kar keyfi", 'fincan sıcak çikolata gibisi yok'],
         "caption": "Uludağ'da ilk kar keyfi! ❄️☕ Beyazlar içinde sıcacık bir fincan sıcak çikolata gibisi yok... Dışarısı buz gibi ama ruhuma öyle iyi geldi ki anlatamam. Kış mevsimini ve kar tatilini sevenler kalpleri bıraksın! 🤍✨",
-        "tags": "#uludağ #kartatili #kar #kışmodası #wintervibes #cozy #canantuna #reels #huzur"
+        "tags": '#uludağ #kartatili #kar #kışmodası #wintervibes #cozy #canantuna #reels #huzur'
     },
     {
-        "id": "sonbahar_nisantasi_kahve_yuruyusu",
-        "category": "sokak",
-        "type": "video",
-        "season": "autumn",
-        "image_path": os.path.join(IMAGES_DIR, "canan_autumn_nisantasi.jpg"),
-        "signatures": ["camel trençkot sezonunu", "sonbahar yaprakları, sıcak bir kahve"],
-        "caption": "Sonbahar yaprakları, sıcak bir kahve ve Nişantaşı sokakları... 🍂☕ Camel trençkot sezonunu resmen açtım! Havalar hafif serinleyince sokak yürüyüşleri bana inanılmaz ilham veriyor. Sizin en sevdiğiniz sonbahar kombini ne? 🤎👇",
-        "tags": "#nişantaşı #sonbahar #trençkot #sokakstili #kahvekeyfi #streetfashion #canantuna #reels #autumnvibes"
+        "id": 'sonbahar_nisantasi_kahve_yuruyusu',
+        "category": 'sokak',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_autumn_nisantasi.jpg'),
+        "signatures": ['camel trençkot sezonunu', 'sonbahar yaprakları, sıcak bir kahve'],
+        "caption": 'Sonbahar yaprakları, sıcak bir kahve ve Nişantaşı sokakları... 🍂☕ Camel trençkot sezonunu resmen açtım! Havalar hafif serinleyince sokak yürüyüşleri bana inanılmaz ilham veriyor. Sizin en sevdiğiniz sonbahar kombini ne? 🤎👇',
+        "tags": '#nişantaşı #sonbahar #trençkot #sokakstili #kahvekeyfi #streetfashion #canantuna #reels #autumnvibes'
     },
     {
-        "id": "gece_kirmizi_italyan_restoran",
-        "category": "gece",
-        "type": "photo",
-        "image_path": os.path.join(IMAGES_DIR, "canan_red_dress_restaurant.jpg"),
-        "signatures": ["kırmızı her kadının gardırobunda", "hafif italyan ezgileri"],
-        "caption": "Kırmızı her kadının gardırobunda en az bir kere olmalı bence... ❤️✨ Mum ışığı, güzel bir akşam yemeği ve hafif İtalyan ezgileri. Kırmızı kombinimi nasıl buldunuz aşklar? 🍷👇",
-        "tags": "#kırmızıelbise #gecedaveti #zarafet #dinner #italyan #lifestyle #canantuna #gününkaresi"
+        "id": 'gece_kirmizi_italyan_restoran',
+        "category": 'gece',
+        "type": 'photo',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_red_dress_restaurant.jpg'),
+        "signatures": ['kırmızı her kadının gardırobunda', 'hafif italyan ezgileri'],
+        "caption": 'Kırmızı her kadının gardırobunda en az bir kere olmalı bence... ❤️✨ Mum ışığı, güzel bir akşam yemeği ve hafif İtalyan ezgileri. Kırmızı kombinimi nasıl buldunuz aşklar? 🍷👇',
+        "tags": '#kırmızıelbise #gecedaveti #zarafet #dinner #italyan #lifestyle #canantuna #gününkaresi'
     },
     {
-        "id": "is_zumrut_blazer_executive",
-        "category": "sokak",
-        "type": "photo",
-        "image_path": os.path.join(IMAGES_DIR, "canan_emerald_blazer_office.jpg"),
-        "signatures": ["zümrüt yeşili blazer'ımın", "yeni projeler, yeni toplantılar ve yüksek"],
+        "id": 'is_zumrut_blazer_executive',
+        "category": 'sokak',
+        "type": 'photo',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_emerald_blazer_office.jpg'),
+        "signatures": ["zümrüt yeşili blazer'ımın", 'yeni projeler, yeni toplantılar ve yüksek'],
         "caption": "Yeni projeler, yeni toplantılar ve yüksek hedefler! 💼💚 Zümrüt yeşili blazer'ımın verdiği özgüveni çok seviyorum. Kadın girişimciler ve iş kadınları burada mı? Gücünüzü gösterin! 🚀✨",
-        "tags": "#businesswoman #blazer #kariyer #ofisstili #kombin #girişimci #canantuna #stil"
+        "tags": '#businesswoman #blazer #kariyer #ofisstili #kombin #girişimci #canantuna #stil'
     },
     {
-        "id": "sokak_alacati_sari_elbise",
-        "category": "tatil",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_alacati_yellow_dress.jpg"),
-        "signatures": ["alaçatı sokakları, pembe begonviller", "yazdan kalan sarı sıcak anlar"],
-        "caption": "Begonviller, Alaçatı sokakları ve sarı keten elbisemin enerjisi... 🌸☀️ Soğuk günlerde bile içimi ısıtan en tatlı karelerden biri. En çok özlediğiniz tatil beldesi neresi? 💛👇",
-        "tags": "#alaçatı #yazadönüş #tb #çeşme #sarıkombin #yazmodası #canantuna #enerji #reels"
+        "id": 'sokak_alacati_sari_elbise',
+        "category": 'tatil',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_alacati_yellow_dress.jpg'),
+        "signatures": ['alaçatı sokakları, pembe begonviller', 'yazdan kalan sarı sıcak anlar'],
+        "caption": 'Begonviller, Alaçatı sokakları ve sarı keten elbisemin enerjisi... 🌸☀️ Soğuk günlerde bile içimi ısıtan en tatlı karelerden biri. En çok özlediğiniz tatil beldesi neresi? 💛👇',
+        "tags": '#alaçatı #yazadönüş #tb #çeşme #sarıkombin #yazmodası #canantuna #enerji #reels'
     },
     {
-        "id": "spor_lila_park_fitness",
-        "category": "spor",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_lilac_fitness_park.jpg"),
-        "signatures": ["sabah koşusu ve park esnemesi", "lila spor takımımın enerjisine"],
-        "caption": "Sabah koşusu ve park esnemesi tamamlandı! 💜🌿 Lila spor takımımın enerjisine bayıldım. Güne erken başlamak ve ter atmak gün boyu zinde tutuyor. Bugün kendiniz için ne yaptınız? 💪🔥",
-        "tags": "#fitness #sabahsporu #lilatakım #gymgirl #motivasyon #sağlıklıyaşam #canantuna #reels"
+        "id": 'spor_lila_park_fitness',
+        "category": 'spor',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_lilac_fitness_park.jpg'),
+        "signatures": ['sabah koşusu ve park esnemesi', 'lila spor takımımın enerjisine'],
+        "caption": 'Sabah koşusu ve park esnemesi tamamlandı! 💜🌿 Lila spor takımımın enerjisine bayıldım. Güne erken başlamak ve ter atmak gün boyu zinde tutuyor. Bugün kendiniz için ne yaptınız? 💪🔥',
+        "tags": '#fitness #sabahsporu #lilatakım #gymgirl #motivasyon #sağlıklıyaşam #canantuna #reels'
     },
     {
-        "id": "tatil_kapadokya_balonlar",
-        "category": "tatil",
-        "type": "photo",
-        "image_path": os.path.join(IMAGES_DIR, "canan_cappadocia_terrace.jpg"),
-        "signatures": ["kapadokya'da gün doğumu masal", "gökyüzündeki balonları izlerken"],
+        "id": 'tatil_kapadokya_balonlar',
+        "category": 'tatil',
+        "type": 'photo',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_cappadocia_terrace.jpg'),
+        "signatures": ["kapadokya'da gün doğumu masal", 'gökyüzündeki balonları izlerken'],
         "caption": "Kapadokya'da gün doğumu masal gibi... 🎈✨ Gökyüzündeki balonları izlerken sıcacık kahvemi yudumlamak bana inanılmaz bir huzur verdi. Hayatınızda mutlaka görmeniz gereken yerler listenize ekleyin derim! Siz Kapadokya'ya gittiniz mi aşklar? ☕🌅👇",
-        "tags": "#kapadokya #cappadocia #gündoğumu #balon #seyahat #travelblogger #canantuna #huzur"
+        "tags": '#kapadokya #cappadocia #gündoğumu #balon #seyahat #travelblogger #canantuna #huzur'
     },
     {
-        "id": "sabah_bebek_kruvasan_kahve",
-        "category": "ev",
-        "type": "photo",
-        "image_path": os.path.join(IMAGES_DIR, "canan_bebek_cafe.jpg"),
-        "signatures": ["sabah kahvesi ve taze kruvasan klasiği", "bebek sahilinde güne mis gibi"],
-        "caption": "Sabah kahvesi ve taze kruvasan klasiği! 🥐☕ Bebek sahilinde güne mis gibi başladım. Tatlı krizine girenler burada mı? Kendinize güzel bir gün hediye edin aşklar 🌸💛",
-        "tags": "#bebek #kahvekeyfi #kruvasan #günaydın #istanbul #lifestyle #canantuna #gününkaresi"
+        "id": 'sabah_bebek_kruvasan_kahve',
+        "category": 'ev',
+        "type": 'photo',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bebek_cafe.jpg'),
+        "signatures": ['sabah kahvesi ve taze kruvasan klasiği', 'bebek sahilinde güne mis gibi'],
+        "caption": 'Sabah kahvesi ve taze kruvasan klasiği! 🥐☕ Bebek sahilinde güne mis gibi başladım. Tatlı krizine girenler burada mı? Kendinize güzel bir gün hediye edin aşklar 🌸💛',
+        "tags": '#bebek #kahvekeyfi #kruvasan #günaydın #istanbul #lifestyle #canantuna #gününkaresi'
     },
     {
-        "id": "tatil_ege_yat_turu",
-        "category": "tatil",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_yacht_summer.jpg"),
-        "signatures": ["rüzgar saçımda, masmavi deniz önümde", "ege'nin o masmavi sularında"],
-        "caption": "Masmavi koylar ve deniz esintisi... 🌊🛥️ Bazen her şeyi geride bırakıp ufka doğru açılmak ruhu yeniliyor. Deniz tutkunları kimler bakalım? 💙👇",
-        "tags": "#yazadönüş #throwback #tb #yatturu #deniz #tatil #yazözlemi #canantuna #reels #summervibes"
+        "id": 'tatil_ege_yat_turu',
+        "category": 'tatil',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_yacht_summer.jpg'),
+        "signatures": ['rüzgar saçımda, masmavi deniz önümde', "ege'nin o masmavi sularında"],
+        "caption": 'Masmavi koylar ve deniz esintisi... 🌊🛥️ Bazen her şeyi geride bırakıp ufka doğru açılmak ruhu yeniliyor. Deniz tutkunları kimler bakalım? 💙👇',
+        "tags": '#yazadönüş #throwback #tb #yatturu #deniz #tatil #yazözlemi #canantuna #reels #summervibes'
     },
     {
-        "id": "gece_bogaz_cati_terasi",
-        "category": "gece",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_rooftop_sunset.jpg"),
-        "signatures": ["altın saatler (golden hour) ve boğaz", "gün batarken bu şehir bambaşka"],
-        "caption": "Altın saatler (Golden hour) ve Boğaz manzarası... 🌇✨ Gün batarken bu şehir bambaşka bir büyüye bürünüyor. Akşam planınız ne canlar? 🍷❤️",
-        "tags": "#goldenhour #günbatımı #istanbul #boğaz #rooftop #zarafet #canantuna #reels"
+        "id": 'gece_bogaz_cati_terasi',
+        "category": 'gece',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_rooftop_sunset.jpg'),
+        "signatures": ['altın saatler (golden hour) ve boğaz', 'gün batarken bu şehir bambaşka'],
+        "caption": 'Altın saatler (Golden hour) ve Boğaz manzarası... 🌇✨ Gün batarken bu şehir bambaşka bir büyüye bürünüyor. Akşam planınız ne canlar? 🍷❤️',
+        "tags": '#goldenhour #günbatımı #istanbul #boğaz #rooftop #zarafet #canantuna #reels'
     },
     {
-        "id": "tatil_bodrum_beach",
-        "category": "tatil",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_tuna_bodrum_beach_1792678870147.jpg"),
-        "signatures": ["deniz, güneş ve biraz kafa dinlemece", "bodrum bana her zaman çok iyi geliyor", "deniz mi havuz mu deseler"],
+        "id": 'tatil_bodrum_beach',
+        "category": 'tatil',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_tuna_bodrum_beach_1792678870147.jpg'),
+        "signatures": ['deniz, güneş ve biraz kafa dinlemece', 'bodrum bana her zaman çok iyi geliyor', 'deniz mi havuz mu deseler'],
         "caption": "Bodrum'un o sıcak güneşi ve kumsalı... ☀️🌊 Deniz mi havuz mu deseler siz hangisini seçerdiniz? 🌊👇",
-        "tags": "#yazadönüş #throwback #tb #bodrum #tatil #beachvibes #güneş #yaz #canantuna #reels"
+        "tags": '#yazadönüş #throwback #tb #bodrum #tatil #beachvibes #güneş #yaz #canantuna #reels'
     },
     {
-        "id": "sokak_karakoy_yagmur",
-        "category": "sokak",
-        "type": "photo",
-        "image_path": os.path.join(IMAGES_DIR, "canan_tuna_karakoy_street_portrait_1792678880948.jpg"),
-        "signatures": ["yağmurda ıslanmayı seven kaç kişiyiz", "karaköy sokaklarında yürüyüş yapıp"],
-        "caption": "Yağmurda ıslanmayı seven kaç kişiyiz? 🌧️🌂 Karaköy sokaklarında yürüyüş yapıp kahvemi aldım. Yağmurlu havalar bana inanılmaz ilham veriyor... ✨",
-        "tags": "#karaköy #istanbul #yağmur #trenchcoat #sokakmodası #canantuna #lifestyle"
+        "id": 'sokak_karakoy_yagmur',
+        "category": 'sokak',
+        "type": 'photo',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_tuna_karakoy_street_portrait_1792678880948.jpg'),
+        "signatures": ['yağmurda ıslanmayı seven kaç kişiyiz', 'karaköy sokaklarında yürüyüş yapıp'],
+        "caption": 'Yağmurda ıslanmayı seven kaç kişiyiz? 🌧️🌂 Karaköy sokaklarında yürüyüş yapıp kahvemi aldım. Yağmurlu havalar bana inanılmaz ilham veriyor... ✨',
+        "tags": '#karaköy #istanbul #yağmur #trenchcoat #sokakmodası #canantuna #lifestyle'
     },
     {
-        "id": "spor_pilates_reformer",
-        "category": "spor",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_tuna_pilates_portrait_1792678899801.jpg"),
-        "signatures": ["reformer seansı bitti, ter atıldı", "vücuduna iyi bakmak kendine yapabileceğin"],
-        "caption": "Reformer seansı bitti, ter atıldı! 💪🧘‍♀️ Vücuduna iyi bakmak kendine yapabileceğin en büyük iyilik. Bugün spora vakit ayırdınız mı canlar? 🔥👇",
-        "tags": "#pilates #reformer #fitgirl #spor #sağlıklıyaşam #canantuna #gymmotivation"
+        "id": 'spor_pilates_reformer',
+        "category": 'spor',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_tuna_pilates_portrait_1792678899801.jpg'),
+        "signatures": ['reformer seansı bitti, ter atıldı', 'vücuduna iyi bakmak kendine yapabileceğin'],
+        "caption": 'Reformer seansı bitti, ter atıldı! 💪🧘\u200d♀️ Vücuduna iyi bakmak kendine yapabileceğin en büyük iyilik. Bugün spora vakit ayırdınız mı canlar? 🔥👇',
+        "tags": '#pilates #reformer #fitgirl #spor #sağlıklıyaşam #canantuna #gymmotivation'
     },
     {
-        "id": "gece_bogaz_aksam_yemegi",
-        "category": "gece",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_tuna_bosphorus_night_1792678913579.jpg"),
-        "signatures": ["istanbul geceleri ve boğaz'ın ışıkları", "bazen sadece durup bu şehrin tadını"],
+        "id": 'gece_bogaz_aksam_yemegi',
+        "category": 'gece',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_tuna_bosphorus_night_1792678913579.jpg'),
+        "signatures": ["istanbul geceleri ve boğaz'ın ışıkları", 'bazen sadece durup bu şehrin tadını'],
         "caption": "İstanbul geceleri ve Boğaz'ın ışıkları... 🌉✨ Bazen sadece durup bu şehrin tadını çıkarmak gerekiyor. Akşamınız nasıl geçiyor aşklar? 🍷❤️",
-        "tags": "#boğaz #istanbul #iyigeceler #şekerim #canantuna #gecehayatı #dinner"
+        "tags": '#boğaz #istanbul #iyigeceler #şekerim #canantuna #gecehayatı #dinner'
     },
     {
-        "id": "sokak_araba_selfie",
-        "category": "sokak",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_tuna_driver_selfie_1792678924695.jpg"),
-        "signatures": ["istanbul trafiği klasiği: kırmızı ışıkta", "şarkımı açtım enerjimi düşürmüyorum"],
-        "caption": "İstanbul trafiği klasiği: Kırmızı ışıkta selfie çekilir! 🚗💨 Şarkımı açtım enerjimi düşürmüyorum. Trafikte olanlara sabırlar diliyorum 🙈🎧",
-        "tags": "#istanbul #trafik #selfie #carselfie #gününkaresi #canantuna #enerji"
+        "id": 'sokak_araba_selfie',
+        "category": 'sokak',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_tuna_driver_selfie_1792678924695.jpg'),
+        "signatures": ['istanbul trafiği klasiği: kırmızı ışıkta', 'şarkımı açtım enerjimi düşürmüyorum'],
+        "caption": 'İstanbul trafiği klasiği: Kırmızı ışıkta selfie çekilir! 🚗💨 Şarkımı açtım enerjimi düşürmüyorum. Trafikte olanlara sabırlar diliyorum 🙈🎧',
+        "tags": '#istanbul #trafik #selfie #carselfie #gününkaresi #canantuna #enerji'
     },
     {
-        "id": "ev_balkon_ciplak_ayak",
-        "category": "ev",
-        "type": "photo",
-        "image_path": os.path.join(IMAGES_DIR, "canan_tuna_cozy_balcony_portrait_1792678939456.jpg"),
-        "signatures": ["balkonda sabah kahvesi, serin hava", "bütün gün böyle oturabilirim"],
-        "caption": "Balkonda sabah kahvesi, serin hava ve sessizlik... ☕🌿 Bütün gün böyle oturabilirim. Güne güzel bir başlangıç yaptık, sizde durumlar ne? 🌸👇",
-        "tags": "#günaydın #kahvekeyfi #huzur #evhali #balkonkeyfi #canantuna #gününkaresi"
+        "id": 'ev_balkon_ciplak_ayak',
+        "category": 'ev',
+        "type": 'photo',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_tuna_cozy_balcony_portrait_1792678939456.jpg'),
+        "signatures": ['balkonda sabah kahvesi, serin hava', 'bütün gün böyle oturabilirim'],
+        "caption": 'Balkonda sabah kahvesi, serin hava ve sessizlik... ☕🌿 Bütün gün böyle oturabilirim. Güne güzel bir başlangıç yaptık, sizde durumlar ne? 🌸👇',
+        "tags": '#günaydın #kahvekeyfi #huzur #evhali #balkonkeyfi #canantuna #gününkaresi'
     },
     {
-        "id": "sokak_nisantasi_kafe",
-        "category": "sokak",
-        "type": "photo",
-        "image_path": os.path.join(IMAGES_DIR, "canan_tana_nisantasi_cafe_1792666291150.jpg"),
-        "signatures": ["nişantaşı sokakları ve buz gibi bir filtre", "kombinimi nasıl buldunuz? 🕶️✨ nişantaşı'nda"],
-        "caption": "Nişantaşı sokakları ve buz gibi bir filtre kahve... ☕🕶️ Enerjim tavan! Bugün kendiniz için ne yaptınız aşklar? 👇✨",
-        "tags": "#nişantaşı #istanbul #kahvekeyfi #sokakmodası #canantuna #lifestyle"
+        "id": 'sokak_nisantasi_kafe',
+        "category": 'sokak',
+        "type": 'photo',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_tana_nisantasi_cafe_1792666291150.jpg'),
+        "signatures": ['nişantaşı sokakları ve buz gibi bir filtre', "kombinimi nasıl buldunuz? 🕶️✨ nişantaşı'nda"],
+        "caption": 'Nişantaşı sokakları ve buz gibi bir filtre kahve... ☕🕶️ Enerjim tavan! Bugün kendiniz için ne yaptınız aşklar? 👇✨',
+        "tags": '#nişantaşı #istanbul #kahvekeyfi #sokakmodası #canantuna #lifestyle'
     },
     {
-        "id": "ev_sabah_kahvesi",
-        "category": "ev",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_tuna_morning_lifestyle_1792660779429.jpg"),
-        "signatures": ["güne kahvesiz başlayamayanlar el kaldırsın", "bugünün mottosu: gülümse ve anı yaşa"],
-        "caption": "Güne kahvesiz başlayamayanlar el kaldırsın! ☕☀️ Bugünün mottosu: Gülümse ve anı yaşa! Harika bir gün olsun hepimize 🌸💛",
-        "tags": "#günaydın #sabahkahvesi #evhali #huzur #canantuna #pozitifenerji"
+        "id": 'ev_sabah_kahvesi',
+        "category": 'ev',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_tuna_morning_lifestyle_1792660779429.jpg'),
+        "signatures": ['güne kahvesiz başlayamayanlar el kaldırsın', 'bugünün mottosu: gülümse ve anı yaşa'],
+        "caption": 'Güne kahvesiz başlayamayanlar el kaldırsın! ☕☀️ Bugünün mottosu: Gülümse ve anı yaşa! Harika bir gün olsun hepimize 🌸💛',
+        "tags": '#günaydın #sabahkahvesi #evhali #huzur #canantuna #pozitifenerji'
     },
     {
-        "id": "sokak_kis_sicak_kahve",
-        "category": "sokak",
-        "type": "photo",
-        "image_path": os.path.join(IMAGES_DIR, "canan_tuna_winter_street_1792666325312.jpg"),
-        "signatures": ["hava buz gibi ama içimizi ısıtan", "kar görünce çocuk gibi sevinenler"],
-        "caption": "Hava buz gibi ama içimizi ısıtan kahvemiz var ❄️☕ Karlı günlerde sokakta yürümek bana hep masal gibi gelir. Siz kış insanı mısınız? ☃️🤍",
-        "tags": "#kış #kar #soğuk #kahvekeyfi #canantuna #wintervibes"
+        "id": 'sokak_kis_sicak_kahve',
+        "category": 'sokak',
+        "type": 'photo',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_tuna_winter_street_1792666325312.jpg'),
+        "signatures": ['hava buz gibi ama içimizi ısıtan', 'kar görünce çocuk gibi sevinenler'],
+        "caption": 'Hava buz gibi ama içimizi ısıtan kahvemiz var ❄️☕ Karlı günlerde sokakta yürümek bana hep masal gibi gelir. Siz kış insanı mısınız? ☃️🤍',
+        "tags": '#kış #kar #soğuk #kahvekeyfi #canantuna #wintervibes'
     },
     {
-        "id": "spor_gym_ayna_selfie",
-        "category": "spor",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_tuna_fitness_selfie_1792663898849.jpg"),
-        "signatures": ["bahane yok, disiplin var", "bugünkü bacak & kalça antrenmanı bitti"],
-        "caption": "Bahane yok, disiplin var! 🔥💪 Bugünkü antrenmanı tamamladım. Aynadaki değişimi görmek en büyük motivasyonum! Siz başladınız mı? 🏋️‍♀️",
-        "tags": "#fitness #gymmotivation #fitgirl #disiplin #spor #canantuna #workout"
+        "id": 'spor_gym_ayna_selfie',
+        "category": 'spor',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_tuna_fitness_selfie_1792663898849.jpg'),
+        "signatures": ['bahane yok, disiplin var', 'bugünkü bacak & kalça antrenmanı bitti'],
+        "caption": 'Bahane yok, disiplin var! 🔥💪 Bugünkü antrenmanı tamamladım. Aynadaki değişimi görmek en büyük motivasyonum! Siz başladınız mı? 🏋️\u200d♀️',
+        "tags": '#fitness #gymmotivation #fitgirl #disiplin #spor #canantuna #workout'
     },
     {
-        "id": "spor_sonrasi_hali_dinlenme",
-        "category": "spor",
-        "type": "photo",
-        "image_path": os.path.join(IMAGES_DIR, "canan_tuna_post_workout_1792664056043.jpg"),
-        "signatures": ["bacak gününden sonra halıya", "halıya serilenler derneği"],
-        "caption": "Bacak gününden sonra halıya serilenler derneği başkanı seçildim sanırım! 🙈😂 Yorulduk ama değdi. Şimdi güzel bir dinlenme zamanı 💆‍♀️✨",
-        "tags": "#postworkout #fitlife #dinlenme #yorgunluk #canantuna #gymgirl"
+        "id": 'spor_sonrasi_hali_dinlenme',
+        "category": 'spor',
+        "type": 'photo',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_tuna_post_workout_1792664056043.jpg'),
+        "signatures": ['bacak gününden sonra halıya', 'halıya serilenler derneği'],
+        "caption": 'Bacak gününden sonra halıya serilenler derneği başkanı seçildim sanırım! 🙈😂 Yorulduk ama değdi. Şimdi güzel bir dinlenme zamanı 💆\u200d♀️✨',
+        "tags": '#postworkout #fitlife #dinlenme #yorgunluk #canantuna #gymgirl'
     },
     {
-        "id": "ev_pazar_rahatligi",
-        "category": "ev",
-        "type": "photo",
-        "image_path": os.path.join(IMAGES_DIR, "canan_tuna_cozy_livingroom_png_1792663231002.jpg"),
-        "signatures": ["evde battaniye ve sıcak bir çay", "hiçbir şey yapmamak da ruhuna"],
-        "caption": "Evde battaniye ve sıcak bir çay modundayım bugün... 🛋️📖 Bazen hiçbir şey yapmamak da ruhuna çok iyi gelir. Bugün evde misiniz dışarıda mı? 🍵👇",
-        "tags": "#evkeyfi #huzur #cozyvibes #dinlenme #canantuna #haftasonu"
+        "id": 'ev_pazar_rahatligi',
+        "category": 'ev',
+        "type": 'photo',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_tuna_cozy_livingroom_png_1792663231002.jpg'),
+        "signatures": ['evde battaniye ve sıcak bir çay', 'hiçbir şey yapmamak da ruhuna'],
+        "caption": 'Evde battaniye ve sıcak bir çay modundayım bugün... 🛋️📖 Bazen hiçbir şey yapmamak da ruhuna çok iyi gelir. Bugün evde misiniz dışarıda mı? 🍵👇',
+        "tags": '#evkeyfi #huzur #cozyvibes #dinlenme #canantuna #haftasonu'
     },
     {
-        "id": "ev_gunesli_balkon_selfie",
-        "category": "ev",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_tuna_selfie_1792665280198.jpg"),
-        "signatures": ["güneş açtıysa enerjimiz de yerine gelir", "yepyeni hedefler, güzel başlangıçlar"],
-        "caption": "Güneş açtıysa enerjimiz de yerine gelir! ☀️🌸 Yepyeni hedefler, güzel başlangıçlar... Gününüz harika geçsin canlar! 💖✨",
-        "tags": "#güneş #pozitifenerji #selfie #balkonkeyfi #canantuna #gününkaresi"
+        "id": 'ev_gunesli_balkon_selfie',
+        "category": 'ev',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_tuna_selfie_1792665280198.jpg'),
+        "signatures": ['güneş açtıysa enerjimiz de yerine gelir', 'yepyeni hedefler, güzel başlangıçlar'],
+        "caption": 'Güneş açtıysa enerjimiz de yerine gelir! ☀️🌸 Yepyeni hedefler, güzel başlangıçlar... Gününüz harika geçsin canlar! 💖✨',
+        "tags": '#güneş #pozitifenerji #selfie #balkonkeyfi #canantuna #gününkaresi'
     },
     {
-        "id": "lifestyle_vanity_mirror_makyaj",
-        "category": "ev",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_vanity_mirror.jpg"),
-        "signatures": ["hazırlanırken aynaya bir bakış", "günün enerjisini yakalama anı"],
-        "caption": "Hazırlanırken aynaya bir bakış ve günün enerjisini yakalama anı... ✨💄 Kendinize değer verdiğiniz her an çok kıymetli. Akşam planları yapıldı mı canlar? 💋👠",
-        "tags": "#vanity #grwm #lifestyle #makyaj #güzellik #canantuna #mirrorselfie"
+        "id": 'lifestyle_vanity_mirror_makyaj',
+        "category": 'ev',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_vanity_mirror.jpg'),
+        "signatures": ['hazırlanırken aynaya bir bakış', 'günün enerjisini yakalama anı'],
+        "caption": 'Hazırlanırken aynaya bir bakış ve günün enerjisini yakalama anı... ✨💄 Kendinize değer verdiğiniz her an çok kıymetli. Akşam planları yapıldı mı canlar? 💋👠',
+        "tags": '#vanity #grwm #lifestyle #makyaj #güzellik #canantuna #mirrorselfie'
     },
     {
-        "id": "spor_kortta_tenis_padel",
-        "category": "spor",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_tennis_court.jpg"),
-        "signatures": ["kortta maç bitti ama enerji hala tavan", "spor sadece bedenine değil ruhuna"],
-        "caption": "Kortta maç bitti ama enerji hala tavan! 🎾🔥 Spor sadece bedenine değil ruhuna da iyi gelen en güzel terapi. Bugün hareket ettik mi? 💪✨",
-        "tags": "#tennis #padel #tenis #fitgirl #sportystyle #canantuna #fitnessmotivation"
+        "id": 'spor_kortta_tenis_padel',
+        "category": 'spor',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_tennis_court.jpg'),
+        "signatures": ['kortta maç bitti ama enerji hala tavan', 'spor sadece bedenine değil ruhuna'],
+        "caption": 'Kortta maç bitti ama enerji hala tavan! 🎾🔥 Spor sadece bedenine değil ruhuna da iyi gelen en güzel terapi. Bugün hareket ettik mi? 💪✨',
+        "tags": '#tennis #padel #tenis #fitgirl #sportystyle #canantuna #fitnessmotivation'
     },
     {
-        "id": "tatil_sonsuzluk_havuzu_gunbatimi",
-        "category": "tatil",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_infinity_pool.jpg"),
-        "signatures": ["gün batımında sonsuzluğa karşı durup", "yazdan kalan sıcacık anlar", "güneşi böyle batırmayı özleyenler"],
-        "caption": "Sonsuzluk havuzunda güneşi batırdığımız o huzurlu akşamüstü... 🌅🌊 Bir kahve alıp manzaraya karşı dalıp gitmeyi özleyenler kimler? ☕💛",
-        "tags": "#tb #yazadönüş #sunset #infinitypool #tatil #yazözlemi #canantuna #travelgram #goldenhour #reels"
+        "id": 'tatil_sonsuzluk_havuzu_gunbatimi',
+        "category": 'tatil',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_infinity_pool.jpg'),
+        "signatures": ['gün batımında sonsuzluğa karşı durup', 'yazdan kalan sıcacık anlar', 'güneşi böyle batırmayı özleyenler'],
+        "caption": 'Sonsuzluk havuzunda güneşi batırdığımız o huzurlu akşamüstü... 🌅🌊 Bir kahve alıp manzaraya karşı dalıp gitmeyi özleyenler kimler? ☕💛',
+        "tags": '#tb #yazadönüş #sunset #infinitypool #tatil #yazözlemi #canantuna #travelgram #goldenhour #reels'
     },
     {
-        "id": "kultur_cagdas_sanat_galerisi",
-        "category": "sokak",
-        "type": "photo",
-        "image_path": os.path.join(IMAGES_DIR, "canan_art_gallery.jpg"),
-        "signatures": ["sanatın içinde kaybolduğum", "renklerin hikayesini dinlediğim"],
-        "caption": "Sanatın içinde kaybolduğum, renklerin hikayesini dinlediğim bir gün... 🎨🖼️ Modern sanat bana her zaman yeni bakış açıları kazandırıyor. Galerileri gezmeyi sevenler burda mı? 🤍✨",
-        "tags": "#artgallery #sanat #istanbul #modernart #kultur #canantuna #streetstyle #ootd"
+        "id": 'kultur_cagdas_sanat_galerisi',
+        "category": 'sokak',
+        "type": 'photo',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_art_gallery.jpg'),
+        "signatures": ['sanatın içinde kaybolduğum', 'renklerin hikayesini dinlediğim'],
+        "caption": 'Sanatın içinde kaybolduğum, renklerin hikayesini dinlediğim bir gün... 🎨🖼️ Modern sanat bana her zaman yeni bakış açıları kazandırıyor. Galerileri gezmeyi sevenler burda mı? 🤍✨',
+        "tags": '#artgallery #sanat #istanbul #modernart #kultur #canantuna #streetstyle #ootd'
     },
     {
-        "id": "hobi_somine_dag_evi",
-        "category": "ev",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_fireplace_chalet.jpg"),
-        "signatures": ["dışarıda lapa lapa kar, içeride çıtırdayan", "çıtırdayan şömine ateşi"],
-        "caption": "Dışarıda lapa lapa kar, içeride çıtırdayan şömine ateşi... ❄️🔥 Kışın en sevdiğim yanı bu sıcak sığınaklar. Bir fincan sıcak kahve ve huzur... Siz kış insanı mısınız yoksa yaz aşığı mı? Yorumlarda buluşalım! ☕✨",
-        "tags": "#kış #şömine #dağevi #huzur #cozyvibes #canantuna #wintervibes #reels"
+        "id": 'hobi_somine_dag_evi',
+        "category": 'ev',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_fireplace_chalet.jpg'),
+        "signatures": ['dışarıda lapa lapa kar, içeride çıtırdayan', 'çıtırdayan şömine ateşi'],
+        "caption": 'Dışarıda lapa lapa kar, içeride çıtırdayan şömine ateşi... ❄️🔥 Kışın en sevdiğim yanı bu sıcak sığınaklar. Bir fincan sıcak kahve ve huzur... Siz kış insanı mısınız yoksa yaz aşığı mı? Yorumlarda buluşalım! ☕✨',
+        "tags": '#kış #şömine #dağevi #huzur #cozyvibes #canantuna #wintervibes #reels'
     },
     {
-        "id": "sokak_bebek_sonbahar_yuruyusu",
-        "category": "sokak",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_bebek_autumn_walk.jpg"),
-        "signatures": ["bebek sahilinde hafif bir boğaz esintisi", "istanbul'un sonbaharı bana her zaman"],
+        "id": 'sokak_bebek_sonbahar_yuruyusu',
+        "category": 'sokak',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bebek_autumn_walk.jpg'),
+        "signatures": ['bebek sahilinde hafif bir boğaz esintisi', "istanbul'un sonbaharı bana her zaman"],
         "caption": "Bebek sahilinde hafif bir Boğaz esintisi ve elimde sıcak kahvem... 🌊☕ İstanbul'un sonbaharı bana her zaman yeni kararlar ve taze umutlar getirir. Bugün kendinize bir iyilik yapıp yürüyüşe çıktınız mı canlar? 🍂💛",
-        "tags": "#bebek #istanbul #boğaz #sonbahar #trenchcoat #sokakmodasıkombin #canantuna #lifestyle #reels"
+        "tags": '#bebek #istanbul #boğaz #sonbahar #trenchcoat #sokakmodasıkombin #canantuna #lifestyle #reels'
     },
     {
-        "id": "gece_mum_isiginda_aksam_yemegi",
-        "category": "gece",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_candlelight_dinner.jpg"),
-        "signatures": ["istanbul ışıl ışıl ayaklarımızın altında", "kadehlerimizi güzelliklere ve hayallerimize"],
-        "caption": "İstanbul ışıl ışıl ayaklarımızın altında... 🌃✨ Bazen sadece durmak, bu anın tadını çıkarmak ve iyi ki demek gerekir. Bu gece kadehlerimizi güzelliklere ve hayallerimize kaldırıyoruz! 🥂💙",
-        "tags": "#istanbul #gece #rooftop #dinner #zarafet #canantuna #gecehayatı #reels"
+        "id": 'gece_mum_isiginda_aksam_yemegi',
+        "category": 'gece',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_candlelight_dinner.jpg'),
+        "signatures": ['istanbul ışıl ışıl ayaklarımızın altında', 'kadehlerimizi güzelliklere ve hayallerimize'],
+        "caption": 'İstanbul ışıl ışıl ayaklarımızın altında... 🌃✨ Bazen sadece durmak, bu anın tadını çıkarmak ve iyi ki demek gerekir. Bu gece kadehlerimizi güzelliklere ve hayallerimize kaldırıyoruz! 🥂💙',
+        "tags": '#istanbul #gece #rooftop #dinner #zarafet #canantuna #gecehayatı #reels'
     },
     {
-        "id": "lifestyle_kitap_kafe_karakoy",
-        "category": "lifestyle",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_bookstore_cafe.jpg"),
-        "signatures": ["kitap kokusu, taze demlenmiş bir latte", "karaköy'ün bu huzurlu köşesinde"],
+        "id": 'lifestyle_kitap_kafe_karakoy',
+        "category": 'lifestyle',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_bookstore_cafe.jpg'),
+        "signatures": ['kitap kokusu, taze demlenmiş bir latte', "karaköy'ün bu huzurlu köşesinde"],
         "caption": "Kitap kokusu, taze demlenmiş bir latte ve yeni projeler... 📚☕ Karaköy'ün bu huzurlu köşesinde saatlerin nasıl geçtiğini anlamıyorum. Bu aralar hangi kitabı okuyorsunuz, bana öneriniz var mı? 📖💭",
-        "tags": "#kitap #kafe #karaköy #lifestyle #kahvekeyfi #canantuna #bookstagram #reels"
+        "tags": '#kitap #kafe #karaköy #lifestyle #kahvekeyfi #canantuna #bookstagram #reels'
     },
     {
-        "id": "kis_uludag_kayak_zirve_teras",
-        "category": "tatil",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_ski_terrace.jpg"),
-        "signatures": ["zirvede hava tertemiz, güneş pırıl pırıl", "termostan sıcak çay içmenin keyfi"],
-        "caption": "Zirvede hava tertemiz, güneş pırıl pırıl! ⛷️❄️ Karların üzerinde termostan sıcak çay içmenin keyfi hiçbir şeyde yok. Beyaz örtü bana inanılmaz enerji veriyor! Kayak yapmayı sevenler burada mı? 🏔️💙",
-        "tags": "#uludağ #kayak #kıştatili #zirve #snow #kar #canantuna #travelgram #reels"
+        "id": 'kis_uludag_kayak_zirve_teras',
+        "category": 'tatil',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_ski_terrace.jpg'),
+        "signatures": ['zirvede hava tertemiz, güneş pırıl pırıl', 'termostan sıcak çay içmenin keyfi'],
+        "caption": 'Zirvede hava tertemiz, güneş pırıl pırıl! ⛷️❄️ Karların üzerinde termostan sıcak çay içmenin keyfi hiçbir şeyde yok. Beyaz örtü bana inanılmaz enerji veriyor! Kayak yapmayı sevenler burada mı? 🏔️💙',
+        "tags": '#uludağ #kayak #kıştatili #zirve #snow #kar #canantuna #travelgram #reels'
     },
     {
-        "id": "ev_pazar_mutfak_granola",
-        "category": "ev",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_kitchen_morning.jpg"),
-        "signatures": ["pazar sabahı mutfakta taze kahve kokusu", "renkli meyveler... 🍓☕ kendime vakit"],
-        "caption": "Pazar sabahı mutfakta taze kahve kokusu ve renkli meyveler... 🍓☕ Kendime vakit ayırdığım en tatlı saatler. Güne nasıl başlarsanız öyle gider; gülümsemeyi unutmayın güzellikler! 🌸✨",
-        "tags": "#pazarkahvaltısı #evhali #sağlıklıyaşam #mutfak #granola #canantuna #morningvibes #reels"
+        "id": 'ev_pazar_mutfak_granola',
+        "category": 'ev',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_kitchen_morning.jpg'),
+        "signatures": ['pazar sabahı mutfakta taze kahve kokusu', 'renkli meyveler... 🍓☕ kendime vakit'],
+        "caption": 'Pazar sabahı mutfakta taze kahve kokusu ve renkli meyveler... 🍓☕ Kendime vakit ayırdığım en tatlı saatler. Güne nasıl başlarsanız öyle gider; gülümsemeyi unutmayın güzellikler! 🌸✨',
+        "tags": '#pazarkahvaltısı #evhali #sağlıklıyaşam #mutfak #granola #canantuna #morningvibes #reels'
     },
     {
-        "id": "lifestyle_termal_spa_dinlenme",
-        "category": "lifestyle",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_spa_wellness.jpg"),
-        "signatures": ["bütün haftanın yorgunluğunu geride bırakma", "sıcak su buharı ve bitki çayı"],
-        "caption": "Bütün haftanın yorgunluğunu geride bırakma terapisi... 🧖‍♀️🌿 Sıcak su buharı ve bitki çayı ruhuma o kadar iyi geldi ki. Bedeninizi dinlendirmeyi ve şımartmayı ihmal etmeyin canlar! 💧✨",
-        "tags": "#spa #wellness #kendinezamanayır #dinlenme #sağlık #canantuna #selfcare #reels"
+        "id": 'lifestyle_termal_spa_dinlenme',
+        "category": 'lifestyle',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_spa_wellness.jpg'),
+        "signatures": ['bütün haftanın yorgunluğunu geride bırakma', 'sıcak su buharı ve bitki çayı'],
+        "caption": 'Bütün haftanın yorgunluğunu geride bırakma terapisi... 🧖\u200d♀️🌿 Sıcak su buharı ve bitki çayı ruhuma o kadar iyi geldi ki. Bedeninizi dinlendirmeyi ve şımartmayı ihmal etmeyin canlar! 💧✨',
+        "tags": '#spa #wellness #kendinezamanayır #dinlenme #sağlık #canantuna #selfcare #reels'
     },
     {
-        "id": "sokak_bogaz_koprusu_araba",
-        "category": "sokak",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_car_bosphorus_bridge.jpg"),
-        "signatures": ["köprüden geçerken güneş tam batış", "trafik bile olsa bu manzaraya değer"],
-        "caption": "Köprüden geçerken güneş tam batış anında yüzüme vuruyor... 🚗🌅 En sevdiğim şarkı çalıyor ve İstanbul yine büyülemeye devam ediyor. Trafik bile olsa bu manzaraya değer! Sizde akşam nasıl geçiyor? 🎶💫",
-        "tags": "#istanbul #boğazköprüsü #goldenhour #günbatımı #carvibes #canantuna #gününkaresi #reels"
+        "id": 'sokak_bogaz_koprusu_araba',
+        "category": 'sokak',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_car_bosphorus_bridge.jpg'),
+        "signatures": ['köprüden geçerken güneş tam batış', 'trafik bile olsa bu manzaraya değer'],
+        "caption": 'Köprüden geçerken güneş tam batış anında yüzüme vuruyor... 🚗🌅 En sevdiğim şarkı çalıyor ve İstanbul yine büyülemeye devam ediyor. Trafik bile olsa bu manzaraya değer! Sizde akşam nasıl geçiyor? 🎶💫',
+        "tags": '#istanbul #boğazköprüsü #goldenhour #günbatımı #carvibes #canantuna #gününkaresi #reels'
     },
     {
-        "id": "sokak_karakoy_mural_grafiti",
-        "category": "sokak",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_karakoy_mural.jpg"),
-        "signatures": ["karaköy sokaklarındaki bu renkli duvar", "duvar sanatı enerjimi ikiye katladı"],
-        "caption": "Karaköy sokaklarındaki bu renkli duvar sanatı enerjimi ikiye katladı! 🎨☕ Sokak modasını ve canlı renkleri çok seviyorum. Günün kombini nasıl olmuş kızlar? Yorumları görelim! 💚👟",
-        "tags": "#karaköy #sokakmodası #streetstyle #ootd #grafiti #canantuna #lifestyle #reels"
+        "id": 'sokak_karakoy_mural_grafiti',
+        "category": 'sokak',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_karakoy_mural.jpg'),
+        "signatures": ['karaköy sokaklarındaki bu renkli duvar', 'duvar sanatı enerjimi ikiye katladı'],
+        "caption": 'Karaköy sokaklarındaki bu renkli duvar sanatı enerjimi ikiye katladı! 🎨☕ Sokak modasını ve canlı renkleri çok seviyorum. Günün kombini nasıl olmuş kızlar? Yorumları görelim! 💚👟',
+        "tags": '#karaköy #sokakmodası #streetstyle #ootd #grafiti #canantuna #lifestyle #reels'
     },
     {
-        "id": "is_levent_plaza_yonetim",
-        "category": "is",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_executive_office.jpg"),
-        "signatures": ["günün son toplantısı bitti ve arkamda", "parlayan levent silüeti"],
-        "caption": "Günün son toplantısı bitti ve arkamda gün batımıyla parlayan Levent silüeti... 💼🌇 Disiplin ve vizyon bir araya gelince imkansız diye bir şey kalmıyor. Hayallerinizin peşini asla bırakmayın! 🚀🤍",
-        "tags": "#business #işkadını #motivasyon #levent #başarı #canantuna #career #reels"
+        "id": 'is_levent_plaza_yonetim',
+        "category": 'is',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_executive_office.jpg'),
+        "signatures": ['günün son toplantısı bitti ve arkamda', 'parlayan levent silüeti'],
+        "caption": 'Günün son toplantısı bitti ve arkamda gün batımıyla parlayan Levent silüeti... 💼🌇 Disiplin ve vizyon bir araya gelince imkansız diye bir şey kalmıyor. Hayallerinizin peşini asla bırakmayın! 🚀🤍',
+        "tags": '#business #işkadını #motivasyon #levent #başarı #canantuna #career #reels'
     },
     {
-        "id": "tatil_ciragan_sarayi_kahvalti",
-        "category": "tatil",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_ciragan_palace.jpg"),
+        "id": 'tatil_ciragan_sarayi_kahvalti',
+        "category": 'tatil',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_ciragan_palace.jpg'),
         "signatures": ["çırağan sarayı'nın deniz kenarındaki", "boğaz'ın mavisi ve saray havası"],
         "caption": "Çırağan Sarayı'nın deniz kenarındaki terasında masalsı bir sabah... 🏰🌊 Boğaz'ın mavisi ve saray havası insanın ruhuna dokunuyor. İstanbul'da en sevdiğiniz tarihi mekan neresi? 💙✨",
-        "tags": "#çırağansarayı #boğaz #istanbul #lüksyaşam #saray #canantuna #travel #reels"
+        "tags": '#çırağansarayı #boğaz #istanbul #lüksyaşam #saray #canantuna #travel #reels'
     },
     {
-        "id": "lifestyle_moda_sahil_gunbatimi",
-        "category": "lifestyle",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_moda_sunset.jpg"),
-        "signatures": ["moda sahilinde çimlere serilip", "anadolu yakasının bu dinginliğini"],
-        "caption": "Moda sahilinde çimlere serilip gün batımını izlemek paha biçilemez... 🌅🍂 Akustik tınılar, serin rüzgar ve hafif sıcak bir çay. Anadolu yakasının bu dinginliğini çok seviyorum! 🧡🎶",
-        "tags": "#moda #kadıköy #günbatımı #sahil #huzur #canantuna #akustik #reels"
+        "id": 'lifestyle_moda_sahil_gunbatimi',
+        "category": 'lifestyle',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_moda_sunset.jpg'),
+        "signatures": ['moda sahilinde çimlere serilip', 'anadolu yakasının bu dinginliğini'],
+        "caption": 'Moda sahilinde çimlere serilip gün batımını izlemek paha biçilemez... 🌅🍂 Akustik tınılar, serin rüzgar ve hafif sıcak bir çay. Anadolu yakasının bu dinginliğini çok seviyorum! 🧡🎶',
+        "tags": '#moda #kadıköy #günbatımı #sahil #huzur #canantuna #akustik #reels'
     },
     {
-        "id": "lifestyle_otel_lobi_orkide",
-        "category": "lifestyle",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_hotel_lobby.jpg"),
-        "signatures": ["zarafet detaylarda gizlidir", "dev orkideler ve sıcacık bir lobi"],
-        "caption": "Zarafet detaylarda gizlidir... ☕🌸 Dev orkideler ve sıcacık bir lobi sohbeti. Kendinizi iyi hissettiren mekanlarda vakit geçirmek enerjinizi anında tazeliyor. Keyifli bir akşam olsun! 🤍✨",
-        "tags": "#zarafet #lifestyle #lüks #otel #kahvesohbeti #canantuna #ootd #reels"
+        "id": 'lifestyle_otel_lobi_orkide',
+        "category": 'lifestyle',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_hotel_lobby.jpg'),
+        "signatures": ['zarafet detaylarda gizlidir', 'dev orkideler ve sıcacık bir lobi'],
+        "caption": 'Zarafet detaylarda gizlidir... ☕🌸 Dev orkideler ve sıcacık bir lobi sohbeti. Kendinizi iyi hissettiren mekanlarda vakit geçirmek enerjinizi anında tazeliyor. Keyifli bir akşam olsun! 🤍✨',
+        "tags": '#zarafet #lifestyle #lüks #otel #kahvesohbeti #canantuna #ootd #reels'
     },
     {
-        "id": "ev_kis_pencere_sicak_cikolata",
-        "category": "ev",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_winter_window.jpg"),
-        "signatures": ["camın kenarına kıvrılıp yağan karı", "bol köpüklü sıcak çikolata"],
-        "caption": "Camın kenarına kıvrılıp yağan karı izlemek ve elinde bol köpüklü sıcak çikolata... 🍫❄️ Peri masalı gibi bir akşam. Kış akşamlarının bu tatlı nostaljisini kimler seviyor? 🕯️🤍",
-        "tags": "#kışakşamı #sıcakçikolata #evkeyfi #nostalji #kar #canantuna #cozynight #reels"
+        "id": 'ev_kis_pencere_sicak_cikolata',
+        "category": 'ev',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_winter_window.jpg'),
+        "signatures": ['camın kenarına kıvrılıp yağan karı', 'bol köpüklü sıcak çikolata'],
+        "caption": 'Camın kenarına kıvrılıp yağan karı izlemek ve elinde bol köpüklü sıcak çikolata... 🍫❄️ Peri masalı gibi bir akşam. Kış akşamlarının bu tatlı nostaljisini kimler seviyor? 🕯️🤍',
+        "tags": '#kışakşamı #sıcakçikolata #evkeyfi #nostalji #kar #canantuna #cozynight #reels'
     },
     {
-        "id": "spor_kort_tenis_mola",
-        "category": "spor",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_tennis_bench.jpg"),
-        "signatures": ["tenis maçında son set bitti", "ter su içindeyiz ama mutluluk"],
-        "caption": "Tenis maçında son set bitti, ter su içindeyiz ama mutluluk paha biçilemez! 🎾💪 Spor yapmak günün tüm stresini silip süpürüyor. Bugün hareket ettiniz mi canlar? Haydi harekete geçin! 🔥👟",
-        "tags": "#tenis #kort #fitgirl #sporaşkı #motivasyon #canantuna #workout #reels"
+        "id": 'spor_kort_tenis_mola',
+        "category": 'spor',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_tennis_bench.jpg'),
+        "signatures": ['tenis maçında son set bitti', 'ter su içindeyiz ama mutluluk'],
+        "caption": 'Tenis maçında son set bitti, ter su içindeyiz ama mutluluk paha biçilemez! 🎾💪 Spor yapmak günün tüm stresini silip süpürüyor. Bugün hareket ettiniz mi canlar? Haydi harekete geçin! 🔥👟',
+        "tags": '#tenis #kort #fitgirl #sporaşkı #motivasyon #canantuna #workout #reels'
     },
     {
-        "id": "gece_galata_kulesi_sokak",
-        "category": "gece",
-        "type": "video",
-        "image_path": os.path.join(IMAGES_DIR, "canan_galata_night.jpg"),
-        "signatures": ["galata sokaklarında akşam yürüyüşü", "arkamda asırların şahidi kule"],
+        "id": 'gece_galata_kulesi_sokak',
+        "category": 'gece',
+        "type": 'video',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_galata_night.jpg'),
+        "signatures": ['galata sokaklarında akşam yürüyüşü', 'arkamda asırların şahidi kule'],
         "caption": "Galata sokaklarında akşam yürüyüşü ve arkamda asırların şahidi kule... 🗼🌙 Taş sokakların tarihi kokusu büyüleyici. Galata'ya her geldiğimde ilk kez görüyormuş gibi aşık oluyorum! 🖤✨",
-        "tags": "#galata #galatakulesi #istanbulgeceleri #tarih #geceyürüyüşü #canantuna #reels"
-    }
+        "tags": '#galata #galatakulesi #istanbulgeceleri #tarih #geceyürüyüşü #canantuna #reels'
+    },
 ]
 
 
