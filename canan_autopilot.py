@@ -192,11 +192,31 @@ def pick_next_scenario(force_type: str = None) -> dict:
     evening_categories = ("gece", "spor", "lifestyle", "is", "sanat", "ev")
     target_cats = day_categories if hour < 16 else evening_categories
 
+    # Kuzen Burcu Sıklık Kontrolü:
+    # - Eğer Instagram'da henüz hiç Kuzen Burcu paylaşımı yoksa, ilk açılışı bu akşam Kırmızı-Pembe Oje ile yapsın.
+    # - Açılış yapıldıktan sonra her gün üst üste atmasın; son 5 paylaşımda Burcu varsa solo Canan paylaşsın (arada bir / 2-3 günde bir Burcu gelsin).
+    ever_posted_burcu = any("burcu" in rc.lower() for rc in recent_caps) or any("kuzen_burcu" in sid for sid in local_recent_ids)
+    recent_5_has_burcu = any("burcu" in rc.lower() for rc in recent_caps[:5]) or any("kuzen_burcu" in sid for sid in local_recent_ids[-5:])
+
     if unseen_scenarios:
-        bold_unseen = [s for s in unseen_scenarios if s.get("bold")]
-        base_unseen = bold_unseen if bold_unseen else unseen_scenarios
-        preferred = [s for s in base_unseen if s.get("category") in target_cats]
-        chosen_pool = preferred if preferred else base_unseen
+        first_debut = [s for s in unseen_scenarios if s["id"] == "kuzen_burcu_kirmizi_pembe_oje_1"]
+        if not ever_posted_burcu and first_debut:
+            chosen_pool = first_debut
+        else:
+            bold_unseen = [s for s in unseen_scenarios if s.get("bold")]
+            base_unseen = bold_unseen if bold_unseen else unseen_scenarios
+            solo_unseen = [s for s in base_unseen if "kuzen_burcu" not in s["id"]]
+            burcu_unseen = [s for s in base_unseen if "kuzen_burcu" in s["id"]]
+
+            if recent_5_has_burcu and solo_unseen:
+                active_pool = solo_unseen
+            elif burcu_unseen and random.random() < 0.35:
+                active_pool = burcu_unseen
+            else:
+                active_pool = solo_unseen if solo_unseen else base_unseen
+
+            preferred = [s for s in active_pool if s.get("category") in target_cats]
+            chosen_pool = preferred if preferred else active_pool
     else:
         # Tüm senaryolar en az 1 kez paylaşıldıysa, en eski paylaşılmış olan en üst 10 senaryodan seç
         scored_scenarios.sort(key=lambda x: x[0], reverse=True)
@@ -443,6 +463,49 @@ def run_daily_story_post(slot_mode: str = "morning") -> bool:
     return r_ig.get("status") == "success" or r_fb.get("status") == "success"
 
 
+def get_live_turkey_weather_note() -> str:
+    """
+    Paylaşım anında İstanbul'un canlı hava durumunu, sıcaklığını ve Türkiye gün/saatini çekerek
+    gerçek zamanlı bir not üretir (Madde 4: Gerçek Zaman İllüzyonu).
+    """
+    from datetime import timezone, timedelta
+    tr_tz = timezone(timedelta(hours=3))
+    now_tr = datetime.now(tr_tz)
+    days_tr = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"]
+    day_name = days_tr[now_tr.weekday()]
+    hour = now_tr.hour
+
+    temp_str = ""
+    is_rainy = False
+    try:
+        r = requests.get(
+            "https://api.open-meteo.com/v1/forecast?latitude=41.0082&longitude=28.9784&current_weather=true",
+            timeout=5
+        ).json()
+        cw = r.get("current_weather", {})
+        if "temperature" in cw:
+            temp_val = round(float(cw["temperature"]))
+            temp_str = f"({temp_val}°C) "
+        wcode = int(cw.get("weathercode", 0))
+        if wcode >= 51:
+            is_rainy = True
+    except Exception:
+        pass
+
+    if hour >= 18:
+        if is_rainy:
+            return f"🌧️ Bu {day_name} akşamı dışarıda yağmur yağarken {temp_str}biz içeride ortamı ısıttık, sizin orada hava nasıl? 👇"
+        return f"🌙 Bu {day_name} akşamı {temp_str}enerjimiz tavan, beni şu an hangi şehirden izliyorsun? 👇"
+    elif hour >= 15:
+        if is_rainy:
+            return f"🌧️ Yağmurlu bir {day_name} akşamüstünden {temp_str}herkese selam, keyifler nasıl? 👇"
+        return f"✨ Güzel bir {day_name} akşamüstünden {temp_str}selamlar, gününüz nasıl geçiyor tatlım? 👇"
+    else:
+        if is_rainy:
+            return f"☔ Yağmurlu bir {day_name} gününden {temp_str}sıcak selamlar, sizin şehirde hava nasıl? 👇"
+        return f"☀️ Harika bir {day_name} gününden {temp_str}selamlar, bugün enerjiniz 10 üzerinden kaç? 👇"
+
+
 def run_single_autopilot_post(force_type: str = None):
     """Günün saatine ve senaryosuna göre Canan Tuna adına 3 platforma otonom paylaşım yapar."""
     check_meta_token_health()
@@ -463,13 +526,20 @@ def run_single_autopilot_post(force_type: str = None):
         print(f"❌ Görsel dosyası bulunamadı: {chosen_img}")
         return False
 
-    full_caption = f"{scenario['caption']}\n\n{scenario.get('tags', '')}"
+    live_note = get_live_turkey_weather_note()
+    full_caption = f"{scenario['caption']}\n\n{live_note}\n\n{scenario.get('tags', '')}"
     success_summary = {"telegram": False, "facebook": False, "instagram": False}
 
     if media_type == "video":
         out_video = os.path.join(OUTPUT_DIR, f"auto_{sc_id}.mp4")
         print(f"🎬 Senaryo için estetik müzikli Full HD Reels videosu üretiliyor: {sc_id}...")
-        create_canan_reel.create_reels_video(chosen_img, output_mp4=out_video, hook_text=scenario.get("hook"))
+        create_canan_reel.create_reels_video(
+            chosen_img,
+            output_mp4=out_video,
+            companion_images=scenario.get("companions"),
+            hook_text=scenario.get("hook"),
+            custom_scene_hooks=scenario.get("scene_hooks")
+        )
 
         # 1. Telegram
         print("📲 Telegram'a Video Gönderiliyor...")

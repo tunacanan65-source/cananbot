@@ -12,6 +12,228 @@ IMAGES_DIR = os.path.join(BASE_DIR, "assets", "images")
 
 SCENARIOS = [
     {
+        "id": 'kuzen_burcu_kirmizi_pembe_oje_1',
+        "category": 'gece',
+        "type": 'video',
+        "bold": True,
+        "priority_first": True,
+        "hook": 'Kuzenim Burcu ile bakım gecesi! Kırmızı mı Pembe mi?',
+        "scene_hooks": [
+            'Kuzenim Burcu ile bakım gecesi! Kırmızı mı Pembe mi?',
+            'İddiaya girdik, kimin ojesi ve bacakları daha güzel?',
+            'Ojemiz bitti! Esmer Canan (1) mı Sarışın Burcu (2) mu?',
+            'Kaybeden yemek ısmarlıyor! Canan (1) mı Burcu (2) mu?'
+        ],
+        "image_path": os.path.join(IMAGES_DIR, 'canan_cousin_red_pink_oje_1.jpg'),
+        "companions": [
+            os.path.join(IMAGES_DIR, 'canan_cousin_red_pink_oje_2.jpg'),
+            os.path.join(IMAGES_DIR, 'canan_cousin_red_pink_oje_3.jpg'),
+            os.path.join(IMAGES_DIR, 'canan_cousin_red_pink_oje_4.jpg')
+        ],
+        "signatures": ['kuzenim burcu ile bu akşam iddiaya girdik', 'kırmızı oje ve kırmızı kombin mi yoksa burcunun pembesi mi'],
+        "caption": 'Kuzenim Burcu ile bu akşam iddiaya girdik, kaybeden yarın akşam yemeğini ısmarlıyor! 💅🔥 Ben kırmızı saten kombinim ve kırmızı ojemle (1), Burcu ise pembe saten kombini ve pembe ojesiyle (2) karşınızda! Videoyu son kareye kadar dikkatle izleyin; sizce Esmer Canan (1) mı yoksa Sarışın Kuzenim Burcu (2) mu kazandı? Hakem sizsiniz, yoruma yazın bakalım! 😉👇',
+        "tags": '#kuzen #ojekeyfi #kırmızıoje #pembeoje #bakımgecesi #esmer #sarışın #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'kuzen_burcu_siyah_beyaz_oje_1',
+        "category": 'gece',
+        "type": 'video',
+        "bold": True,
+        "priority_first": True,
+        "hook": 'Kuzenim Burcu ile yeni iddia! Siyah mı Beyaz mı?',
+        "scene_hooks": [
+            'Kuzenim Burcu ile yeni iddia! Siyah mı Beyaz mı?',
+            'Bordo oje mi yoksa Beyaz oje mi daha çekici?',
+            'Bakım bitti! Esmer Canan (1) mı Sarışın Burcu (2) mu?',
+            'Geceye hazırız! Favorin 1 mi yoksa 2 mi? Yoruma yaz!'
+        ],
+        "image_path": os.path.join(IMAGES_DIR, 'canan_cousin_black_white_oje_1.jpg'),
+        "companions": [
+            os.path.join(IMAGES_DIR, 'canan_cousin_black_white_oje_2.jpg'),
+            os.path.join(IMAGES_DIR, 'canan_cousin_black_white_oje_3.jpg'),
+            os.path.join(IMAGES_DIR, 'canan_cousin_night_dresses.jpg')
+        ],
+        "signatures": ['kuzenim burcu ile siyah ve beyazın rekabetini', 'ben siyah satenim ve bordo ojemle'],
+        "caption": 'Kuzenim Burcu ile siyah ve beyazın rekabetini başlattık! 🖤🤍 Ben siyah satenim ve bordo ojemle (1), Burcu ise beyaz sateni ve beyaz ojesiyle (2) bakım modunda. Son karedeki gece elbiselerimize kadar izleyin; bu sefer oyunu kime veriyorsun? Canan (1) mı, Burcu (2) mu? 🔥👇',
+        "tags": '#kuzen #siyahbeyaz #pedikür #bordo #beyazoje #bakım #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'kuzen_burcu_sabah_kahvesi',
+        "category": 'ev',
+        "type": 'photo',
+        "bold": True,
+        "hook": 'Kuzenim Burcu ile sabah kahvesi! Günaydın tatlım!',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_cousin_coffee_morning.jpg'),
+        "signatures": ['kuzenim burcu ile balkonda sabah kahvesi', 'dün akşamki oje mesaimizden sonra'],
+        "caption": 'Dün akşamki oje mesaimizden sonra kuzenim Burcu ile balkonda sabah kahvesi keyfi! ☕☀️ Ojelerimiz hala ilk günkü gibi parlak. Bize katılmak isteyen var mı, kahveler bizden! 🥰👇',
+        "tags": '#sabahkahvesi #kuzen #balkonkeyfi #ojeler #günaydın #canantuna #lifestyle'
+    },
+    {
+        "id": 'kuzen_burcu_havuz_basi_ayaklar',
+        "category": 'tatil',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Kuzenim Burcu ile havuz keyfi! Kimin ojesi daha güzel?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_cousin_poolside_feet.jpg'),
+        "signatures": ['kuzenim burcu ile güneşin ve havuzun tadını', 'ayaklarımızı serin sulara bıraktık'],
+        "caption": 'Kuzenim Burcu ile güneşin ve havuzun tadını çıkarıyoruz! 🏊‍♀️☀️ Ayaklarımızı serin sulara bıraktık, kırmızı ve pembe ojelerimiz güneşin altında parlıyor. Yanımızdaki şezlong boş, kimler gelmek isterdi? 😉👇',
+        "tags": '#havuzbaşı #kuzen #yazkeyfi #bikini #oje #tatil #canantuna #reels'
+    },
+    {
+        "id": 'kuzen_burcu_film_gecesi_koltuk',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Kuzenim Burcu ile film gecesi! Yanımıza kim geliyor?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_cousin_couch_movie_feet.jpg'),
+        "signatures": ['mısırlarımızı patlattık kuzenim burcu ile', 'uzattık ayaklarımızı film seçiyoruz'],
+        "caption": 'Mısırlarımızı patlattık, kuzenim Burcu ile ayaklarımızı uzatıp film gecesi yapıyoruz! 🍿🎬 Ama hala hangi filmi izleyeceğimize karar veremedik. Bize güzel bir film önerir misin tatlım? 👇✨',
+        "tags": '#filmgecesi #kuzen #evkeyfi #bakımlı #kırmızı #pembe #canantuna #reels'
+    },
+    {
+        "id": 'kuzen_burcu_lila_mercan_oje_yatak',
+        "category": 'gece',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Kuzenim Burcu ile yatakta bakım! Lila mı Mercan mı?',
+        "scene_hooks": [
+            'Kuzenim Burcu ile yatakta bakım! Lila mı Mercan mı?',
+            'Mürdüm oje mi yoksa Mercan oje mi daha çekici?',
+            'Bakım tamam! Esmer Canan (1) mı Sarışın Burcu (2) mu?',
+            'Pijama partimizden selam! Favorin 1 mi 2 mi? Seç!'
+        ],
+        "image_path": os.path.join(IMAGES_DIR, 'canan_cousin_purple_coral_oje_1.jpg'),
+        "companions": [
+            os.path.join(IMAGES_DIR, 'canan_cousin_purple_coral_oje_2.jpg'),
+            os.path.join(IMAGES_DIR, 'canan_cousin_purple_coral_oje_3.jpg'),
+            os.path.join(IMAGES_DIR, 'canan_cousin_balcony_evening_wine.jpg')
+        ],
+        "signatures": ['kuzenim burcu ile bu gece pijama partisi ve oje', 'ben lila saten takımım ve mürdüm ojemle'],
+        "caption": 'Kuzenim Burcu ile bu gece pijama partisi ve oje mesaisindeyiz! 💜🧡 Ben lila saten takımım ve mürdüm ojemle (1), Burcu ise mercan saten takımı ve mercan ojesiyle (2) yarışıyor! Videoyu sonuna kadar izleyin; bu gecenin kazananı Canan (1) mı yoksa Burcu (2) mu? Yoruma yazın! 😉👇',
+        "tags": '#kuzen #pijamapartisi #ojekeyfi #pedikür #esmer #sarışın #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'kuzen_burcu_kabin_ayna_kombin',
+        "category": 'lifestyle',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Burcu ile alışverişteyiz! Kırmızı (1) mı Mavi (2) mi?',
+        "scene_hooks": [
+            'Burcu ile alışverişteyiz! Kırmızı (1) mı Mavi (2) mi?',
+            'Mutfakta buzlu kahve molası! Hangi şort kombini?',
+            'Teras gün batımı! Siyah (1) mı Rose-Gold (2) mu?',
+            'Esmer Canan (1) mı Sarışın Burcu (2) mu? Favorini yaz!'
+        ],
+        "image_path": os.path.join(IMAGES_DIR, 'canan_cousin_fitting_room_mirror.jpg'),
+        "companions": [
+            os.path.join(IMAGES_DIR, 'canan_cousin_kitchen_shorts_barefoot.jpg'),
+            os.path.join(IMAGES_DIR, 'canan_cousin_terrace_sunset_drinks.jpg'),
+            os.path.join(IMAGES_DIR, 'canan_cousin_balcony_evening_wine.jpg')
+        ],
+        "signatures": ['kuzenim burcu ile mağaza kabininde elbise deniyoruz', 'kırmızı mini elbise mi yoksa saks mavisi mi'],
+        "caption": 'Kuzenim Burcu ile alışverişe çıktık, kabinde elbise denemekten yorulduk! 👗🛍️ Benim üzerimdeki kırmızı mini elbise (1) mi daha çok yakışmış yoksa Burcu nun saks mavisi elbisesi (2) mi? Karar veremedik, bize yardımcı olun tatlım! 🔥👇',
+        "tags": '#alışveriş #kuzen #minielbise #kabin #kırmızı #mavi #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'kuzen_burcu_yat_tatil_gunes',
+        "category": 'tatil',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Kuzenim Burcu ile yat keyfi! Beyaz (1) mı Turkuaz (2) mı?',
+        "scene_hooks": [
+            'Kuzenim Burcu ile yat keyfi! Beyaz (1) mı Turkuaz (2) mı?',
+            'Kumsalda güneşleniyoruz! Kırmızı mı Sarı bikini mi?',
+            'Spa ve jakuzi molası! Enerjimiz 10 üzerinden kaç?',
+            'Tatil ikilisi! Canan (1) mı Burcu (2) mu? Seç bakalım!'
+        ],
+        "image_path": os.path.join(IMAGES_DIR, 'canan_cousin_yacht_sunbed_feet.jpg'),
+        "companions": [
+            os.path.join(IMAGES_DIR, 'canan_cousin_beach_sand_toes.jpg'),
+            os.path.join(IMAGES_DIR, 'canan_cousin_spa_jacuzzi_relax.jpg'),
+            os.path.join(IMAGES_DIR, 'canan_cousin_poolside_feet.jpg')
+        ],
+        "signatures": ['kuzenim burcu ile tekne güvertesinde güneşleniyoruz', 'beyaz bikini mi turkuaz bikini mi'],
+        "caption": 'Kuzenim Burcu ile tekne güvertesinde güneşin ve Ege nin tadını çıkarıyoruz! 🛥️☀️ Beyaz bikinimle ben (1) mi yoksa turkuaz bikinisiyle Burcu (2) mu? 4 kareyi de izleyip favorinizi yoruma bırakın bakalım! 😉👇',
+        "tags": '#yatturu #kuzen #bikini #tatil #güneş #plaj #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'kuzen_burcu_mutfak_buzlu_kahve',
+        "category": 'ev',
+        "type": 'photo',
+        "bold": True,
+        "hook": 'Kuzenim Burcu ile mutfakta buzlu kahve hazırlığı!',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_cousin_kitchen_shorts_barefoot.jpg'),
+        "signatures": ['kuzenim burcu ile mutfağa girdik buzlu kahvelerimizi', 'evde yalınayak şortlarla rahatlık gibisi yok'],
+        "caption": 'Kuzenim Burcu ile mutfağa girdik, kendi ellerimizle buzlu kahve hazırladık! 🧋🌸 Evde yalınayak rahat şortlarla takılmak gibisi yok. Bir bardak da fazladan yaptık, kimler içmeye gelir? 🥰👇',
+        "tags": '#mutfak #kahvekeyfi #kuzen #evhali #şort #yalınayak #canantuna #lifestyle'
+    },
+    {
+        "id": 'kuzen_burcu_araba_yolculuk',
+        "category": 'sokak',
+        "type": 'photo',
+        "bold": True,
+        "hook": 'Kuzenim Burcu ile yola çıktık! Nereye gidiyoruz?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_cousin_car_roadtrip_selfie.jpg'),
+        "signatures": ['kuzenim burcu ile güneşli havayı görünce kendimizi yollara', 'araba yolculuğunda yan koltukta müzik'],
+        "caption": 'Güneşli havayı görünce kuzenim Burcu ile kendimizi yollara attık! 🚗☀️ Müzik açık, enerjimiz yerinde. Sizce nereye doğru gidiyoruz, doğru tahmin edene benden sürpriz kalp! 😉👇',
+        "tags": '#yolculuk #roadtrip #kuzen #arabaselfie #haftasonu #canantuna #keşfet'
+    },
+    {
+        "id": 'kuzen_burcu_spa_jakuzi',
+        "category": 'tatil',
+        "type": 'photo',
+        "bold": True,
+        "hook": 'Kuzenim Burcu ile spa ve jakuzi keyfi!',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_cousin_spa_jacuzzi_relax.jpg'),
+        "signatures": ['kuzenim burcu ile tüm haftanın yorgunluğunu jakuzide', 'bordo bikini mi altın sarısı bikini mi'],
+        "caption": 'Kuzenim Burcu ile tüm haftanın yorgunluğunu sıcak spa havuzunda atıyoruz... 🧖‍♀️💦 Ayaklarımızı suya uzattık, huzur dolduk. Bordo bikinim (1) mi, Burcu nun altın tonlu bikinisi (2) mi? 🔥👇',
+        "tags": '#spa #jakuzi #kuzen #dinlenme #bikini #bakım #canantuna #lifestyle'
+    },
+    {
+        "id": 'kuzen_burcu_teras_gunbatimi',
+        "category": 'gece',
+        "type": 'photo',
+        "bold": True,
+        "hook": 'Burcu ile gün batımında teras keyfi! Siyah mı Pembe mi?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_cousin_terrace_sunset_drinks.jpg'),
+        "signatures": ['gün batımında kuzenim burcu ile deniz manzaralı terasta', 'siyah saten elbisem mi rose gold mu'],
+        "caption": 'Gün batımında kuzenim Burcu ile deniz manzaralı terasta akşam keyfi! 🍹🌅 Siyah saten mini elbisem (1) mi yoksa Burcu nun rose-gold saten elbisesi (2) mi daha şık olmuş? Yorumlarda buluşalım! ✨👇',
+        "tags": '#günbatımı #teras #kuzen #satenelbise #akşamkeyfi #canantuna #şıklık'
+    },
+    {
+        "id": 'kuzen_burcu_kumsal_sezlong',
+        "category": 'tatil',
+        "type": 'photo',
+        "bold": True,
+        "hook": 'Kuzenim Burcu ile kumsalda! Kırmızı mı Sarı mı?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_cousin_beach_sand_toes.jpg'),
+        "signatures": ['ayaklarımızı sıcak kumlara uzattık kuzenim burcu ile', 'kırmızı bikini mi sarı bikini mi'],
+        "caption": 'Ayaklarımızı sıcak altın kumlara uzattık, kuzenim Burcu ile plajın keyfini çıkarıyoruz! 🏖️☀️ Kırmızı bikini (Canan) mı, sarı bikini (Burcu) mu? Güneşten daha sıcak olan hangisi? 😉🔥👇',
+        "tags": '#plaj #kumsal #kuzen #kırmızıbikini #yaz #tatil #canantuna #beach'
+    },
+    {
+        "id": 'kuzen_burcu_evde_yoga_esneklik',
+        "category": 'spor',
+        "type": 'photo',
+        "bold": True,
+        "hook": 'Kuzenim Burcu ile evde spor bitti! Enerji nasıl?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_cousin_livingroom_rug_stretch.jpg'),
+        "signatures": ['evde kuzenim burcu ile yoga ve esneme antrenmanımızı', 'yalınayak matın üzerinde dinlenme vakti'],
+        "caption": 'Evde kuzenim Burcu ile yoga ve esneme antrenmanımızı bitirdik, matın üzerinde yalınayak dinleniyoruz! 🧘‍♀️🌸 Pembe takım (1) mı, gri takım (2) mi? Bizimle spor yapmak isteyenleri görelim! 💪👇',
+        "tags": '#evdespor #yoga #kuzen #fit #yalınayak #motivasyon #canantuna'
+    },
+    {
+        "id": 'kuzen_burcu_pilates_ayna',
+        "category": 'spor',
+        "type": 'photo',
+        "bold": True,
+        "hook": 'Kuzenim Burcu ile antrenman bitti! Enerjimiz nasıl?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_cousin_gym_mirror.jpg'),
+        "signatures": ['kuzenim burcu ile sabah pilatesini tamamladık', 'beraber spor yapınca motivasyon ikiye katlanıyor'],
+        "caption": 'Kuzenim Burcu ile sabah pilatesini tamamladık! 💪🔥 Beraber spor yapınca motivasyon ikiye katlanıyor. Bordo takım (Canan) mı, lacivert takım (Burcu) mu? Hangimizin spor tarzı daha iyi? 😉👇',
+        "tags": '#pilates #spor #kuzen #motivasyon #fit #canantuna #gym'
+    },
+    {
         "id": 'oje_kirmizi_koltuk_bakim',
         "category": 'ev',
         "type": 'video',

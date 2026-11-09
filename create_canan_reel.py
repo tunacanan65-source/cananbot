@@ -53,6 +53,24 @@ def get_short_hook_for_image(
     ekrana taşmayan, kısa ve yüksek etkileşimli cümle seçer.
     """
     is_last_scene = (scene_index == num_scenes - 1)
+    fname = os.path.basename(image_path).lower()
+
+    if "canan_cousin_" in fname:
+        if is_last_scene:
+            return random.choice([
+                "Kaybeden yemek ısmarlıyor! Canan (1) mı Burcu (2) mu?",
+                "Esmer Canan (1) mı Sarışın Burcu (2) mu? Yoruma yaz!",
+                "Hangimizin tarzı ve ojesi 10/10? Seç bakalım!"
+            ])
+        if scene_index == 0 and custom_hook and len(custom_hook.strip()) <= 55:
+            return custom_hook.strip()
+        return random.choice([
+            "Kuzenim Burcu ile iddiaya girdik, hangimiz?",
+            "Esmer mi Sarışın mı? Tarafını seç tatlım!",
+            "Kimin ojesi ve bacakları daha güzel olmuş?",
+            "Kuzenim Burcu ve ben! Puanın kaç?"
+        ])
+
     if is_last_scene:
         final_hooks = [
             "Hazırım! 1, 2, 3 yoksa 4. kare mi? Favorini yaz!",
@@ -64,8 +82,6 @@ def get_short_hook_for_image(
 
     if scene_index == 0 and custom_hook and len(custom_hook.strip()) <= 55:
         return custom_hook.strip()
-
-    fname = os.path.basename(image_path).lower()
 
     if any(k in fname for k in ("feet", "polish", "pedi", "toes", "anklet")):
         if scene_index == 0:
@@ -208,17 +224,19 @@ def create_story_image(image_path: str, story_text: str, output_jpg: str = None)
 
 
 def get_motion_filter(style_index: int, total_frames: int) -> str:
-    """8 Farklı Sinematik Kamera Hareketi + Canlı/Aydınlık Renk Dokunuşu (1080x1920 Full HD)."""
+    """8 Farklı Sinematik + Organik El Kamerası Salınımlı (Canlı Video Hissi Veren) Hareket (1080x1920 Full HD)."""
     bright_eq = ",eq=brightness=0.025:contrast=1.03:saturation=1.05"
+    sway_x = "+6*sin(on/9)"
+    sway_y = "+5*cos(on/11)"
     styles = [
-        f"zoompan=z='min(zoom+0.0010,1.14)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d={total_frames}:s=1080x1920:fps=30{bright_eq}",
-        f"zoompan=z='min(zoom+0.0010,1.15)':x='iw/2-(iw/zoom/2)':y='ih/3-(ih/zoom/3)':d={total_frames}:s=1080x1920:fps=30{bright_eq}",
-        f"zoompan=z='min(zoom+0.0008,1.12)':x='(iw-iw/zoom)*(on/{total_frames})':y='ih/2-(ih/zoom/2)':d={total_frames}:s=1080x1920:fps=30{bright_eq}",
-        f"zoompan=z='min(zoom+0.0008,1.12)':x='iw/2-(iw/zoom/2)':y='(ih-ih/zoom)*(on/{total_frames})':d={total_frames}:s=1080x1920:fps=30{bright_eq}",
-        f"zoompan=z='max(1.15-0.0011*on,1.0)':x='iw/2-(iw/zoom/2)':y='ih/2.3-(ih/zoom/2.3)':d={total_frames}:s=1080x1920:fps=30{bright_eq}",
-        f"zoompan=z='min(zoom+0.0008,1.12)':x='(iw-iw/zoom)*(1-on/{total_frames})':y='ih/2.1-(ih/zoom/2.1)':d={total_frames}:s=1080x1920:fps=30{bright_eq}",
-        f"zoompan=z='min(zoom+0.0009,1.14)':x='iw/2-(iw/zoom/2)':y='(ih-ih/zoom)*(1-on/{total_frames})':d={total_frames}:s=1080x1920:fps=30{bright_eq}",
-        f"zoompan=z='min(zoom+0.0009,1.12)':x='iw/2-(iw/zoom/2)':y='ih/2.5-(ih/zoom/2.5)':d={total_frames}:s=1080x1920:fps=30{bright_eq}"
+        f"zoompan=z='min(zoom+0.0010,1.14)':x='iw/2-(iw/zoom/2){sway_x}':y='ih/2-(ih/zoom/2){sway_y}':d={total_frames}:s=1080x1920:fps=30{bright_eq}",
+        f"zoompan=z='min(zoom+0.0010,1.15)':x='iw/2-(iw/zoom/2){sway_x}':y='ih/3-(ih/zoom/3){sway_y}':d={total_frames}:s=1080x1920:fps=30{bright_eq}",
+        f"zoompan=z='min(zoom+0.0008,1.12)':x='(iw-iw/zoom)*(on/{total_frames}){sway_x}':y='ih/2-(ih/zoom/2){sway_y}':d={total_frames}:s=1080x1920:fps=30{bright_eq}",
+        f"zoompan=z='min(zoom+0.0008,1.12)':x='iw/2-(iw/zoom/2){sway_x}':y='(ih-ih/zoom)*(on/{total_frames}){sway_y}':d={total_frames}:s=1080x1920:fps=30{bright_eq}",
+        f"zoompan=z='max(1.15-0.0011*on,1.0)':x='iw/2-(iw/zoom/2){sway_x}':y='ih/2.3-(ih/zoom/2.3){sway_y}':d={total_frames}:s=1080x1920:fps=30{bright_eq}",
+        f"zoompan=z='min(zoom+0.0008,1.12)':x='(iw-iw/zoom)*(1-on/{total_frames}){sway_x}':y='ih/2.1-(ih/zoom/2.1){sway_y}':d={total_frames}:s=1080x1920:fps=30{bright_eq}",
+        f"zoompan=z='min(zoom+0.0009,1.14)':x='iw/2-(iw/zoom/2){sway_x}':y='(ih-ih/zoom)*(1-on/{total_frames}){sway_y}':d={total_frames}:s=1080x1920:fps=30{bright_eq}",
+        f"zoompan=z='min(zoom+0.0009,1.12)':x='iw/2-(iw/zoom/2){sway_x}':y='ih/2.5-(ih/zoom/2.5){sway_y}':d={total_frames}:s=1080x1920:fps=30{bright_eq}"
     ]
     return styles[style_index % len(styles)]
 
@@ -252,14 +270,22 @@ def pick_companion_images(primary_image: str, count: int = 3, extra_candidates: 
     """
     primary_abs = os.path.abspath(primary_image)
     if extra_candidates:
-        pool = [p for p in extra_candidates if os.path.exists(p) and os.path.abspath(p) != primary_abs]
-    else:
-        all_imgs = [
-            os.path.join(IMAGES_DIR, f)
-            for f in os.listdir(IMAGES_DIR)
-            if f.lower().endswith((".jpg", ".jpeg", ".png"))
-        ]
-        pool = [p for p in all_imgs if os.path.abspath(p) != primary_abs]
+        ordered = [p for p in extra_candidates if os.path.exists(p) and os.path.abspath(p) != primary_abs]
+        if len(ordered) >= count:
+            return ordered[:count]
+
+    all_imgs = [
+        os.path.join(IMAGES_DIR, f)
+        for f in os.listdir(IMAGES_DIR)
+        if f.lower().endswith((".jpg", ".jpeg", ".png"))
+    ]
+    pool = [p for p in all_imgs if os.path.abspath(p) != primary_abs]
+
+    # Eğer Kuzen Burcu serisi ise diğer Kuzen Burcu kareleriyle sıralı eşleştir
+    if "canan_cousin_" in os.path.basename(primary_abs).lower():
+        cousin_pool = sorted([p for p in pool if "canan_cousin_" in os.path.basename(p).lower()])
+        if len(cousin_pool) >= count:
+            return cousin_pool[:count]
 
     feet_pool = [p for p in pool if "canan_feet_" in os.path.basename(p).lower()]
     day_glam_pool = [
@@ -302,7 +328,8 @@ def create_reels_video(
     duration: float = 16.0,
     motion_index: int = None,
     companion_images: list = None,
-    hook_text: str = None
+    hook_text: str = None,
+    custom_scene_hooks: list = None
 ) -> str:
     """
     Facebook & Instagram Para Kazanma ve Yüksek Etkileşim Kriterlerine Özel:
@@ -343,12 +370,15 @@ def create_reels_video(
             m_style = available_motions[idx % len(available_motions)]
             zoom_filter = get_motion_filter(m_style, frames_per_scene)
 
-            scene_hook = get_short_hook_for_image(
-                img_p,
-                scene_index=idx,
-                num_scenes=num_scenes,
-                custom_hook=(hook_text if idx == 0 else None)
-            )
+            if custom_scene_hooks and idx < len(custom_scene_hooks) and custom_scene_hooks[idx]:
+                scene_hook = custom_scene_hooks[idx]
+            else:
+                scene_hook = get_short_hook_for_image(
+                    img_p,
+                    scene_index=idx,
+                    num_scenes=num_scenes,
+                    custom_hook=(hook_text if idx == 0 else None)
+                )
 
             overlay_png = os.path.join(OUTPUT_DIR, f"_tmp_ovl_{idx}_{random.randint(1000,9999)}.png")
             create_overlay_png(scene_hook, overlay_png)
