@@ -463,49 +463,6 @@ def run_daily_story_post(slot_mode: str = "morning") -> bool:
     return r_ig.get("status") == "success" or r_fb.get("status") == "success"
 
 
-def get_live_turkey_weather_note() -> str:
-    """
-    Paylaşım anında İstanbul'un canlı hava durumunu, sıcaklığını ve Türkiye gün/saatini çekerek
-    gerçek zamanlı bir not üretir (Madde 4: Gerçek Zaman İllüzyonu).
-    """
-    from datetime import timezone, timedelta
-    tr_tz = timezone(timedelta(hours=3))
-    now_tr = datetime.now(tr_tz)
-    days_tr = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"]
-    day_name = days_tr[now_tr.weekday()]
-    hour = now_tr.hour
-
-    temp_str = ""
-    is_rainy = False
-    try:
-        r = requests.get(
-            "https://api.open-meteo.com/v1/forecast?latitude=41.0082&longitude=28.9784&current_weather=true",
-            timeout=5
-        ).json()
-        cw = r.get("current_weather", {})
-        if "temperature" in cw:
-            temp_val = round(float(cw["temperature"]))
-            temp_str = f"({temp_val}°C) "
-        wcode = int(cw.get("weathercode", 0))
-        if wcode >= 51:
-            is_rainy = True
-    except Exception:
-        pass
-
-    if hour >= 18:
-        if is_rainy:
-            return f"🌧️ Bu {day_name} akşamı dışarıda yağmur yağarken {temp_str}biz içeride ortamı ısıttık, sizin orada hava nasıl? 👇"
-        return f"🌙 Bu {day_name} akşamı {temp_str}enerjimiz tavan, beni şu an hangi şehirden izliyorsun? 👇"
-    elif hour >= 15:
-        if is_rainy:
-            return f"🌧️ Yağmurlu bir {day_name} akşamüstünden {temp_str}herkese selam, keyifler nasıl? 👇"
-        return f"✨ Güzel bir {day_name} akşamüstünden {temp_str}selamlar, gününüz nasıl geçiyor tatlım? 👇"
-    else:
-        if is_rainy:
-            return f"☔ Yağmurlu bir {day_name} gününden {temp_str}sıcak selamlar, sizin şehirde hava nasıl? 👇"
-        return f"☀️ Harika bir {day_name} gününden {temp_str}selamlar, bugün enerjiniz 10 üzerinden kaç? 👇"
-
-
 def run_single_autopilot_post(force_type: str = None):
     """Günün saatine ve senaryosuna göre Canan Tuna adına 3 platforma otonom paylaşım yapar."""
     check_meta_token_health()
@@ -526,8 +483,7 @@ def run_single_autopilot_post(force_type: str = None):
         print(f"❌ Görsel dosyası bulunamadı: {chosen_img}")
         return False
 
-    live_note = get_live_turkey_weather_note()
-    full_caption = f"{scenario['caption']}\n\n{live_note}\n\n{scenario.get('tags', '')}"
+    full_caption = f"{scenario['caption']}\n\n{scenario.get('tags', '')}"
     success_summary = {"telegram": False, "facebook": False, "instagram": False}
 
     if media_type == "video":
