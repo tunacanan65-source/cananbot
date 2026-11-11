@@ -144,13 +144,60 @@ def _scenario_matches_caption(sc: dict, ig_caption: str) -> bool:
     return False
 
 
+def get_30day_quarantined_filenames(recent_caps: list = None) -> set:
+    """
+    Son 30 günde (yaklaşık son 90 Instagram paylaşımında + yerel karantinada) kullanılan
+    TÜM görsellerin (ana kareler, Reels içindeki 2-3-4. yan kareler, fotoğraflar ve hikayeler)
+    dosya adlarını döner. Render yeniden başlasa bile Instagram canlı geçmişinden yan kareleri de
+    deterministik olarak yeniden hesaplar ve 30 gün boyunca tekrar kullanılmasını %100 engeller!
+    """
+    if recent_caps is None:
+        recent_caps = get_recent_instagram_captions(limit=90)
+
+    quarantined = set(create_canan_reel.load_quarantine(days=30).keys())
+
+    # Yerel geçmişten son 90 paylaşımın görsellerini ekle
+    local_hist = load_history()
+    for h in local_hist[-90:]:
+        if h.get("image_name"):
+            quarantined.add(h["image_name"])
+        for comp in h.get("companion_names", []):
+            quarantined.add(comp)
+
+    # Instagram canlı geçmişindeki son 90 gönderiden hem ana görseli hem de Reels yan görsellerini çıkar
+    all_scenarios = [
+        sc for sc in life_scenarios.SCENARIOS
+        if sc.get("image_path") and os.path.exists(sc.get("image_path"))
+    ]
+    for rc in recent_caps[:90]:
+        for sc in all_scenarios:
+            if _scenario_matches_caption(sc, rc):
+                primary_p = sc["image_path"]
+                quarantined.add(os.path.basename(primary_p))
+                if sc.get("companions"):
+                    for cp in sc["companions"]:
+                        quarantined.add(os.path.basename(cp))
+                elif sc.get("type") == "video":
+                    # Deterministik yan görselleri de karantinaya ekle
+                    sim_comps = create_canan_reel.pick_companion_images(
+                        primary_p,
+                        count=3,
+                        exclude_filenames=quarantined
+                    )
+                    for cp in sim_comps:
+                        quarantined.add(os.path.basename(cp))
+                break
+
+    return quarantined
+
+
 def pick_next_scenario(force_type: str = None) -> dict:
     """
-    Canan Tuna için KESİNLİKLE TEKRAR ETMEYEN canlı senaryo seçicisi:
+    Canan Tuna için 30 GÜN SIFIR-TEKRAR KALKANLI canlı senaryo seçicisi:
     1. Instagram API'ye canlı bağlanıp son 100 gönderiyi çeker.
-    2. Her senaryonun Instagram'da en son kaç gönderi önce paylaşıldığını hesaplar.
-    3. Öncelikle HİÇ PAYLAŞILMAMIŞ (unseen) senaryoları seçer.
-    4. Tüm havuz tamamlandığında yalnızca en eski paylaşılmış senaryolardan seçer ve alternatif taze açıklama kullanır.
+    2. Son 30 günde hem ana karede, hem Reels'in 2-3-4. yan karelerinde, hem de Story'de
+       kullanılmış tüm fotoğrafları karantinaya alır.
+    3. Öncelikle HİÇ PAYLAŞILMAMIŞ ve ana görseli karantinada olmayan senaryoları seçer.
     """
     all_scenarios = [
         sc for sc in life_scenarios.SCENARIOS
@@ -162,9 +209,12 @@ def pick_next_scenario(force_type: str = None) -> dict:
     recent_caps = get_recent_instagram_captions(limit=100)
     print(f"📡 [Canan Anti-Tekrar Kalkanı] Instagram'dan son {len(recent_caps)} canlı paylaşım çekildi.")
 
+    quarantined_files = get_30day_quarantined_filenames(recent_caps)
+    print(f"🛡️ [30 Günlük Görsel Karantinası] Son 30 günde kullanılan {len(quarantined_files)} görsel koruma altında.")
+
     # Yerel geçmişi de yedek olarak oku
     local_hist = load_history()
-    local_recent_ids = [h.get("scenario_id") for h in local_hist[-30:] if h.get("scenario_id")]
+    local_recent_ids = [h.get("scenario_id") for h in local_hist[-45:] if h.get("scenario_id")]
 
     unseen_scenarios = []
     scored_scenarios = []  # (distance_from_latest, scenario)
@@ -176,15 +226,19 @@ def pick_next_scenario(force_type: str = None) -> dict:
                 last_seen_idx = idx
                 break
 
-        # Eğer Instagram'da hiç görülmediyse ve yerel son 15 paylaşımda da yoksa -> TAMAMEN TAZE
-        if last_seen_idx is None and sc["id"] not in local_recent_ids[-15:]:
+        img_fname = os.path.basename(sc["image_path"])
+        # Eğer Instagram'da hiç görülmediyse, yerel son 30 paylaşımda yoksa VE görseli 30 günlük karantinada değilse -> TAMAMEN TAZE
+        if last_seen_idx is None and sc["id"] not in local_recent_ids[-30:] and img_fname not in quarantined_files:
             unseen_scenarios.append(sc)
             scored_scenarios.append((9999, sc))
+        elif last_seen_idx is None and sc["id"] not in local_recent_ids[-15:]:
+            # Senaryo hiç paylaşılmamış ama görseli yan karede kullanılmışsa ikinci öncelik ver
+            scored_scenarios.append((5000, sc))
         else:
             dist = last_seen_idx if last_seen_idx is not None else 40
             scored_scenarios.append((dist, sc))
 
-    print(f"🎯 [Canan Senaryo Havuzu] {len(all_scenarios)} aktif senaryodan {len(unseen_scenarios)} tanesi hiç paylaşılmamış (100% Taze)!")
+    print(f"🎯 [Canan Senaryo Havuzu] {len(all_scenarios)} aktif senaryodan {len(unseen_scenarios)} tanesi hiç paylaşılmamış ve görseli %100 taze!")
 
     now = datetime.now()
     hour = now.hour
@@ -193,8 +247,6 @@ def pick_next_scenario(force_type: str = None) -> dict:
     target_cats = day_categories if hour < 16 else evening_categories
 
     # Kuzen Burcu Sıklık Kontrolü:
-    # - Eğer Instagram'da henüz hiç Kuzen Burcu paylaşımı yoksa, ilk açılışı bu akşam Kırmızı-Pembe Oje ile yapsın.
-    # - Açılış yapıldıktan sonra her gün üst üste atmasın; son 5 paylaşımda Burcu varsa solo Canan paylaşsın (arada bir / 2-3 günde bir Burcu gelsin).
     ever_posted_burcu = any("burcu" in rc.lower() for rc in recent_caps) or any("kuzen_burcu" in sid for sid in local_recent_ids)
     recent_5_has_burcu = any("burcu" in rc.lower() for rc in recent_caps[:5]) or any("kuzen_burcu" in sid for sid in local_recent_ids[-5:])
 
@@ -210,7 +262,7 @@ def pick_next_scenario(force_type: str = None) -> dict:
 
             if recent_5_has_burcu and solo_unseen:
                 active_pool = solo_unseen
-            elif burcu_unseen and random.random() < 0.35:
+            elif burcu_unseen and random.random() < 0.30:
                 active_pool = burcu_unseen
             else:
                 active_pool = solo_unseen if solo_unseen else base_unseen
@@ -218,13 +270,14 @@ def pick_next_scenario(force_type: str = None) -> dict:
             preferred = [s for s in active_pool if s.get("category") in target_cats]
             chosen_pool = preferred if preferred else active_pool
     else:
-        # Tüm senaryolar en az 1 kez paylaşıldıysa, en eski paylaşılmış olan en üst 10 senaryodan seç
+        # Tüm senaryolar en az 1 kez paylaşıldıysa, en eski paylaşılmış olan (30 gün = ~90 paylaşım öncesi) senaryolardan seç
         scored_scenarios.sort(key=lambda x: x[0], reverse=True)
-        oldest_pool = [sc for dist, sc in scored_scenarios[:12] if dist >= 20] or [sc for _, sc in scored_scenarios[:10]]
+        oldest_pool = [sc for dist, sc in scored_scenarios[:15] if dist >= 60] or [sc for _, sc in scored_scenarios[:10]]
         preferred = [s for s in oldest_pool if s.get("category") in target_cats]
         chosen_pool = preferred if preferred else oldest_pool
 
     chosen = dict(random.choice(chosen_pool))
+    chosen["_quarantined_files"] = quarantined_files
 
     # Eğer bu senaryonun alternatif taze açıklamaları varsa ve ana açıklama daha önce kullanıldıysa, kullanılmamış olanı seç
     alt_list = [chosen["caption"]] + chosen.get("alt_captions", [])
@@ -414,45 +467,57 @@ def run_daily_story_post(slot_mode: str = "morning") -> bool:
     """
     Sabah 10:30 ('morning') ve Gece 23:00 ('night') saatlerinde Canan Tuna adına
     Instagram ve Facebook Hikaye (Story) paylaşımı yapar.
+    Son 30 günde Reels veya Gönderilerde kullanılmış hiçbir fotoğrafı Story'de tekrar kullanmaz!
     """
     images_dir = os.path.join(BASE_DIR, "assets", "images")
     if not os.path.exists(images_dir):
         return False
 
-    all_imgs = [
+    quarantined_files = get_30day_quarantined_filenames()
+
+    all_imgs = sorted([
         os.path.join(images_dir, f)
         for f in os.listdir(images_dir)
-        if f.lower().startswith(("canan_feet_", "canan_bold_")) and f.lower().endswith((".jpg", ".jpeg", ".png"))
-    ]
+        if f.lower().endswith((".jpg", ".jpeg", ".png"))
+        and "canan_cousin_" not in f.lower()
+    ])
     if not all_imgs:
         return False
 
+    fresh_imgs = [p for p in all_imgs if os.path.basename(p) not in quarantined_files]
+    pool_imgs = fresh_imgs if fresh_imgs else all_imgs
+
+    now = datetime.now()
+    story_seq = (now.year * 366 + now.timetuple().tm_yday) * 2 + (0 if slot_mode == "morning" else 1)
+
     if slot_mode == "morning":
         morning_candidates = [
-            p for p in all_imgs
-            if any(k in os.path.basename(p).lower() for k in ("morning", "bed", "robe", "couch", "coffee", "feet", "sunbed", "balcony"))
+            p for p in pool_imgs
+            if any(k in os.path.basename(p).lower() for k in ("morning", "bed", "robe", "couch", "coffee", "feet", "sunbed", "balcony", "terrace", "window"))
         ]
-        chosen_img = random.choice(morning_candidates or all_imgs)
+        cands = morning_candidates or pool_imgs
+        chosen_img = cands[story_seq % len(cands)]
         greetings = [
-            "Günaydın tatlım! Günün nasıl başladı?",
+            "Günaydın! Günün nasıl başladı?",
             "Sabah kahvem ve ben... Günaydınlar!",
             "Yeni güne enerjik başladık, günaydın!",
-            "Bakım saatiyle güne merhaba, günaydın tatlım!"
+            "Bakım saatiyle güne merhaba, herkese günaydın!"
         ]
     else:
         night_candidates = [
-            p for p in all_imgs
-            if any(k in os.path.basename(p).lower() for k in ("night", "satin", "silk", "lace", "cami", "slip", "feet", "mirror", "couch"))
+            p for p in pool_imgs
+            if any(k in os.path.basename(p).lower() for k in ("night", "evening", "satin", "silk", "lace", "cami", "slip", "feet", "mirror", "couch", "velvet"))
         ]
-        chosen_img = random.choice(night_candidates or all_imgs)
+        cands = night_candidates or pool_imgs
+        chosen_img = cands[(story_seq + 7) % len(cands)]
         greetings = [
-            "İyi geceler tatlım, hala uyanık olan var mı?",
+            "İyi geceler, hala uyanık olan var mı?",
             "Günün yorgunluğunu atma vakti, iyi geceler!",
             "Bu saatte uyumayanlar burada mı? İyi geceler!",
-            "Tatlı rüyalar, yarın yine buluşalım mı?"
+            "Huzurlu geceler, yarın yine buluşalım mı?"
         ]
 
-    story_text = random.choice(greetings)
+    story_text = greetings[story_seq % len(greetings)]
     story_out = os.path.join(OUTPUT_DIR, f"story_{slot_mode}.jpg")
     create_canan_reel.create_story_image(chosen_img, story_text, output_jpg=story_out)
 
@@ -473,6 +538,7 @@ def run_single_autopilot_post(force_type: str = None):
         return False
     sc_id = scenario["id"]
     media_type = force_type if force_type else scenario.get("type", "photo")
+    quarantined_files = scenario.get("_quarantined_files") or set()
 
     print("\n" + "=" * 60)
     print(f"🌟 Canan Tuna Otonom Yaşam Adımı: [{scenario.get('category', '').upper()}] {sc_id} (Format: {media_type})")
@@ -485,16 +551,25 @@ def run_single_autopilot_post(force_type: str = None):
 
     full_caption = f"{scenario['caption']}\n\n{scenario.get('tags', '')}"
     success_summary = {"telegram": False, "facebook": False, "instagram": False}
+    used_companion_names = []
 
     if media_type == "video":
         out_video = os.path.join(OUTPUT_DIR, f"auto_{sc_id}.mp4")
         print(f"🎬 Senaryo için estetik müzikli Full HD Reels videosu üretiliyor: {sc_id}...")
+        planned_companions = create_canan_reel.pick_companion_images(
+            chosen_img,
+            count=3,
+            extra_candidates=scenario.get("companions"),
+            exclude_filenames=quarantined_files
+        )
+        used_companion_names = [os.path.basename(p) for p in planned_companions]
         create_canan_reel.create_reels_video(
             chosen_img,
             output_mp4=out_video,
-            companion_images=scenario.get("companions"),
+            companion_images=planned_companions,
             hook_text=scenario.get("hook"),
-            custom_scene_hooks=scenario.get("scene_hooks")
+            custom_scene_hooks=scenario.get("scene_hooks"),
+            exclude_filenames=quarantined_files
         )
 
         # 1. Telegram
@@ -550,6 +625,7 @@ def run_single_autopilot_post(force_type: str = None):
 
     else:
         print("📸 Fotoğraf Paylaşımı Yapılıyor (Instagram + Facebook + Telegram)...")
+        create_canan_reel.mark_images_used([chosen_img])
         res = canan_engine.publish_lifestyle_update(chosen_img, full_caption)
         if res.get("telegram", {}).get("status") == "success":
             success_summary["telegram"] = True
@@ -568,6 +644,7 @@ def run_single_autopilot_post(force_type: str = None):
         "media_type": media_type,
         "image_path": chosen_img,
         "image_name": os.path.basename(chosen_img),
+        "companion_names": used_companion_names,
         "timestamp": datetime.now().isoformat(),
         "caption": full_caption,
         "platforms": success_summary

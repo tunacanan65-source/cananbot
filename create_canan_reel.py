@@ -1,8 +1,10 @@
 import os
 import sys
+import json
 import textwrap
 import subprocess
 import random
+from datetime import datetime, timedelta
 import imageio_ffmpeg
 from PIL import Image, ImageDraw, ImageFont
 
@@ -18,10 +20,79 @@ OUTPUT_DIR = os.path.join(BASE_DIR, "output")
 MUSIC_DIR = os.path.join(BASE_DIR, "assets", "music")
 IMAGES_DIR = os.path.join(BASE_DIR, "assets", "images")
 FONT_PATH = os.path.join(BASE_DIR, "assets", "font.ttf")
+QUARANTINE_FILE = os.path.join(BASE_DIR, "used_images_quarantine.json")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 os.makedirs(MUSIC_DIR, exist_ok=True)
 
 DEFAULT_MUSIC = os.path.join(MUSIC_DIR, "aesthetic_lofi.mp3")
+
+# 1. Sahne (0-4 sn) Sol-Üstte Çıkacak Gerçekçi Takipçi Yorumu Balonu Havuzu
+FOLLOWER_COMMENTS_FEET = [
+    ("Mehmet K.", "Canan hanım kırmızı oje size çok yakışıyor, yeni video gelsin!"),
+    ("Ahmet Y.", "Ayak bakımınıza ve zarafetinize hayranım, 10 üzerinden 10!"),
+    ("Mustafa T.", "Oje renk seçimleriniz her zaman çok şık duruyor Canan hanım."),
+    ("Kemal S.", "Hem yüzünüzün güzelliği hem bakımlı olmanız harika gerçekten."),
+    ("Serkan B.", "Açık renk oje mi koyu renk oje mi? İkisi de çok yakışıyor!"),
+    ("Hasan D.", "Videolarınızı her gün keyifle takip ediyoruz, çok zarifsiniz.")
+]
+
+FOLLOWER_COMMENTS_COUSIN = [
+    ("Murat A.", "Esmer olan Canan hanım tek geçer, kuzeni de çok sempatik!"),
+    ("Cemil K.", "Kuzenin Burcu ile videolarınız çok keyifli, ikiniz de harikasınız!"),
+    ("Orhan V.", "Benim oyum her zaman gözlükleriyle Canan hanıma, 1 numara!"),
+    ("ibrahim E.", "Esmer mi sarışın mı sorusunun cevabı kesinlikle Canan hanım!"),
+    ("Sinan M.", "Kuzeninizle girdiğiniz iddiaların devamı gelsin, çok güzel ikilisiniz.")
+]
+
+FOLLOWER_COMMENTS_SUMMER = [
+    ("Ali R.", "Fiziğiniz ve enerjiniz gerçekten 10 numara Canan hanım, maşallah!"),
+    ("Hüseyin Ç.", "Güneş sizden daha sönük kalmış, her zamanki gibi çok şıksınız."),
+    ("Burak G.", "Tatil pozlarınız içimizi ısıtıyor, enerjiniz hiç bitmesin!"),
+    ("Yavuz N.", "Hem doğal hem bu kadar çekici olmayı nasıl başarıyorsunuz?"),
+    ("Tuncay Ö.", "Deniz ve güneş size çok yakışıyor Canan hanım, selamlar.")
+]
+
+FOLLOWER_COMMENTS_GENERAL = [
+    ("Mustafa B.", "Gözlükleriniz ve tebessümünüz çok zarif, videolarınızı bekliyoruz!"),
+    ("Erkan T.", "Hangi kombini giyseniz ayrı bir hava katıyorsunuz Canan hanım."),
+    ("Zafer L.", "Sayfanızı yeni keşfettim, bütün videolarınızı hayranlıkla izledim!"),
+    ("Bülent K.", "Günün en güzel paylaşımı yine sizden geldi, çok şıksınız."),
+    ("Metin P.", "4 karelik videolarınız çok güzel oluyor, sonuna kadar izliyoruz.")
+]
+
+
+def load_quarantine(days: int = 30) -> dict:
+    """Son 30 gün içinde kullanılan görsellerin {dosya_adi: iso_tarih} sözlüğünü döner."""
+    if not os.path.exists(QUARANTINE_FILE):
+        return {}
+    try:
+        with open(QUARANTINE_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        cutoff = datetime.now() - timedelta(days=days)
+        active = {}
+        for k, v in data.items():
+            try:
+                if datetime.fromisoformat(v) >= cutoff:
+                    active[k] = v
+            except Exception:
+                active[k] = v
+        return active
+    except Exception:
+        return {}
+
+
+def mark_images_used(image_paths: list):
+    """Kullanılan tüm görselleri (Reels içindeki 4 kare, Fotoğraf ve Story dahil) 30 günlük karantinaya kaydeder."""
+    q = load_quarantine(days=30)
+    now_iso = datetime.now().isoformat()
+    for p in image_paths:
+        if p:
+            q[os.path.basename(p)] = now_iso
+    try:
+        with open(QUARANTINE_FILE, "w", encoding="utf-8") as f:
+            json.dump(q, f, ensure_ascii=False, indent=2)
+    except Exception:
+        pass
 
 
 def _load_font(size: int = 32):
@@ -40,6 +111,21 @@ def _load_font(size: int = 32):
             except Exception:
                 pass
     return ImageFont.load_default()
+
+
+def get_follower_comment_for_image(image_path: str) -> tuple:
+    """1. Sahnede sol üstte gösterilecek gerçekçi takipçi yorumunu seçer."""
+    fname = os.path.basename(image_path).lower()
+    seed_val = sum(ord(c) for c in fname) + datetime.now().timetuple().tm_yday
+    if "canan_cousin_" in fname:
+        pool = FOLLOWER_COMMENTS_COUSIN
+    elif any(k in fname for k in ("feet", "polish", "pedi", "toes", "anklet")):
+        pool = FOLLOWER_COMMENTS_FEET
+    elif any(k in fname for k in ("bikini", "swim", "pool", "yacht", "beach", "sunbed", "hammock", "shower", "jacuzzi")):
+        pool = FOLLOWER_COMMENTS_SUMMER
+    else:
+        pool = FOLLOWER_COMMENTS_GENERAL
+    return pool[seed_val % len(pool)]
 
 
 def get_short_hook_for_image(
@@ -66,7 +152,7 @@ def get_short_hook_for_image(
             return custom_hook.strip()
         return random.choice([
             "Kuzenim Burcu ile iddiaya girdik, hangimiz?",
-            "Esmer mi Sarışın mı? Tarafını seç tatlım!",
+            "Esmer mi Sarışın mı? Tarafını seç!",
             "Kimin ojesi ve bacakları daha güzel olmuş?",
             "Kuzenim Burcu ve ben! Puanın kaç?"
         ])
@@ -96,11 +182,11 @@ def get_short_hook_for_image(
                 "Ojem bitti, nasıl olmuş? Puanın kaç?",
                 "Yeni sürdüm, ojemin rengi yakışmış mı?",
                 "Bakım tamamlandı! Ayaklarıma 10 üzerinden kaç?",
-                "Bu renk ojeyi beğendin mi tatlım?"
+                "Bu renk ojeyi beğendin mi?"
             ]
             return random.choice(feet_done_hooks)
 
-    if any(k in fname for k in ("bikini", "swim", "pool", "yacht", "beach", "sunbed", "hammock", "shower")):
+    if any(k in fname for k in ("bikini", "swim", "pool", "yacht", "beach", "sunbed", "hammock", "shower", "jacuzzi")):
         summer_hooks = [
             "Güneş mi daha sıcak yoksa bu poz mu?",
             "Biraz da güneşlenelim, fizik nasıl?",
@@ -128,22 +214,89 @@ def get_short_hook_for_image(
 
     general_hooks = [
         "Akşam için hazırlanıyoruz, bu kombin nasıl?",
-        "Bu elbiseyle dışarı çıkılır mı tatlım?",
+        "Bu elbiseyle dışarı çıkılır mı?",
         "Sence bu renk bana yakışmış mı?",
         "Tarzıma 10 üzerinden kaç veriyorsun?"
     ]
     return random.choice(general_hooks)
 
 
-def create_overlay_png(text: str, out_png_path: str, y_pos: int = 1470):
+def create_overlay_png(
+    text: str,
+    out_png_path: str,
+    y_pos: int = 1470,
+    scene_index: int = None,
+    num_scenes: int = None,
+    follower_comment: tuple = None
+):
     """
-    1080x1920 şeffaf katman üzerine, asla ekrandan taşmayan (maksimum 900px genişlik),
-    ufak, zarif, yarı saydam koyu kapsül içinde net beyaz Türkçe etkileşim yazısı çizer.
+    1080x1920 şeffaf katman üzerine:
+    1) Sağ üst köşeye şık '1/4', '2/4', '3/4', '4/4' kare sayacı,
+    2) 1. sahnede sol üst güvenli bölgeye gerçekçi 'Takipçi Yorumuna Yanıt' balonu,
+    3) Alt-orta güvenli bölgeye ekrandan taşmayan etkileşim kapsülü çizer.
     """
     canvas = Image.new("RGBA", (1080, 1920), (0, 0, 0, 0))
     draw = ImageDraw.Draw(canvas)
-    font = _load_font(size=31)
+    font_main = _load_font(size=31)
+    font_counter = _load_font(size=28)
+    font_comment_user = _load_font(size=23)
+    font_comment_body = _load_font(size=26)
 
+    # 1. SAĞ ÜST KARE SAYACI (1/4, 2/4, 3/4, 4/4)
+    if scene_index is not None and num_scenes and num_scenes > 1:
+        counter_str = f"{scene_index + 1} / {num_scenes}"
+        cb = draw.textbbox((0, 0), counter_str, font=font_counter)
+        cw, ch = cb[2] - cb[0], cb[3] - cb[1]
+        c_x1, c_y1 = 1080 - cw - 85, 130
+        c_x2, c_y2 = c_x1 + cw + 44, c_y1 + ch + 26
+        draw.rounded_rectangle(
+            [c_x1, c_y1, c_x2, c_y2],
+            radius=22,
+            fill=(15, 15, 22, 195),
+            outline=(255, 255, 255, 130),
+            width=2
+        )
+        draw.text((c_x1 + 22, c_y1 + 11), counter_str, font=font_counter, fill=(255, 255, 255, 255))
+
+    # 2. SOL ÜST TAKİPÇİ YORUMU BALONU (Yalnızca 1. Sahnede)
+    if scene_index == 0 and follower_comment:
+        author, c_text = follower_comment
+        clean_c = "".join(ch for ch in c_text if ord(ch) < 0x1F000).strip()
+        c_lines = textwrap.wrap(clean_c, width=36)[:2]
+        header_str = f"{author} yorum yaptı:"
+
+        hb = draw.textbbox((0, 0), header_str, font=font_comment_user)
+        hw, hh = hb[2] - hb[0], hb[3] - hb[1]
+        c_bboxes = [draw.textbbox((0, 0), ln, font=font_comment_body) for ln in c_lines]
+        c_widths = [b[2] - b[0] for b in c_bboxes]
+        c_heights = [b[3] - b[1] for b in c_bboxes]
+
+        bub_w = min(max([hw] + c_widths) + 64, 780)
+        bub_h = hh + sum(c_heights) + len(c_lines) * 8 + 38
+        bx1, by1 = 65, 130
+        bx2, by2 = bx1 + bub_w, by1 + bub_h
+
+        # Beyaz/buzlu TikTok & Reels tarzı yorum kartı
+        draw.rounded_rectangle(
+            [bx1, by1, bx2, by2],
+            radius=22,
+            fill=(252, 252, 255, 232),
+            outline=(220, 40, 90, 210),
+            width=3
+        )
+        # Sol kırmızı/pembe vurgu şeridi
+        draw.rounded_rectangle(
+            [bx1 + 12, by1 + 14, bx1 + 20, by2 - 14],
+            radius=4,
+            fill=(225, 38, 88, 255)
+        )
+        draw.text((bx1 + 32, by1 + 14), header_str, font=font_comment_user, fill=(130, 130, 145, 255))
+        cy = by1 + 14 + hh + 8
+        for idx_l, ln in enumerate(c_lines):
+            draw.text((bx1 + 32, cy), ln, font=font_comment_body, fill=(20, 20, 28, 255))
+            cy += c_heights[idx_l] + 6
+
+    # 3. ALT-ORTA ETKİLEŞİM KAPSÜLÜ
     clean_text = "".join(ch for ch in text if ord(ch) < 0x1F000).strip()
     if not clean_text:
         clean_text = "Sence nasıl olmuş? Yorumda buluşalım!"
@@ -152,7 +305,7 @@ def create_overlay_png(text: str, out_png_path: str, y_pos: int = 1470):
     if len(lines) > 2:
         lines = lines[:2]
 
-    line_bboxes = [draw.textbbox((0, 0), ln, font=font) for ln in lines]
+    line_bboxes = [draw.textbbox((0, 0), ln, font=font_main) for ln in lines]
     line_widths = [b[2] - b[0] for b in line_bboxes]
     line_heights = [b[3] - b[1] for b in line_bboxes]
 
@@ -182,8 +335,8 @@ def create_overlay_png(text: str, out_png_path: str, y_pos: int = 1470):
         lw = line_widths[i]
         lh = line_heights[i]
         tx = (1080 - lw) // 2
-        draw.text((tx + 2, curr_y + 2), ln, font=font, fill=(0, 0, 0, 210))
-        draw.text((tx, curr_y), ln, font=font, fill=(255, 255, 255, 255))
+        draw.text((tx + 2, curr_y + 2), ln, font=font_main, fill=(0, 0, 0, 210))
+        draw.text((tx, curr_y), ln, font=font_main, fill=(255, 255, 255, 255))
         curr_y += lh + 10
 
     canvas.save(out_png_path, "PNG")
@@ -193,10 +346,12 @@ def create_overlay_png(text: str, out_png_path: str, y_pos: int = 1470):
 def create_story_image(image_path: str, story_text: str, output_jpg: str = None) -> str:
     """
     Günlük Otomatik Hikaye (Story) için 1080x1920 dikey görselin üzerine
-    şık ve taşmayan bir hikaye notu ("Günaydın tatlım", "İyi geceler, uyuyan var mı?") işler.
+    şık ve taşmayan bir hikaye notu işler ve kullanılan görseli 30 günlük karantinaya kaydeder.
     """
     if not output_jpg:
         output_jpg = os.path.join(OUTPUT_DIR, f"story_{random.randint(1000, 9999)}.jpg")
+
+    mark_images_used([image_path])
 
     img = Image.open(image_path).convert("RGB")
     target_w, target_h = 1080, 1920
@@ -255,68 +410,102 @@ def pick_background_music() -> str:
     return None
 
 
-def pick_companion_images(primary_image: str, count: int = 3, extra_candidates: list = None) -> list:
+def pick_companion_images(
+    primary_image: str,
+    count: int = 3,
+    extra_candidates: list = None,
+    exclude_filenames: set = None
+) -> list:
     """
-    4 Karede 'Adım Adım Hazırlanma' (Öncesi/Sonrası Hikaye Kurgusu):
-    İzleyiciyi 16 saniye boyunca ekranda tutmak için sahneleri hikaye sırasıyla seçer:
-    - Eğer 1. kare oje/ayak bakımı ise:
-      2. kare -> Bitmiş oje/pedikür pozu
-      3. kare -> Plaj / Bikini / Spor / Gündüz bacak pozu
-      4. kare -> Gece mini elbise / korse / saten final pozu
-    - Eğer 1. kare başka bir poz ise:
-      2. kare -> Oje / ayak bakımı pozu (her Reels'te mutlaka oje/ayak sahnesi yer alır)
-      3. kare -> Plaj / Bikini / Spor pozu
-      4. kare -> Gece mini elbise / korse / saten final pozu
+    30 Günlük Sıfır-Tekrar Karantinalı & Deterministik 4-Kare Seçici:
+    - Daha önce Reels'in herhangi bir karesinde, Fotoğrafta veya Story'de kullanılmış hiçbir görseli seçmez.
+    - Sunucu yeniden başlasa bile her ana görselin kendine özgü deterministik ofseti olduğu için
+      2., 3. ve 4. karelerde aynı görseller üst üste ASLA denk gelmez!
     """
     primary_abs = os.path.abspath(primary_image)
+    primary_fname = os.path.basename(primary_abs)
+
+    quarantined = set(load_quarantine(days=30).keys())
+    if exclude_filenames:
+        quarantined.update(exclude_filenames)
+    quarantined.add(primary_fname)
+
     if extra_candidates:
-        ordered = [p for p in extra_candidates if os.path.exists(p) and os.path.abspath(p) != primary_abs]
+        ordered = [
+            p for p in extra_candidates
+            if os.path.exists(p)
+            and os.path.abspath(p) != primary_abs
+            and os.path.basename(p) not in quarantined
+        ]
         if len(ordered) >= count:
             return ordered[:count]
 
-    all_imgs = [
+    all_imgs = sorted([
         os.path.join(IMAGES_DIR, f)
         for f in os.listdir(IMAGES_DIR)
         if f.lower().endswith((".jpg", ".jpeg", ".png"))
-    ]
-    pool = [p for p in all_imgs if os.path.abspath(p) != primary_abs]
+        and os.path.abspath(os.path.join(IMAGES_DIR, f)) != primary_abs
+    ])
 
-    # Eğer Kuzen Burcu serisi ise diğer Kuzen Burcu kareleriyle sıralı eşleştir
-    if "canan_cousin_" in os.path.basename(primary_abs).lower():
-        cousin_pool = sorted([p for p in pool if "canan_cousin_" in os.path.basename(p).lower()])
-        if len(cousin_pool) >= count:
-            return cousin_pool[:count]
+    is_cousin = "canan_cousin_" in primary_fname.lower()
+    if is_cousin:
+        base_pool = [p for p in all_imgs if "canan_cousin_" in os.path.basename(p).lower()]
+    else:
+        base_pool = [p for p in all_imgs if "canan_cousin_" not in os.path.basename(p).lower()]
 
-    feet_pool = [p for p in pool if "canan_feet_" in os.path.basename(p).lower()]
-    day_glam_pool = [
-        p for p in pool
-        if os.path.basename(p).lower().startswith("canan_bold_")
-        and any(k in os.path.basename(p).lower() for k in ("bikini", "pool", "yacht", "beach", "sunbed", "hammock", "shower", "gym", "yoga", "tennis", "shorts"))
+    fresh_pool = [p for p in base_pool if os.path.basename(p) not in quarantined]
+    if len(fresh_pool) < count:
+        fresh_pool = list(base_pool)
+
+    # Deterministik + Günlük Kaydırmalı Seçim (Rastgele çakışmayı %100 önler)
+    now = datetime.now()
+    slot_num = 0 if now.hour < 15 else (1 if now.hour < 19 else 2)
+    day_seq = (now.year * 366 + now.timetuple().tm_yday) * 3 + slot_num
+    name_hash = sum((i + 1) * ord(ch) for i, ch in enumerate(primary_fname))
+
+    if is_cousin:
+        start_idx = (day_seq * 3 + name_hash) % max(1, len(fresh_pool))
+        chosen = []
+        for step in range(len(fresh_pool)):
+            cand = fresh_pool[(start_idx + step) % len(fresh_pool)]
+            if cand not in chosen:
+                chosen.append(cand)
+            if len(chosen) == count:
+                break
+        return chosen
+
+    # Solo Canan için 3 farklı görsel grubu (birbirini tekrar etmeyen geniş havuzlar):
+    # Grup 1: Oje / Ayak / Ev / Yatak / Koltuk / Sabah
+    group_1 = [
+        p for p in fresh_pool
+        if any(k in os.path.basename(p).lower() for k in ("feet", "polish", "pedi", "toes", "anklet", "bed", "couch", "sofa", "rug", "carpet", "robe", "morning", "coffee", "home", "book"))
     ]
-    night_glam_pool = [
-        p for p in pool
-        if os.path.basename(p).lower().startswith("canan_bold_")
-        and any(k in os.path.basename(p).lower() for k in ("mini", "corset", "satin", "backless", "plunge", "cutout", "chainmail", "mesh", "halter", "bodycon", "leather", "velvet", "silk"))
+    # Grup 2: Plaj / Bikini / Havuz / Yat / Spor / Gündüz
+    group_2 = [
+        p for p in fresh_pool
+        if p not in group_1
+        and any(k in os.path.basename(p).lower() for k in ("bikini", "pool", "yacht", "beach", "sunbed", "hammock", "shower", "jacuzzi", "gym", "yoga", "tennis", "pilates", "shorts", "workout", "summer"))
     ]
-    all_bold_pool = [p for p in pool if os.path.basename(p).lower().startswith(("canan_feet_", "canan_bold_"))]
+    # Grup 3: Gece / Mini Elbise / Saten / Korse / Ayna / Şık Kombin
+    group_3 = [
+        p for p in fresh_pool
+        if p not in group_1 and p not in group_2
+    ]
 
     chosen = []
-    if len(feet_pool) >= 1:
-        chosen.append(random.choice(feet_pool))
-    if len(day_glam_pool) >= 1:
-        c_day = [p for p in day_glam_pool if p not in chosen]
-        if c_day:
-            chosen.append(random.choice(c_day))
-    if len(night_glam_pool) >= 1:
-        c_night = [p for p in night_glam_pool if p not in chosen]
-        if c_night:
-            chosen.append(random.choice(c_night))
+    for g_idx, grp in enumerate([group_1, group_2, group_3]):
+        avail = [p for p in grp if p not in chosen]
+        if avail:
+            pick_idx = (day_seq * 7 + name_hash + g_idx * 13) % len(avail)
+            chosen.append(avail[pick_idx])
 
-    fallback_source = [p for p in (all_bold_pool or pool) if p not in chosen]
-    while len(chosen) < count and fallback_source:
-        pick = random.choice(fallback_source)
+    remaining = [p for p in fresh_pool if p not in chosen]
+    step_idx = 0
+    while len(chosen) < count and remaining:
+        pick = remaining[(day_seq + name_hash + step_idx) % len(remaining)]
         chosen.append(pick)
-        fallback_source.remove(pick)
+        remaining.remove(pick)
+        step_idx += 1
 
     return chosen[:count]
 
@@ -329,14 +518,15 @@ def create_reels_video(
     motion_index: int = None,
     companion_images: list = None,
     hook_text: str = None,
-    custom_scene_hooks: list = None
+    custom_scene_hooks: list = None,
+    exclude_filenames: set = None
 ) -> str:
     """
     Facebook & Instagram Para Kazanma ve Yüksek Etkileşim Kriterlerine Özel:
-    - 4 karede 'Adım Adım Hazırlanma' kurgusu (4 x 4.0 sn = 16.0 saniye)
-    - İlk kareden (0.00 sn) itibaren %100 parlak ve net başlangıç (karanlık başlangıç yok)
-    - Her sahnede ekrana taşmayan, ufak ve şık etkileşim sorusu (Pillow PNG katmanı)
-    - 1080x1920 Full HD (CRF 19) + telifsiz arka plan müziği
+    - 30 Günlük Karantina Kalkanı (Reels içi 4 kare dahil hiçbir fotoğraf tekrar etmez)
+    - Sağ üstte '1/4', '2/4', '3/4', '4/4' kare sayacı
+    - 1. karede sol üstte gerçekçi 'Takipçi Yorumu' balonu
+    - İlk kareden (0.00 sn) itibaren %100 parlak ve net başlangıç
     """
     if not output_mp4:
         output_mp4 = os.path.join(OUTPUT_DIR, "reels_output.mp4")
@@ -345,8 +535,16 @@ def create_reels_video(
     if not music_file or not os.path.exists(music_file):
         raise FileNotFoundError(f"Arka plan müziği bulunamadı: {music_file}")
 
-    companions = pick_companion_images(image_path, count=3, extra_candidates=companion_images)
+    companions = pick_companion_images(
+        image_path,
+        count=3,
+        extra_candidates=companion_images,
+        exclude_filenames=exclude_filenames
+    )
     scene_images = [image_path] + companions
+    # Kullanılan 4 görselin tamamını 30 günlük karantinaya kaydet!
+    mark_images_used(scene_images)
+
     num_scenes = len(scene_images)
     scene_duration = round(duration / num_scenes, 2)
     frames_per_scene = int(scene_duration * 30)
@@ -356,8 +554,10 @@ def create_reels_video(
     if motion_index is not None:
         available_motions[0] = motion_index % 8
 
+    follower_comm = get_follower_comment_for_image(image_path)
+
     print(
-        f"🎬 [4 Sahneli 16sn Hikaye Kurgulu Reels] Üretiliyor: {[os.path.basename(p) for p in scene_images]} "
+        f"🎬 [4 Sahneli 16sn Karantinalı Reels] Üretiliyor: {[os.path.basename(p) for p in scene_images]} "
         f"| Müzik: {os.path.basename(music_file)}"
     )
 
@@ -381,10 +581,16 @@ def create_reels_video(
                 )
 
             overlay_png = os.path.join(OUTPUT_DIR, f"_tmp_ovl_{idx}_{random.randint(1000,9999)}.png")
-            create_overlay_png(scene_hook, overlay_png)
+            create_overlay_png(
+                scene_hook,
+                overlay_png,
+                y_pos=1470,
+                scene_index=idx,
+                num_scenes=num_scenes,
+                follower_comment=(follower_comm if idx == 0 else None)
+            )
             temp_files.append(overlay_png)
 
-            # İlk kareden itibaren %100 parlak ve net başlasın (karanlık başlangıç olmasın)
             filter_complex = (
                 f"[0:v]scale=1080:1920:force_original_aspect_ratio=increase:flags=lanczos,crop=1080:1920,"
                 f"{zoom_filter}[bg];"
@@ -448,7 +654,7 @@ def create_reels_video(
                 except Exception:
                     pass
 
-    print(f"✅ 4 Sahneli 16 Saniyelik Hikaye Kurgulu Reels videosu üretildi: {output_mp4}")
+    print(f"✅ 4 Sahneli 16 Saniyelik Karantinalı Reels videosu üretildi: {output_mp4}")
     return output_mp4
 
 
