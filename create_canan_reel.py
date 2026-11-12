@@ -26,6 +26,24 @@ os.makedirs(MUSIC_DIR, exist_ok=True)
 
 DEFAULT_MUSIC = os.path.join(MUSIC_DIR, "aesthetic_lofi.mp3")
 
+SUMMER_FILENAME_KEYWORDS = (
+    "bikini", "swim", "pool", "yacht", "beach", "sunbed",
+    "hammock", "shower", "cabana", "sandals_pool", "wooden_deck",
+    "coral_mini_sunset", "silver_anklet_terrace", "denim_shorts_crop"
+)
+
+
+def is_summer_image(image_path: str) -> bool:
+    """Görselin deniz/plaj/havuz/bikini/yat gibi yazlık açık hava görseli olup olmadığını döner."""
+    fname = os.path.basename(image_path).lower()
+    return any(k in fname for k in SUMMER_FILENAME_KEYWORDS)
+
+
+def is_cold_season() -> bool:
+    """Ekim (10) - Nisan (4) arası sonbahar/kış/erken bahar döneminde True döner."""
+    return datetime.now().month in (10, 11, 12, 1, 2, 3, 4)
+
+
 # 1. Sahne (0-4 sn) Sol-Üstte Çıkacak Gerçekçi Takipçi Yorumu Balonu Havuzu
 FOLLOWER_COMMENTS_FEET = [
     ("Mehmet K.", "Canan hanım kırmızı oje size çok yakışıyor, yeni video gelsin!"),
@@ -187,6 +205,13 @@ def get_short_hook_for_image(
             return random.choice(feet_done_hooks)
 
     if any(k in fname for k in ("bikini", "swim", "pool", "yacht", "beach", "sunbed", "hammock", "shower", "jacuzzi")):
+        if is_cold_season():
+            return random.choice([
+                "Dışarısı soğukken yaz arşivinden bir #tbt! Nasıl?",
+                "Yazı ve güneşi şimdiden özleyenler burada mı? (#tbt)",
+                "Yazdan kalan en sevdiğim karelerden biri! Puanın kaç?",
+                "Soğuk havalarda içimizi ısıtacak bir #tbt!"
+            ])
         summer_hooks = [
             "Güneş mi daha sıcak yoksa bu poz mu?",
             "Biraz da güneşlenelim, fizik nasıl?",
@@ -452,6 +477,14 @@ def pick_companion_images(
         base_pool = [p for p in all_imgs if "canan_cousin_" in os.path.basename(p).lower()]
     else:
         base_pool = [p for p in all_imgs if "canan_cousin_" not in os.path.basename(p).lower()]
+
+    # Kış/Sonbahar (Ekim-Nisan) döneminde eğer ana görsel yazlık (#tbt) DEĞİLSE,
+    # yan karelere deniz/plaj/havuz/bikini görseli karıştırma!
+    primary_is_summer = is_summer_image(primary_abs)
+    if is_cold_season() and not primary_is_summer:
+        seasonal_pool = [p for p in base_pool if not is_summer_image(p)]
+        if len(seasonal_pool) >= count:
+            base_pool = seasonal_pool
 
     fresh_pool = [p for p in base_pool if os.path.basename(p) not in quarantined]
     if len(fresh_pool) < count:

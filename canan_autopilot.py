@@ -106,13 +106,32 @@ def get_recent_instagram_captions(limit: int = 100) -> list:
 
 
 def _strip_legacy_prefix(text: str) -> str:
-    """Eski sürümlerde eklenmiş olabilen 'Yazdan kalanlar...' ön ek paragrafını temizler."""
+    """Eski sürümlerde veya #tbt modunda eklenmiş olabilen ön ek paragrafını temizler."""
     t = text.strip().lower()
-    if "siz de yazı şimdiden özleyenlerden misiniz?" in t:
-        parts = t.split("siz de yazı şimdiden özleyenlerden misiniz?")
-        if len(parts) > 1:
-            t = parts[-1].lstrip(" ✨\n\r")
+    for marker in ("siz de yazı şimdiden özleyenlerden misiniz?", "yazı özleyenler burada mı?", "içimizi ısıtsın:"):
+        if marker in t:
+            parts = t.split(marker)
+            if len(parts) > 1:
+                t = parts[-1].lstrip(" ✨☀️🌊🔥\n\r")
     return t.strip()
+
+
+SUMMER_SCENARIO_KEYWORDS = (
+    "bikini", "plaj", "kumsal", "tekne", "yat ", "yatta", "güverte",
+    "denizden", "havuz", "şezlong", "hamak", "loca", "koylarda",
+    "iskelede", "bodrum'un o sıcak güneşi", "ege nin tadını"
+)
+
+
+def is_summer_scenario(sc: dict) -> bool:
+    """Bir senaryonun deniz/plaj/havuz/bikini/yat gibi yazlık açık hava temalı olup olmadığını tespit eder."""
+    img_path = sc.get("image_path", "")
+    if create_canan_reel.is_summer_image(img_path):
+        return True
+    cap_low = (sc.get("caption") or "").lower()
+    sid_low = (sc.get("id") or "").lower()
+    return any(k in cap_low or k in sid_low for k in SUMMER_SCENARIO_KEYWORDS)
+
 
 
 def _scenario_matches_caption(sc: dict, ig_caption: str) -> bool:
@@ -242,13 +261,33 @@ def pick_next_scenario(force_type: str = None) -> dict:
 
     now = datetime.now()
     hour = now.hour
-    day_categories = ("tatil", "hobi", "sanat", "sokak", "ev", "lifestyle")
+    cold_season = create_canan_reel.is_cold_season()
+
+    day_categories = ("ev", "hobi", "sanat", "sokak", "lifestyle", "tatil")
     evening_categories = ("gece", "spor", "lifestyle", "is", "sanat", "ev")
     target_cats = day_categories if hour < 16 else evening_categories
 
-    # Kuzen Burcu Sıklık Kontrolü:
+    # 1) Kuzen Burcu Sıklık Kalkanı: Son 8 paylaşımda (yaklaşık 3 gün) Burcu varsa üst üste ASLA atma!
     ever_posted_burcu = any("burcu" in rc.lower() for rc in recent_caps) or any("kuzen_burcu" in sid for sid in local_recent_ids)
-    recent_5_has_burcu = any("burcu" in rc.lower() for rc in recent_caps[:5]) or any("kuzen_burcu" in sid for sid in local_recent_ids[-5:])
+    recent_8_has_burcu = (
+        any("burcu" in rc.lower() for rc in recent_caps[:8])
+        or any("kuzen_burcu" in sid for sid in local_recent_ids[-8:])
+    )
+
+    # 2) Kış/Sonbahar (Ekim-Nisan) Deniz/Plaj/Havuz (#tbt) Sıklık Kalkanı:
+    # Son 10 paylaşımda (yaklaşık 3.5 gün) herhangi bir deniz/plaj/havuz/#tbt paylaşımı varsa
+    # kesinlikle yazlık senaryo seçme! Yoksa da yalnızca %15 ihtimalle "Yazdan kalan #tbt" olarak seç.
+    recent_10_has_summer = (
+        any(
+            any(w in rc.lower() for w in ("#tbt", "plaj", "kumsal", "bikini", "havuz", "güverte", "şezlong", "yaz arşivinden", "yazdan kalan"))
+            for rc in recent_caps[:10]
+        )
+        or any(
+            any(w in sid.lower() for w in ("bikini", "havuz", "plaj", "kumsal", "yat", "sezlong", "loca"))
+            for sid in local_recent_ids[-10:]
+        )
+    )
+    allow_summer_tbt = (not cold_season) or (not recent_10_has_summer and random.random() < 0.15)
 
     if unseen_scenarios:
         first_debut = [s for s in unseen_scenarios if s["id"] == "kuzen_burcu_kirmizi_pembe_oje_1"]
@@ -257,12 +296,28 @@ def pick_next_scenario(force_type: str = None) -> dict:
         else:
             bold_unseen = [s for s in unseen_scenarios if s.get("bold")]
             base_unseen = bold_unseen if bold_unseen else unseen_scenarios
+
+            # Kış aylarında #tbt izni yoksa bütün deniz/plaj/havuz/bikini senaryolarını havuzdan çıkar!
+            if cold_season and not allow_summer_tbt:
+                non_summer = [s for s in base_unseen if not is_summer_scenario(s)]
+                if non_summer:
+                    base_unseen = non_summer
+
             solo_unseen = [s for s in base_unseen if "kuzen_burcu" not in s["id"]]
+            if not solo_unseen:
+                # Eğer bold havuzundaki tüm solo görseller yan karelerde kullanılmışsa, hiç paylaşılmamış tüm solo senaryoları aç
+                all_unseen_any = [
+                    sc for dist, sc in scored_scenarios
+                    if dist >= 5000 and "kuzen_burcu" not in sc["id"]
+                    and (not cold_season or allow_summer_tbt or not is_summer_scenario(sc))
+                ]
+                solo_unseen = all_unseen_any
+
             burcu_unseen = [s for s in base_unseen if "kuzen_burcu" in s["id"]]
 
-            if recent_5_has_burcu and solo_unseen:
+            if recent_8_has_burcu and solo_unseen:
                 active_pool = solo_unseen
-            elif burcu_unseen and random.random() < 0.30:
+            elif not recent_8_has_burcu and burcu_unseen and random.random() < 0.22:
                 active_pool = burcu_unseen
             else:
                 active_pool = solo_unseen if solo_unseen else base_unseen
@@ -272,7 +327,11 @@ def pick_next_scenario(force_type: str = None) -> dict:
     else:
         # Tüm senaryolar en az 1 kez paylaşıldıysa, en eski paylaşılmış olan (30 gün = ~90 paylaşım öncesi) senaryolardan seç
         scored_scenarios.sort(key=lambda x: x[0], reverse=True)
-        oldest_pool = [sc for dist, sc in scored_scenarios[:15] if dist >= 60] or [sc for _, sc in scored_scenarios[:10]]
+        oldest_pool = [sc for dist, sc in scored_scenarios[:20] if dist >= 60] or [sc for _, sc in scored_scenarios[:12]]
+        if cold_season and not allow_summer_tbt:
+            non_summer_old = [s for s in oldest_pool if not is_summer_scenario(s)]
+            if non_summer_old:
+                oldest_pool = non_summer_old
         preferred = [s for s in oldest_pool if s.get("category") in target_cats]
         chosen_pool = preferred if preferred else oldest_pool
 
@@ -289,6 +348,24 @@ def pick_next_scenario(force_type: str = None) -> dict:
         chosen["caption"] = random.choice(fresh_captions)
     else:
         chosen["caption"] = random.choice(alt_list)
+
+    # Kış/Sonbahar (Ekim-Nisan) döneminde nadir olarak yazlık/deniz/havuz senaryosu seçildiyse,
+    # bugün denize gitmiş gibi görünmemesi için hem açıklamayı hem de video üstü yazısını otomatik #tbt'ye çevir!
+    if cold_season and is_summer_scenario(chosen):
+        tbt_intros = [
+            "Dışarısı buz gibiyken telefonumda yaz arşivinden bu kareyi buldum... 📸☀️ Yazı özleyenler burada mı?\n\n",
+            "Soğuk havalarda içimizi ısıtacak bir #tbt bırakıyorum... 🌊✨ Yaz gelsin diyenler kimler? İçimizi ısıtsın:\n\n",
+            "Kasım soğuğunda yaz tatilinden kalan bu anılar burnumda tütüyor! 🏖️☀️ Siz de yazı şimdiden özleyenlerden misiniz?\n\n"
+        ]
+        if "#tbt" not in chosen["caption"].lower():
+            chosen["caption"] = random.choice(tbt_intros) + chosen["caption"]
+        if "#tbt" not in chosen.get("tags", "").lower():
+            chosen["tags"] = (chosen.get("tags", "") + " #tbt #yazözlemi #throwback").strip()
+        chosen["hook"] = random.choice([
+            "Soğuk havalarda yaz arşivinden sıcak bir #tbt!",
+            "Yazı ve güneşi özleyenler burada mı? (#tbt)",
+            "Dışarısı soğukken yazdan kalan bu kareye puanın kaç?"
+        ])
 
     return chosen
 
@@ -487,13 +564,19 @@ def run_daily_story_post(slot_mode: str = "morning") -> bool:
     fresh_imgs = [p for p in all_imgs if os.path.basename(p) not in quarantined_files]
     pool_imgs = fresh_imgs if fresh_imgs else all_imgs
 
+    # Kış/Sonbahar (Ekim-Nisan) döneminde Hikaye (Story) paylaşımlarında deniz/plaj/havuz görseli kullanma!
+    if create_canan_reel.is_cold_season():
+        non_summer_story = [p for p in pool_imgs if not create_canan_reel.is_summer_image(p)]
+        if non_summer_story:
+            pool_imgs = non_summer_story
+
     now = datetime.now()
     story_seq = (now.year * 366 + now.timetuple().tm_yday) * 2 + (0 if slot_mode == "morning" else 1)
 
     if slot_mode == "morning":
         morning_candidates = [
             p for p in pool_imgs
-            if any(k in os.path.basename(p).lower() for k in ("morning", "bed", "robe", "couch", "coffee", "feet", "sunbed", "balcony", "terrace", "window"))
+            if any(k in os.path.basename(p).lower() for k in ("morning", "bed", "robe", "couch", "coffee", "feet", "balcony", "window"))
         ]
         cands = morning_candidates or pool_imgs
         chosen_img = cands[story_seq % len(cands)]
