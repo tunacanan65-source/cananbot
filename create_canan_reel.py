@@ -220,6 +220,28 @@ def get_short_hook_for_image(
         ]
         return random.choice(summer_hooks)
 
+    if any(k in fname for k in ("cinema", "popcorn", "movie")):
+        return random.choice([
+            "Bu akşam sinema keyfi! Hangi filmi izliyorum?",
+            "Patlamış mısırım hazır, yanıma kim geliyor?",
+            "Sinema akşamı! Sen hangi tür filmi seversin?"
+        ])
+
+    if any(k in fname for k in ("dinner", "restaurant", "breakfast", "cheesecake", "kitchen", "pasta", "cafe", "latte", "coffee", "tea", "ferry")):
+        return random.choice([
+            "Kahve ve lezzet molası! Beraber içelim mi?",
+            "Bugün kendime küçük bir keyif molası verdim!",
+            "Karşımdaki sandalye boş, eşlik etmek ister misin?",
+            "Çay mı kahve mi? Sen hangisisin?"
+        ])
+
+    if any(k in fname for k in ("shopping", "mall", "bowling", "bookstore", "street", "walk", "drive", "car")):
+        return random.choice([
+            "Bugün biraz gezmeye çıktım, kombinim nasıl?",
+            "Şehir turundayız, enerjim nasıl görünüyor?",
+            "Evde durmak yok, bugün gezme modundayım!"
+        ])
+
     if any(k in fname for k in ("gym", "pilates", "yoga", "fitness", "workout", "cycling", "tennis")):
         sport_hooks = [
             "Antrenman bitti, sence emeğime değmiş mi?",
@@ -257,15 +279,13 @@ def create_overlay_png(
     """
     1080x1920 şeffaf katman üzerine:
     1) Sağ üst köşeye şık '1/4', '2/4', '3/4', '4/4' kare sayacı,
-    2) 1. sahnede sol üst güvenli bölgeye gerçekçi 'Takipçi Yorumuna Yanıt' balonu,
-    3) Alt-orta güvenli bölgeye ekrandan taşmayan etkileşim kapsülü çizer.
+    2) Alt-orta güvenli bölgeye ekrandan taşmayan etkileşim kapsülü çizer.
+    (Sol-üst yorum kutusu kullanıcı isteğiyle kaldırılmıştır, ekran temizdir.)
     """
     canvas = Image.new("RGBA", (1080, 1920), (0, 0, 0, 0))
     draw = ImageDraw.Draw(canvas)
     font_main = _load_font(size=31)
     font_counter = _load_font(size=28)
-    font_comment_user = _load_font(size=23)
-    font_comment_body = _load_font(size=26)
 
     # 1. SAĞ ÜST KARE SAYACI (1/4, 2/4, 3/4, 4/4)
     if scene_index is not None and num_scenes and num_scenes > 1:
@@ -283,45 +303,7 @@ def create_overlay_png(
         )
         draw.text((c_x1 + 22, c_y1 + 11), counter_str, font=font_counter, fill=(255, 255, 255, 255))
 
-    # 2. SOL ÜST TAKİPÇİ YORUMU BALONU (Yalnızca 1. Sahnede)
-    if scene_index == 0 and follower_comment:
-        author, c_text = follower_comment
-        clean_c = "".join(ch for ch in c_text if ord(ch) < 0x1F000).strip()
-        c_lines = textwrap.wrap(clean_c, width=36)[:2]
-        header_str = f"{author} yorum yaptı:"
-
-        hb = draw.textbbox((0, 0), header_str, font=font_comment_user)
-        hw, hh = hb[2] - hb[0], hb[3] - hb[1]
-        c_bboxes = [draw.textbbox((0, 0), ln, font=font_comment_body) for ln in c_lines]
-        c_widths = [b[2] - b[0] for b in c_bboxes]
-        c_heights = [b[3] - b[1] for b in c_bboxes]
-
-        bub_w = min(max([hw] + c_widths) + 64, 780)
-        bub_h = hh + sum(c_heights) + len(c_lines) * 8 + 38
-        bx1, by1 = 65, 130
-        bx2, by2 = bx1 + bub_w, by1 + bub_h
-
-        # Beyaz/buzlu TikTok & Reels tarzı yorum kartı
-        draw.rounded_rectangle(
-            [bx1, by1, bx2, by2],
-            radius=22,
-            fill=(252, 252, 255, 232),
-            outline=(220, 40, 90, 210),
-            width=3
-        )
-        # Sol kırmızı/pembe vurgu şeridi
-        draw.rounded_rectangle(
-            [bx1 + 12, by1 + 14, bx1 + 20, by2 - 14],
-            radius=4,
-            fill=(225, 38, 88, 255)
-        )
-        draw.text((bx1 + 32, by1 + 14), header_str, font=font_comment_user, fill=(130, 130, 145, 255))
-        cy = by1 + 14 + hh + 8
-        for idx_l, ln in enumerate(c_lines):
-            draw.text((bx1 + 32, cy), ln, font=font_comment_body, fill=(20, 20, 28, 255))
-            cy += c_heights[idx_l] + 6
-
-    # 3. ALT-ORTA ETKİLEŞİM KAPSÜLÜ
+    # 2. ALT-ORTA ETKİLEŞİM KAPSÜLÜ
     clean_text = "".join(ch for ch in text if ord(ch) < 0x1F000).strip()
     if not clean_text:
         clean_text = "Sence nasıl olmuş? Yorumda buluşalım!"
@@ -442,10 +424,11 @@ def pick_companion_images(
     exclude_filenames: set = None
 ) -> list:
     """
-    30 Günlük Sıfır-Tekrar Karantinalı & Deterministik 4-Kare Seçici:
+    30 Günlük Sıfır-Tekrar Karantinalı & %100 Sabit İndeksli 4-Kare Seçici:
     - Daha önce Reels'in herhangi bir karesinde, Fotoğrafta veya Story'de kullanılmış hiçbir görseli seçmez.
-    - Sunucu yeniden başlasa bile her ana görselin kendine özgü deterministik ofseti olduğu için
-      2., 3. ve 4. karelerde aynı görseller üst üste ASLA denk gelmez!
+    - Saate veya güne bağlı RASTGELE kayma yapmaz; her ana görselin kendine özgü sabit asal çarpanlı
+      indeksi vardır. Böylece Render sunucusu yeniden başlasa bile Instagram geçmişindeki her gönderinin
+      hangi 3 yan kareyi kullandığı %100 kesin olarak bilinir ve 30 gün boyunca ASLA tekrar etmez!
     """
     primary_abs = os.path.abspath(primary_image)
     primary_fname = os.path.basename(primary_abs)
@@ -490,36 +473,42 @@ def pick_companion_images(
     if len(fresh_pool) < count:
         fresh_pool = list(base_pool)
 
-    # Deterministik + Günlük Kaydırmalı Seçim (Rastgele çakışmayı %100 önler)
-    now = datetime.now()
-    slot_num = 0 if now.hour < 15 else (1 if now.hour < 19 else 2)
-    day_seq = (now.year * 366 + now.timetuple().tm_yday) * 3 + slot_num
-    name_hash = sum((i + 1) * ord(ch) for i, ch in enumerate(primary_fname))
+    # Sabit (Zaman-Bağımsız) Deterministik Hash:
+    # Ana görselin dosya adına göre sabit bir başlangıç noktası üretir; karantina seti (quarantined)
+    # zaten kullanılanları elediği için her yeni Reels tamamen benzersiz 3 yan görsel alır!
+    name_hash = sum((i + 1) * 31 * ord(ch) for i, ch in enumerate(primary_fname))
 
     if is_cousin:
-        start_idx = (day_seq * 3 + name_hash) % max(1, len(fresh_pool))
+        start_idx = name_hash % max(1, len(fresh_pool))
         chosen = []
         for step in range(len(fresh_pool)):
-            cand = fresh_pool[(start_idx + step) % len(fresh_pool)]
+            cand = fresh_pool[(start_idx + step * 3) % len(fresh_pool)]
             if cand not in chosen:
                 chosen.append(cand)
             if len(chosen) == count:
                 break
         return chosen
 
-    # Solo Canan için 3 farklı görsel grubu (birbirini tekrar etmeyen geniş havuzlar):
-    # Grup 1: Oje / Ayak / Ev / Yatak / Koltuk / Sabah
+    # Solo Canan için 3 dengeli ve geniş görsel grubu (Oje dar havuzuna sıkışmayı önler):
+    # Grup 1: Sosyal Yaşam / Gezme / Kafe / Restoran / Sinema / Sokak / Kahve (2. Sahne)
     group_1 = [
         p for p in fresh_pool
-        if any(k in os.path.basename(p).lower() for k in ("feet", "polish", "pedi", "toes", "anklet", "bed", "couch", "sofa", "rug", "carpet", "robe", "morning", "coffee", "home", "book"))
+        if any(k in os.path.basename(p).lower() for k in (
+            "social", "cafe", "coffee", "dinner", "restaurant", "cinema", "shopping",
+            "street", "walk", "bosphorus", "ferry", "bookstore", "bowling", "cheesecake",
+            "breakfast", "kitchen", "car", "nisantasi", "bebek", "karakoy", "galata", "moda", "hotel"
+        ))
     ]
-    # Grup 2: Plaj / Bikini / Havuz / Yat / Spor / Gündüz
+    # Grup 2: Ev Hali / Dinlenme / Spor / Pilates / Sabah / Bakım (3. Sahne)
     group_2 = [
         p for p in fresh_pool
         if p not in group_1
-        and any(k in os.path.basename(p).lower() for k in ("bikini", "pool", "yacht", "beach", "sunbed", "hammock", "shower", "jacuzzi", "gym", "yoga", "tennis", "pilates", "shorts", "workout", "summer"))
+        and any(k in os.path.basename(p).lower() for k in (
+            "bed", "couch", "sofa", "rug", "carpet", "robe", "morning", "home", "book",
+            "gym", "yoga", "tennis", "pilates", "shorts", "workout", "feet", "polish", "pedi"
+        ))
     ]
-    # Grup 3: Gece / Mini Elbise / Saten / Korse / Ayna / Şık Kombin
+    # Grup 3: Gece Şıklığı / Mini Elbise / Saten / Korse / Ayna / Kombin (4. Sahne)
     group_3 = [
         p for p in fresh_pool
         if p not in group_1 and p not in group_2
@@ -529,13 +518,13 @@ def pick_companion_images(
     for g_idx, grp in enumerate([group_1, group_2, group_3]):
         avail = [p for p in grp if p not in chosen]
         if avail:
-            pick_idx = (day_seq * 7 + name_hash + g_idx * 13) % len(avail)
+            pick_idx = (name_hash + g_idx * 17) % len(avail)
             chosen.append(avail[pick_idx])
 
     remaining = [p for p in fresh_pool if p not in chosen]
     step_idx = 0
     while len(chosen) < count and remaining:
-        pick = remaining[(day_seq + name_hash + step_idx) % len(remaining)]
+        pick = remaining[(name_hash + step_idx * 7) % len(remaining)]
         chosen.append(pick)
         remaining.remove(pick)
         step_idx += 1

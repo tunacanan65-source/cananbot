@@ -133,6 +133,19 @@ def is_summer_scenario(sc: dict) -> bool:
     return any(k in cap_low or k in sid_low for k in SUMMER_SCENARIO_KEYWORDS)
 
 
+def is_oje_scenario(sc: dict) -> bool:
+    """Bir senaryonun oje/pedikür/ayak bakımı odaklı olup olmadığını tespit eder."""
+    sid_low = (sc.get("id") or "").lower()
+    img_fname = os.path.basename(sc.get("image_path", "")).lower()
+    cap_low = (sc.get("caption") or "").lower()
+    return (
+        sid_low.startswith("oje_")
+        or "canan_feet_" in img_fname
+        or any(w in cap_low for w in ("oje", "pedikür"))
+    )
+
+
+
 
 def _scenario_matches_caption(sc: dict, ig_caption: str) -> bool:
     """Bir senaryonun Instagram'daki belirli bir gönderiyle eşleşip eşleşmediğini kesin olarak tespit eder."""
@@ -274,7 +287,14 @@ def pick_next_scenario(force_type: str = None) -> dict:
         or any("kuzen_burcu" in sid for sid in local_recent_ids[-8:])
     )
 
-    # 2) Kış/Sonbahar (Ekim-Nisan) Deniz/Plaj/Havuz (#tbt) Sıklık Kalkanı:
+    # 2) Oje / Pedikür Sıklık Kalkanı: Son 4 paylaşımda oje/pedikür varsa üst üste ASLA oje atma!
+    # Böylece araya mutlaka gezme, kafe, sinema, yemek, spor ve şık yaşam senaryoları girer.
+    recent_4_has_oje = (
+        any(any(w in rc.lower() for w in ("oje", "pedikür")) for rc in recent_caps[:4])
+        or any(sid.startswith("oje_") for sid in local_recent_ids[-4:])
+    )
+
+    # 3) Kış/Sonbahar (Ekim-Nisan) Deniz/Plaj/Havuz (#tbt) Sıklık Kalkanı:
     # Son 10 paylaşımda (yaklaşık 3.5 gün) herhangi bir deniz/plaj/havuz/#tbt paylaşımı varsa
     # kesinlikle yazlık senaryo seçme! Yoksa da yalnızca %15 ihtimalle "Yazdan kalan #tbt" olarak seç.
     recent_10_has_summer = (
@@ -294,8 +314,8 @@ def pick_next_scenario(force_type: str = None) -> dict:
         if not ever_posted_burcu and first_debut:
             chosen_pool = first_debut
         else:
-            bold_unseen = [s for s in unseen_scenarios if s.get("bold")]
-            base_unseen = bold_unseen if bold_unseen else unseen_scenarios
+            # Sadece 'bold' olanlara sıkışma! Tüm hiç paylaşılmamış (gezme, kafe, sinema, yemek dahil) senaryoları aç:
+            base_unseen = list(unseen_scenarios)
 
             # Kış aylarında #tbt izni yoksa bütün deniz/plaj/havuz/bikini senaryolarını havuzdan çıkar!
             if cold_season and not allow_summer_tbt:
@@ -303,13 +323,20 @@ def pick_next_scenario(force_type: str = None) -> dict:
                 if non_summer:
                     base_unseen = non_summer
 
+            # Son 4 paylaşımda oje varsa oje senaryolarını havuzdan çıkar!
+            if recent_4_has_oje:
+                non_oje = [s for s in base_unseen if not is_oje_scenario(s)]
+                if non_oje:
+                    base_unseen = non_oje
+
             solo_unseen = [s for s in base_unseen if "kuzen_burcu" not in s["id"]]
             if not solo_unseen:
-                # Eğer bold havuzundaki tüm solo görseller yan karelerde kullanılmışsa, hiç paylaşılmamış tüm solo senaryoları aç
+                # Eğer birincil havuzdaki tüm solo görseller yan karelerde kullanılmışsa, hiç paylaşılmamış tüm solo senaryoları aç
                 all_unseen_any = [
                     sc for dist, sc in scored_scenarios
                     if dist >= 5000 and "kuzen_burcu" not in sc["id"]
                     and (not cold_season or allow_summer_tbt or not is_summer_scenario(sc))
+                    and (not recent_4_has_oje or not is_oje_scenario(sc))
                 ]
                 solo_unseen = all_unseen_any
 
@@ -317,7 +344,7 @@ def pick_next_scenario(force_type: str = None) -> dict:
 
             if recent_8_has_burcu and solo_unseen:
                 active_pool = solo_unseen
-            elif not recent_8_has_burcu and burcu_unseen and random.random() < 0.22:
+            elif not recent_8_has_burcu and burcu_unseen and random.random() < 0.18:
                 active_pool = burcu_unseen
             else:
                 active_pool = solo_unseen if solo_unseen else base_unseen
@@ -327,11 +354,15 @@ def pick_next_scenario(force_type: str = None) -> dict:
     else:
         # Tüm senaryolar en az 1 kez paylaşıldıysa, en eski paylaşılmış olan (30 gün = ~90 paylaşım öncesi) senaryolardan seç
         scored_scenarios.sort(key=lambda x: x[0], reverse=True)
-        oldest_pool = [sc for dist, sc in scored_scenarios[:20] if dist >= 60] or [sc for _, sc in scored_scenarios[:12]]
+        oldest_pool = [sc for dist, sc in scored_scenarios[:25] if dist >= 60] or [sc for _, sc in scored_scenarios[:15]]
         if cold_season and not allow_summer_tbt:
             non_summer_old = [s for s in oldest_pool if not is_summer_scenario(s)]
             if non_summer_old:
                 oldest_pool = non_summer_old
+        if recent_4_has_oje:
+            non_oje_old = [s for s in oldest_pool if not is_oje_scenario(s)]
+            if non_oje_old:
+                oldest_pool = non_oje_old
         preferred = [s for s in oldest_pool if s.get("category") in target_cats]
         chosen_pool = preferred if preferred else oldest_pool
 

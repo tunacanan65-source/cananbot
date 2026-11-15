@@ -1679,6 +1679,138 @@ SCENARIOS = [
         "caption": 'Evden çıkmadan önce giyinme odasında son ayna kontrolü! 🪞💚 Zeytin yeşili mini elbisem ve henüz ayakkabılarımı giymeden yalınayak halimle bir kare aldım. Kombin onaylandı mı? 😉👇',
         "tags": '#aynaselfiesi #kombin #ootd #yeşilelbise #şıklık #canantuna #lifestyle'
     },
+    {
+        "id": 'sosyal_sinema_patlamis_misir_keyfi',
+        "category": 'gece',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Bu akşam sinema keyfi! Hangi tür filmi seversiniz?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_social_cinema_popcorn.jpg'),
+        "signatures": ['patlamış mısırımı aldım sinema koltuğuma kuruldum', 'en son sinemada hangi filmi izlediniz'],
+        "caption": 'Patlamış mısırımı aldım, sinema koltuğuma kuruldum ve film başlamadan size selam vermek istedim! 🍿🎬 Sinema atmosferini çok seviyorum. Siz en son hangi filmi izlediniz, tavsiyeniz var mı? 👇✨',
+        "tags": '#sinema #filmgecesi #patlamışmısır #akşamkeyfi #istanbul #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'sosyal_restoran_aksam_yemegi_sohbet',
+        "category": 'gece',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Bu akşam dışarıda yemek keyfi! Afiyet olsun mu?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_social_turkish_dinner_table.jpg'),
+        "signatures": ['mum ışığında harika bir akşam yemeği ve sohbet', 'karşımdaki sandalye boş kaldı'],
+        "caption": 'Mum ışığında harika bir akşam yemeği, güzel mezeler ve huzurlu bir atmosfer... 🍽️🕯️ Bugün kendime güzel bir akşam ısmarladım. Sizin en sevdiğiniz akşam yemeği menüsü nedir? ❤️👇',
+        "tags": '#akşamyemeği #restoran #lezzet #şıklık #istanbulgeceleri #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'sosyal_yagmurlu_kafe_pencere_latte',
+        "category": 'sokak',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Yağmurlu havada sıcak kahve gibisi var mı?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_social_rainy_cafe_latte.jpg'),
+        "signatures": ['dışarıda yağmur yağarken kafenin cam kenarında', 'iki elimle ısıttığım sıcak lattem'],
+        "caption": 'Dışarıda yağmur çiselerken şirin bir kafenin cam kenarına geçip sıcak lattemi yudumluyorum... ☕🌧️ Sonbahar ve kış aylarının bu huzurlu kafe havasını sevenler burada mı? 🤍👇',
+        "tags": '#kahvekeyfi #kafe #yağmur #sonbahar #latte #huzur #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'sosyal_avm_alisveris_turu_kombin',
+        "category": 'sokak',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Bugün alışveriş günü! Kombinim nasıl olmuş?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_social_shopping_mall_bags.jpg'),
+        "signatures": ['bugün kendimi biraz şımartma ve alışveriş günü', 'zeytin yeşili ceket ve mini etek takımım'],
+        "caption": 'Bugün kendimi biraz şımartma ve alışveriş günü! 🛍️✨ Mağazaları gezerken zeytin yeşili ceket ve mini etek kombinimle enerjim tavan yaptı. Alışveriş yapmayı sevenler kimler? 💚👇',
+        "tags": '#alışveriş #shopping #kombin #ootd #stil #gezme #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'sosyal_pazar_serpme_kahvalti_cay',
+        "category": 'lifestyle',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Boğaz manzaralı kahvaltı ve ince belli çay!',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_social_sunday_breakfast_tea.jpg'),
+        "signatures": ['boğaz manzarasına karşı sıcacık bir serpme kahvaltı', 'ince belli bardakta demli çay olmadan asla'],
+        "caption": 'Boğaz manzarasına karşı uzun ve keyifli bir kahvaltı gibisi yok! 🥐🍵 İnce belli bardakta demli çay olmadan kahvaltı yapmış sayılmam diyenlerdenseniz çok iyi anlaşacağız! Günaydınlar! ☀️👇',
+        "tags": '#kahvaltı #boğaz #çaykeyfi #istanbul #günaydın #haftasonu #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'sosyal_mutfakta_makarna_yemek_hazirligi',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Bu akşam yemekler benden! El lezzetine güvenir misin?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_social_kitchen_cooking_pasta.jpg'),
+        "signatures": ['mutfağa girdim kendi ellerimle özel soslu makarna', 'yemek yaparken müzik dinlemeyi çok seviyorum'],
+        "caption": 'Bu akşam dışarı çıkmak yerine mutfağa girdim, kendi ellerimle özel soslu nefis bir makarna hazırlıyorum! 🍝👩‍🍳 Mutfakta vakit geçirmeyi ve güzel yemek yapmayı çok seviyorum. Bir tabak da size ayırayım mı? 😋👇',
+        "tags": '#mutfak #yemek #akşamyemeği #evhali #lezzet #hamarat #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'sosyal_gece_araba_sehir_turu',
+        "category": 'gece',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Gece şehir ışıklarında araba turuna çıkalım mı?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_social_night_car_drive.jpg'),
+        "signatures": ['gece boş yollarda müzik açıp şehir turu atmak', 'deri ceketimi giydim direksiyon başındayım'],
+        "caption": 'Deri ceketimi giydim, gece sakinliğinde sevdiğim şarkıları açıp şehir turuna çıktım... 🚗🌃 Gece araba kullanmanın verdiği o özgürlük hissi bambaşka. Yan koltukta hangi şarkıyı açardınız? 🎶👇',
+        "tags": '#gecesürüşü #araba #istanbulgeceleri #müzik #dericeket #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'sosyal_kafe_cheesecake_tatli_molasi',
+        "category": 'sokak',
+        "type": 'photo',
+        "bold": True,
+        "hook": 'Tatlı molası! İlk çatalı kime uzatıyorum?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_social_cheesecake_cafe_fork.jpg'),
+        "signatures": ['bol çikolata soslu san sebastian cheesecake molası', 'ilk çatalı size uzatıyorum'],
+        "caption": 'Gezme arasında bol çikolata soslu San Sebastian cheesecake molası! 🍰🍫 İlk çatalı size uzatıyorum, tatlı krizine girenler burada mı? Kahvenin yanına en çok hangi tatlı yakışır? 😋👇',
+        "tags": '#tatlı #cheesecake #kafe #kahvemolası #lezzet #canantuna #lifestyle'
+    },
+    {
+        "id": 'sosyal_bowling_eglence_aksami',
+        "category": 'spor',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Bowling gecesi! Rakibim olmaya cesaretin var mı?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_social_bowling_night_fun.jpg'),
+        "signatures": ['bu akşam biraz eğlenmeye ve bowling oynamaya geldim', 'strike yapmaya hazırım'],
+        "caption": 'Bu akşam biraz stres atmaya ve bowling oynamaya geldim! 🎳🔥 Atışlarıma çok güvenirim, karşıma rakip çıkacak kadar kendine güvenen var mı? 😉👇',
+        "tags": '#bowling #eğlence #haftasonu #spor #enerji #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'sosyal_beyoglu_kitapci_plak_kahve',
+        "category": 'sanat',
+        "type": 'photo',
+        "bold": True,
+        "hook": 'Kitap ve plak kokusunu sevenler burada mı?',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_social_bookstore_vinyl_coffee.jpg'),
+        "signatures": ['beyoğlu sokaklarında eski bir kitapçı ve plak dükkanı', 'elimde kahvem yeni kitaplar keşfediyorum'],
+        "caption": 'Beyoğlu sokaklarında gezerken çok şirin bir kitapçı ve plak dükkanına uğradım... 📚☕ Elimde sıcak kahvemle yeni kitaplar karıştırmak ruhumu dinlendiriyor. En son hangi kitabı okudunuz? 🤍👇',
+        "tags": '#kitap #beyoğlu #kültürsanat #kahve #huzur #canantuna #lifestyle'
+    },
+    {
+        "id": 'sosyal_bogaz_vapuru_simit_cay',
+        "category": 'sokak',
+        "type": 'video',
+        "bold": True,
+        "hook": 'Boğaz vapurunda sıcak çay ve martılar!',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_social_bosphorus_ferry_tea.jpg'),
+        "signatures": ['vapur güvertesinde yüzüme çarpan boğaz rüzgarı', 'martılar ve elimde sıcacık çayım'],
+        "caption": 'Vapur güvertesinde yüzüme çarpan serin Boğaz rüzgarı, martılar ve elimde sıcacık çayım... ⛴️🍵 İstanbul un en güzel ritüeli kesinlikle vapur yolculuğu! Anadolu yakası mı Avrupa yakası mı? 💙👇',
+        "tags": '#vapur #boğaz #istanbul #çay #gezme #denizhavası #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'sosyal_evde_film_dizi_sicak_cikolata',
+        "category": 'ev',
+        "type": 'photo',
+        "bold": True,
+        "hook": 'Evde battaniye, sıcak çikolata ve film gecesi!',
+        "image_path": os.path.join(IMAGES_DIR, 'canan_social_home_tv_movie_night.jpg'),
+        "signatures": ['dışarısı soğukken evde battaniye altına kıvrılıp', 'elimde sıcak çikolatam ve kumandam'],
+        "caption": 'Dışarısı serinken evde yumuşacık battaniye altına kıvrılıp sıcak çikolata eşliğinde film izlemek gibisi yok! 🛋️☕ Bu akşam evde dinlenme modundayım, güzel bir film veya dizi öneriniz var mı? 🎬👇',
+        "tags": '#evkeyfi #filmgecesi #sıcakçikolata #huzur #iyiaksamlar #canantuna #lifestyle'
+    },
 ]
 
 
