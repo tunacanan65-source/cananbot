@@ -220,6 +220,20 @@ def get_short_hook_for_image(
         ]
         return random.choice(summer_hooks)
 
+    if any(k in fname for k in ("stocking", "canan_sk_", "canan_bare", "fishnet", "garter", "pleated_skirt", "mini_skirt")):
+        if "bare" in fname:
+            return random.choice([
+                "Mini etekle çorapsız mı daha iyi yoksa çoraplı mı?",
+                "Korse bluz ve mini etek kombinime puanın kaç?",
+                "Uzanırken yakalandım! Bu kombin nasıl olmuş?"
+            ])
+        return random.choice([
+            "Dantelli çorap ve mini etek uyumuna puanın kaç?",
+            "Beyaz dantelli çorap mı siyah mı? Favorini yaz!",
+            "Bu etek ve çorap kombini bana yakışmış mı?",
+            "10 üzerinden kaç puan veriyorsun? Yoruma yaz!"
+        ])
+
     if any(k in fname for k in ("cinema", "popcorn", "movie")):
         return random.choice([
             "Bu akşam sinema keyfi! Hangi filmi izliyorum?",
