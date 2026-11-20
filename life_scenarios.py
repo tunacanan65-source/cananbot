@@ -3406,6 +3406,215 @@ SCENARIOS = [
         "caption": "Yatağıma uzanıp günün yorgunluğunu atarken lila fitilli ev eşofman takımım ile size küçük bir selam göndermek istedim! 🌸✨ Evde böyle rahat eşofman ve taytlarla takılmayı çok seviyorum. Bu kombinime 10 üzerinden kaç puan verirsiniz? 😉👇",
         "tags": '#evhali #eşofman #pembe #rahatlık #fit #bakım #canantuna #reels #keşfet'
     },
+    {
+        "id": 'cekyat_poz_canan_sofa_kneel_01_hotpink_velour_sweatpants_black_lace',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": "Pembe kadife eşofmanımla ev keyfi! Yakışmış mı?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_sofa_kneel_01_hotpink_velour_sweatpants_black_lace.jpg'),
+        "signatures": ["salonda çekyat önünde parlak fuşya pembe kadife eşofmanım ve siyah dantelli büstiyerim ile dinlenme pozu 0", "evde rahat eşofman ve çekici duruş 0"],
+        "caption": "Salonda koltuğa yaslanıp biraz dinlenirken parlak fuşya pembe kadife eşofmanım ve siyah dantelli büstiyerim ile size küçük bir selam göndermek istedim! 🌸✨ Evde hem rahat hem de bakımlı olmayı çok seviyorum. Bu kombinime 10 üzerinden kaç puan verirsiniz? 😉👇",
+        "tags": '#evhali #eşofman #pembe #kombin #fit #şıklık #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'cekyat_poz_canan_sofa_kneel_02_babypink_tight_sweatpants_white_top',
+        "category": 'spor',
+        "type": 'video',
+        "bold": True,
+        "hook": "Toz pembe eşofmanım nasıl durmuş? Puanın kaç?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_sofa_kneel_02_babypink_tight_sweatpants_white_top.jpg'),
+        "signatures": ["salonda çekyat önünde toz pembe dar eşofman altım ve beyaz atletim ile dinlenme pozu 1", "evde rahat eşofman ve çekici duruş 1"],
+        "caption": "Salonda koltuğa yaslanıp biraz dinlenirken toz pembe dar eşofman altım ve beyaz atletim ile size küçük bir selam göndermek istedim! 🌸✨ Evde hem rahat hem de bakımlı olmayı çok seviyorum. Bu kombinime 10 üzerinden kaç puan verirsiniz? 😉👇",
+        "tags": '#evhali #eşofman #pembe #kombin #fit #şıklık #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'cekyat_poz_canan_sofa_kneel_03_pink_scrunch_yoga_leggings',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": "Evde spor sonrası dinlenme! Pembe tayt yakışmış mı?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_sofa_kneel_03_pink_scrunch_yoga_leggings.jpg'),
+        "signatures": ["salonda çekyat önünde pembe spor tayt takımım ile dinlenme pozu 2", "evde rahat eşofman ve çekici duruş 2"],
+        "caption": "Salonda koltuğa yaslanıp biraz dinlenirken pembe spor tayt takımım ile size küçük bir selam göndermek istedim! 🌸✨ Evde hem rahat hem de bakımlı olmayı çok seviyorum. Bu kombinime 10 üzerinden kaç puan verirsiniz? 😉👇",
+        "tags": '#evhali #eşofman #pembe #kombin #fit #şıklık #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'cekyat_poz_canan_sofa_kneel_04_grey_tight_sweatpants_pink_lace',
+        "category": 'spor',
+        "type": 'photo',
+        "bold": True,
+        "hook": "Gri eşofman ve pembe korse uyumu nasıl olmuş?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_sofa_kneel_04_grey_tight_sweatpants_pink_lace.jpg'),
+        "signatures": ["salonda çekyat önünde gri eşofman altım ve pembe dantelli korsem ile dinlenme pozu 3", "evde rahat eşofman ve çekici duruş 3"],
+        "caption": "Salonda koltuğa yaslanıp biraz dinlenirken gri eşofman altım ve pembe dantelli korsem ile size küçük bir selam göndermek istedim! 🌸✨ Evde hem rahat hem de bakımlı olmayı çok seviyorum. Bu kombinime 10 üzerinden kaç puan verirsiniz? 😉👇",
+        "tags": '#evhali #eşofman #pembe #kombin #fit #şıklık #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'cekyat_poz_canan_sofa_kneel_06_black_leather_skirt_black_garter_lace',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": "Deri mini etek ve dantelli çorap! 10 üzerinden kaç?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_sofa_kneel_06_black_leather_skirt_black_garter_lace.jpg'),
+        "signatures": ["salonda çekyat önünde siyah deri mini eteğim ve jartiyer askılı dantelli çoraplarım ile dinlenme pozu 4", "evde rahat eşofman ve çekici duruş 4"],
+        "caption": "Salonda koltuğa yaslanıp biraz dinlenirken siyah deri mini eteğim ve jartiyer askılı dantelli çoraplarım ile size küçük bir selam göndermek istedim! 🌸✨ Evde hem rahat hem de bakımlı olmayı çok seviyorum. Bu kombinime 10 üzerinden kaç puan verirsiniz? 😉👇",
+        "tags": '#evhali #eşofman #pembe #kombin #fit #şıklık #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'cekyat_poz_canan_sofa_kneel_07_white_tight_sweatpants_burgundy_lace',
+        "category": 'spor',
+        "type": 'video',
+        "bold": True,
+        "hook": "Beyaz eşofman ve bordo korse kombinime puanın kaç?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_sofa_kneel_07_white_tight_sweatpants_burgundy_lace.jpg'),
+        "signatures": ["salonda çekyat önünde krem-beyaz eşofman altım ve bordo dantelli korsem ile dinlenme pozu 5", "evde rahat eşofman ve çekici duruş 5"],
+        "caption": "Salonda koltuğa yaslanıp biraz dinlenirken krem-beyaz eşofman altım ve bordo dantelli korsem ile size küçük bir selam göndermek istedim! 🌸✨ Evde hem rahat hem de bakımlı olmayı çok seviyorum. Bu kombinime 10 üzerinden kaç puan verirsiniz? 😉👇",
+        "tags": '#evhali #eşofman #pembe #kombin #fit #şıklık #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'cekyat_poz_canan_sofa_kneel_08_lilac_ribbed_tight_pants_sofa',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": "Lila ev eşofmanımla rahatlık modu! Nasıl olmuş?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_sofa_kneel_08_lilac_ribbed_tight_pants_sofa.jpg'),
+        "signatures": ["salonda çekyat önünde lila fitilli ev eşofmanım ve beyaz bluzum ile dinlenme pozu 6", "evde rahat eşofman ve çekici duruş 6"],
+        "caption": "Salonda koltuğa yaslanıp biraz dinlenirken lila fitilli ev eşofmanım ve beyaz bluzum ile size küçük bir selam göndermek istedim! 🌸✨ Evde hem rahat hem de bakımlı olmayı çok seviyorum. Bu kombinime 10 üzerinden kaç puan verirsiniz? 😉👇",
+        "tags": '#evhali #eşofman #pembe #kombin #fit #şıklık #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'cekyat_poz_canan_sofa_kneel_09_pink_ribbed_micro_shorts_sofa',
+        "category": 'spor',
+        "type": 'photo',
+        "bold": True,
+        "hook": "Evde pembe mini şort rahatlığı! Yakışmış mı?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_sofa_kneel_09_pink_ribbed_micro_shorts_sofa.jpg'),
+        "signatures": ["salonda çekyat önünde pembe fitilli mini şortum ve beyaz dantelli atletim ile dinlenme pozu 7", "evde rahat eşofman ve çekici duruş 7"],
+        "caption": "Salonda koltuğa yaslanıp biraz dinlenirken pembe fitilli mini şortum ve beyaz dantelli atletim ile size küçük bir selam göndermek istedim! 🌸✨ Evde hem rahat hem de bakımlı olmayı çok seviyorum. Bu kombinime 10 üzerinden kaç puan verirsiniz? 😉👇",
+        "tags": '#evhali #eşofman #pembe #kombin #fit #şıklık #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'cekyat_poz_canan_sofa_kneel_10_emerald_scrunch_leggings_sofa',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": "Yeşil tayt kombinime 10 üzerinden kaç verirsin?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_sofa_kneel_10_emerald_scrunch_leggings_sofa.jpg'),
+        "signatures": ["salonda çekyat önünde zümrüt yeşili taytım ve beyaz büstiyerim ile dinlenme pozu 8", "evde rahat eşofman ve çekici duruş 8"],
+        "caption": "Salonda koltuğa yaslanıp biraz dinlenirken zümrüt yeşili taytım ve beyaz büstiyerim ile size küçük bir selam göndermek istedim! 🌸✨ Evde hem rahat hem de bakımlı olmayı çok seviyorum. Bu kombinime 10 üzerinden kaç puan verirsiniz? 😉👇",
+        "tags": '#evhali #eşofman #pembe #kombin #fit #şıklık #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'cekyat_poz_canan_sofa_kneel_11_red_leather_skirt_white_lace_sofa',
+        "category": 'spor',
+        "type": 'video',
+        "bold": True,
+        "hook": "Kırmızı deri etek ve beyaz dantelli çorap nasıl?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_sofa_kneel_11_red_leather_skirt_white_lace_sofa.jpg'),
+        "signatures": ["salonda çekyat önünde kırmızı deri mini eteğim ve beyaz dantelli çoraplarım ile dinlenme pozu 9", "evde rahat eşofman ve çekici duruş 9"],
+        "caption": "Salonda koltuğa yaslanıp biraz dinlenirken kırmızı deri mini eteğim ve beyaz dantelli çoraplarım ile size küçük bir selam göndermek istedim! 🌸✨ Evde hem rahat hem de bakımlı olmayı çok seviyorum. Bu kombinime 10 üzerinden kaç puan verirsiniz? 😉👇",
+        "tags": '#evhali #eşofman #pembe #kombin #fit #şıklık #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'cekyat_poz_canan_sofa_kneel_12_royal_blue_scrunch_leggings_sofa',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": "Mavi tayt takımımla antrenman bitti! Enerji nasıl?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_sofa_kneel_12_royal_blue_scrunch_leggings_sofa.jpg'),
+        "signatures": ["salonda çekyat önünde saks mavisi spor tayt takımım ile dinlenme pozu 10", "evde rahat eşofman ve çekici duruş 10"],
+        "caption": "Salonda koltuğa yaslanıp biraz dinlenirken saks mavisi spor tayt takımım ile size küçük bir selam göndermek istedim! 🌸✨ Evde hem rahat hem de bakımlı olmayı çok seviyorum. Bu kombinime 10 üzerinden kaç puan verirsiniz? 😉👇",
+        "tags": '#evhali #eşofman #pembe #kombin #fit #şıklık #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'cekyat_poz_canan_sofa_kneel_13_hotpink_velour_sweatpants_bed_edge',
+        "category": 'spor',
+        "type": 'photo',
+        "bold": True,
+        "hook": "Pembe kadife eşofmanımla ev keyfi! Yakışmış mı?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_sofa_kneel_13_hotpink_velour_sweatpants_bed_edge.jpg'),
+        "signatures": ["salonda çekyat önünde parlak fuşya pembe kadife eşofmanım ve siyah dantelli büstiyerim ile dinlenme pozu 11", "evde rahat eşofman ve çekici duruş 11"],
+        "caption": "Salonda koltuğa yaslanıp biraz dinlenirken parlak fuşya pembe kadife eşofmanım ve siyah dantelli büstiyerim ile size küçük bir selam göndermek istedim! 🌸✨ Evde hem rahat hem de bakımlı olmayı çok seviyorum. Bu kombinime 10 üzerinden kaç puan verirsiniz? 😉👇",
+        "tags": '#evhali #eşofman #pembe #kombin #fit #şıklık #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'cekyat_poz_canan_sofa_kneel_14_denim_micro_skirt_white_fishnet_sofa',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": "Kot mini etek ve beyaz file çorap! Favorin hangisi?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_sofa_kneel_14_denim_micro_skirt_white_fishnet_sofa.jpg'),
+        "signatures": ["salonda çekyat önünde kısa kot mini eteğim ve beyaz dantelli file çoraplarım ile dinlenme pozu 12", "evde rahat eşofman ve çekici duruş 12"],
+        "caption": "Salonda koltuğa yaslanıp biraz dinlenirken kısa kot mini eteğim ve beyaz dantelli file çoraplarım ile size küçük bir selam göndermek istedim! 🌸✨ Evde hem rahat hem de bakımlı olmayı çok seviyorum. Bu kombinime 10 üzerinden kaç puan verirsiniz? 😉👇",
+        "tags": '#evhali #eşofman #pembe #kombin #fit #şıklık #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'cekyat_poz_canan_sofa_kneel_15_black_velour_sweatpants_pink_top_sofa',
+        "category": 'spor',
+        "type": 'video',
+        "bold": True,
+        "hook": "Siyah kadife eşofman mı pembe mi? Tarafını seç!",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_sofa_kneel_15_black_velour_sweatpants_pink_top_sofa.jpg'),
+        "signatures": ["salonda çekyat önünde siyah kadife eşofman altım ve fuşya pembe bluzum ile dinlenme pozu 13", "evde rahat eşofman ve çekici duruş 13"],
+        "caption": "Salonda koltuğa yaslanıp biraz dinlenirken siyah kadife eşofman altım ve fuşya pembe bluzum ile size küçük bir selam göndermek istedim! 🌸✨ Evde hem rahat hem de bakımlı olmayı çok seviyorum. Bu kombinime 10 üzerinden kaç puan verirsiniz? 😉👇",
+        "tags": '#evhali #eşofman #pembe #kombin #fit #şıklık #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'cekyat_poz_canan_sofa_kneel_16_pink_satin_skirt_white_lace_sofa',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": "Pembe saten etek ve beyaz dantelli çorap! Puanın kaç?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_sofa_kneel_16_pink_satin_skirt_white_lace_sofa.jpg'),
+        "signatures": ["salonda çekyat önünde pembe saten mini eteğim ve beyaz dantelli çoraplarım ile dinlenme pozu 14", "evde rahat eşofman ve çekici duruş 14"],
+        "caption": "Salonda koltuğa yaslanıp biraz dinlenirken pembe saten mini eteğim ve beyaz dantelli çoraplarım ile size küçük bir selam göndermek istedim! 🌸✨ Evde hem rahat hem de bakımlı olmayı çok seviyorum. Bu kombinime 10 üzerinden kaç puan verirsiniz? 😉👇",
+        "tags": '#evhali #eşofman #pembe #kombin #fit #şıklık #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'cekyat_poz_canan_sofa_kneel_05_red_plaid_pleated_skirt_white_lace',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": "Pembe saten etek ve beyaz dantelli çorap! Puanın kaç?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_sofa_kneel_05_red_plaid_pleated_skirt_white_lace.jpg'),
+        "signatures": ["salonda çekyat önünde pembe saten mini eteğim ve beyaz dantelli çoraplarım ile dinlenme pozu 0", "evde rahat eşofman ve çekici duruş 0"],
+        "caption": "Salonda koltuğa yaslanıp biraz dinlenirken pembe saten mini eteğim ve beyaz dantelli çoraplarım ile size küçük bir selam göndermek istedim! 🌸✨ Evde hem rahat hem de bakımlı olmayı çok seviyorum. Bu kombinime 10 üzerinden kaç puan verirsiniz? 😉👇",
+        "tags": '#evhali #eşofman #pembe #kombin #fit #şıklık #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'cekyat_poz_canan_sofa_kneel_17_red_plaid_pleated_skirt_black_garter',
+        "category": 'spor',
+        "type": 'video',
+        "bold": True,
+        "hook": "Pembe saten etek ve beyaz dantelli çorap! Puanın kaç?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_sofa_kneel_17_red_plaid_pleated_skirt_black_garter.jpg'),
+        "signatures": ["salonda çekyat önünde pembe saten mini eteğim ve beyaz dantelli çoraplarım ile dinlenme pozu 1", "evde rahat eşofman ve çekici duruş 1"],
+        "caption": "Salonda koltuğa yaslanıp biraz dinlenirken pembe saten mini eteğim ve beyaz dantelli çoraplarım ile size küçük bir selam göndermek istedim! 🌸✨ Evde hem rahat hem de bakımlı olmayı çok seviyorum. Bu kombinime 10 üzerinden kaç puan verirsiniz? 😉👇",
+        "tags": '#evhali #eşofman #pembe #kombin #fit #şıklık #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'cekyat_poz_canan_sofa_kneel_18_navy_plaid_pleated_skirt_white_fishnet',
+        "category": 'ev',
+        "type": 'video',
+        "bold": True,
+        "hook": "Pembe saten etek ve beyaz dantelli çorap! Puanın kaç?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_sofa_kneel_18_navy_plaid_pleated_skirt_white_fishnet.jpg'),
+        "signatures": ["salonda çekyat önünde pembe saten mini eteğim ve beyaz dantelli çoraplarım ile dinlenme pozu 2", "evde rahat eşofman ve çekici duruş 2"],
+        "caption": "Salonda koltuğa yaslanıp biraz dinlenirken pembe saten mini eteğim ve beyaz dantelli çoraplarım ile size küçük bir selam göndermek istedim! 🌸✨ Evde hem rahat hem de bakımlı olmayı çok seviyorum. Bu kombinime 10 üzerinden kaç puan verirsiniz? 😉👇",
+        "tags": '#evhali #eşofman #pembe #kombin #fit #şıklık #canantuna #reels #keşfet'
+    },
+    {
+        "id": 'cekyat_poz_canan_sofa_kneel_19_red_plaid_pleated_skirt_barelegs',
+        "category": 'spor',
+        "type": 'photo',
+        "bold": True,
+        "hook": "Pembe saten etek ve beyaz dantelli çorap! Puanın kaç?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_sofa_kneel_19_red_plaid_pleated_skirt_barelegs.jpg'),
+        "signatures": ["salonda çekyat önünde pembe saten mini eteğim ve beyaz dantelli çoraplarım ile dinlenme pozu 3", "evde rahat eşofman ve çekici duruş 3"],
+        "caption": "Salonda koltuğa yaslanıp biraz dinlenirken pembe saten mini eteğim ve beyaz dantelli çoraplarım ile size küçük bir selam göndermek istedim! 🌸✨ Evde hem rahat hem de bakımlı olmayı çok seviyorum. Bu kombinime 10 üzerinden kaç puan verirsiniz? 😉👇",
+        "tags": '#evhali #eşofman #pembe #kombin #fit #şıklık #canantuna #reels #keşfet'
+    },
 ]
 
 

@@ -32,12 +32,12 @@ SUMMER_FILENAME_KEYWORDS = (
     "coral_mini_sunset", "silver_anklet_terrace", "denim_shorts_crop"
 )
 
-# Dünden itibaren üretilen 157 Yepyeni Görselin (Etek/Çorap, Özel Pozlar, Pembe Eşofman ve Sosyal Yaşam) Öncelikli Ön Ekleri
+# Dünden itibaren üretilen 172 Yepyeni Görselin (Etek/Çorap, Özel Pozlar, Pembe Eşofman, Çekyat Diz Çökme ve Sosyal Yaşam) Öncelikli Ön Ekleri
 NEW_GENERATION_PREFIXES = (
     "canan_sk_", "canan_p1_", "canan_p2_", "canan_p3_", "canan_p4_",
-    "canan_p5_", "canan_p6_", "canan_stocking_", "canan_bare_",
-    "canan_barelegs_", "canan_cousin_stocking_", "canan_social_",
-    "canan_example_", "canan_pleated_skirt_", "canan_mini_skirt_"
+    "canan_p5_", "canan_p6_", "canan_sofa_kneel_", "canan_stocking_",
+    "canan_bare_", "canan_barelegs_", "canan_cousin_stocking_",
+    "canan_social_", "canan_example_", "canan_pleated_skirt_", "canan_mini_skirt_"
 )
 
 
@@ -233,6 +233,14 @@ def get_short_hook_for_image(
             "Tatil modunu açtık, puanın kaç?"
         ]
         return random.choice(summer_hooks)
+
+    if any(k in fname for k in ("canan_sofa_kneel_", "canan_p3_curve_")):
+        return random.choice([
+            "Evde en rahat eşofman halim! Nasıl durmuş?",
+            "Pembe eşofman mı siyah mı? Puanın 10 üzerinden kaç?",
+            "Biraz dinlenme molası! Bu kombin yakışmış mı?",
+            "Ev hali mi dışarı şıklığı mı? Favorini yaz!"
+        ])
 
     if any(k in fname for k in ("stocking", "canan_sk_", "canan_p1_", "canan_p2_", "canan_p3_", "canan_p4_", "canan_p5_", "canan_p6_", "canan_bare", "fishnet", "garter", "pleated_skirt", "mini_skirt")) and "leggings" not in fname:
         if "bare" in fname:
