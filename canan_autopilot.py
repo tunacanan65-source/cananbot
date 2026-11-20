@@ -210,11 +210,13 @@ def get_30day_quarantined_filenames(recent_caps: list = None) -> set:
                     for cp in sc["companions"]:
                         quarantined.add(os.path.basename(cp))
                 elif sc.get("type") == "video":
-                    # Deterministik yan görselleri de karantinaya ekle
+                    # Deterministik yan görselleri de karantinaya ekle (eski gönderiyse sadece eski havuzdan simüle et ki yeni 157 görseli yanlışlıkla karantinaya sokmasın!)
+                    is_new_sc = create_canan_reel.is_new_generation_image(primary_p)
                     sim_comps = create_canan_reel.pick_companion_images(
                         primary_p,
                         count=3,
-                        exclude_filenames=quarantined
+                        exclude_filenames=quarantined,
+                        prefer_new_generation=is_new_sc
                     )
                     for cp in sim_comps:
                         quarantined.add(os.path.basename(cp))
@@ -329,18 +331,28 @@ def pick_next_scenario(force_type: str = None) -> dict:
                 if non_oje:
                     base_unseen = non_oje
 
-            solo_unseen = [s for s in base_unseen if "kuzen_burcu" not in s["id"]]
+            # YENİ ÜRETİLEN 157 GÖRSEL ÖNCELİĞİ:
+            # Dünden beri üretilen yeni görseller (etek/çorap, özel pozlar, pembe eşofman, sosyal yaşam) bitene kadar
+            # eski arşiv görsellerini (ruj sürme, eski salon vb.) kesinlikle seçme!
+            new_gen_unseen = [
+                s for s in base_unseen
+                if create_canan_reel.is_new_generation_image(s.get("image_path", ""))
+            ]
+            if new_gen_unseen:
+                base_unseen = new_gen_unseen
+
+            solo_unseen = [s for s in base_unseen if "kuzen_burcu" not in s["id"] and "cousin" not in s["id"]]
             if not solo_unseen:
                 # Eğer birincil havuzdaki tüm solo görseller yan karelerde kullanılmışsa, hiç paylaşılmamış tüm solo senaryoları aç
                 all_unseen_any = [
                     sc for dist, sc in scored_scenarios
-                    if dist >= 5000 and "kuzen_burcu" not in sc["id"]
+                    if dist >= 5000 and "kuzen_burcu" not in sc["id"] and "cousin" not in sc["id"]
                     and (not cold_season or allow_summer_tbt or not is_summer_scenario(sc))
                     and (not recent_4_has_oje or not is_oje_scenario(sc))
                 ]
                 solo_unseen = all_unseen_any
 
-            burcu_unseen = [s for s in base_unseen if "kuzen_burcu" in s["id"]]
+            burcu_unseen = [s for s in base_unseen if "kuzen_burcu" in s["id"] or "cousin" in s["id"]]
 
             if recent_8_has_burcu and solo_unseen:
                 active_pool = solo_unseen
@@ -600,6 +612,11 @@ def run_daily_story_post(slot_mode: str = "morning") -> bool:
         non_summer_story = [p for p in pool_imgs if not create_canan_reel.is_summer_image(p)]
         if non_summer_story:
             pool_imgs = non_summer_story
+
+    # Hikayelerde de öncelikle yeni üretilen 157 görseli kullan!
+    new_story_imgs = [p for p in pool_imgs if create_canan_reel.is_new_generation_image(p)]
+    if new_story_imgs:
+        pool_imgs = new_story_imgs
 
     now = datetime.now()
     story_seq = (now.year * 366 + now.timetuple().tm_yday) * 2 + (0 if slot_mode == "morning" else 1)

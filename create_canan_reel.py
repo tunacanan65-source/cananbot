@@ -32,6 +32,20 @@ SUMMER_FILENAME_KEYWORDS = (
     "coral_mini_sunset", "silver_anklet_terrace", "denim_shorts_crop"
 )
 
+# Dünden itibaren üretilen 157 Yepyeni Görselin (Etek/Çorap, Özel Pozlar, Pembe Eşofman ve Sosyal Yaşam) Öncelikli Ön Ekleri
+NEW_GENERATION_PREFIXES = (
+    "canan_sk_", "canan_p1_", "canan_p2_", "canan_p3_", "canan_p4_",
+    "canan_p5_", "canan_p6_", "canan_stocking_", "canan_bare_",
+    "canan_barelegs_", "canan_cousin_stocking_", "canan_social_",
+    "canan_example_", "canan_pleated_skirt_", "canan_mini_skirt_"
+)
+
+
+def is_new_generation_image(image_path: str) -> bool:
+    """Görselin yeni üretilen 157 görsellik koleksiyondan olup olmadığını döner."""
+    fname = os.path.basename(image_path).lower()
+    return fname.startswith(NEW_GENERATION_PREFIXES)
+
 
 def is_summer_image(image_path: str) -> bool:
     """Görselin deniz/plaj/havuz/bikini/yat gibi yazlık açık hava görseli olup olmadığını döner."""
@@ -220,7 +234,7 @@ def get_short_hook_for_image(
         ]
         return random.choice(summer_hooks)
 
-    if any(k in fname for k in ("stocking", "canan_sk_", "canan_bare", "fishnet", "garter", "pleated_skirt", "mini_skirt")):
+    if any(k in fname for k in ("stocking", "canan_sk_", "canan_p1_", "canan_p2_", "canan_p3_", "canan_p4_", "canan_p5_", "canan_p6_", "canan_bare", "fishnet", "garter", "pleated_skirt", "mini_skirt")) and "leggings" not in fname:
         if "bare" in fname:
             return random.choice([
                 "Mini etekle çorapsız mı daha iyi yoksa çoraplı mı?",
@@ -435,7 +449,8 @@ def pick_companion_images(
     primary_image: str,
     count: int = 3,
     extra_candidates: list = None,
-    exclude_filenames: set = None
+    exclude_filenames: set = None,
+    prefer_new_generation: bool = True
 ) -> list:
     """
     30 Günlük Sıfır-Tekrar Karantinalı & %100 Sabit İndeksli 4-Kare Seçici:
@@ -487,6 +502,14 @@ def pick_companion_images(
     if len(fresh_pool) < count:
         fresh_pool = list(base_pool)
 
+    # ÖNCELİK KALKANI: Dünden itibaren üretilen 157 yeni görselden (etek/çorap, özel pozlar, pembe eşofman, sosyal yaşam)
+    # henüz kullanılmamış olanlar varsa, Reels'in 2., 3. ve 4. karelerini YALNIZCA bu yeni görsellerden karışık seç!
+    # Böylece eski ruj/oje/eski arşiv resimleri dönüp dolaşıp videolara girmez!
+    if prefer_new_generation:
+        new_gen_fresh = [p for p in fresh_pool if is_new_generation_image(p)]
+        if len(new_gen_fresh) >= count:
+            fresh_pool = new_gen_fresh
+
     # Sabit (Zaman-Bağımsız) Deterministik Hash:
     # Ana görselin dosya adına göre sabit bir başlangıç noktası üretir; karantina seti (quarantined)
     # zaten kullanılanları elediği için her yeni Reels tamamen benzersiz 3 yan görsel alır!
@@ -503,26 +526,19 @@ def pick_companion_images(
                 break
         return chosen
 
-    # Solo Canan için 3 dengeli ve geniş görsel grubu (Oje dar havuzuna sıkışmayı önler):
-    # Grup 1: Sosyal Yaşam / Gezme / Kafe / Restoran / Sinema / Sokak / Kahve (2. Sahne)
+    # Solo Canan için 3 farklı poz/konsept grubu (Yeni üretilen görselleri kendi içinde harmanlar):
+    # Grup 1: Yatak & Koltuk Yüzüstü / Uzanma / Eşofman & Etek-Çorap Pozları (2. Sahne)
     group_1 = [
         p for p in fresh_pool
-        if any(k in os.path.basename(p).lower() for k in (
-            "social", "cafe", "coffee", "dinner", "restaurant", "cinema", "shopping",
-            "street", "walk", "bosphorus", "ferry", "bookstore", "bowling", "cheesecake",
-            "breakfast", "kitchen", "car", "nisantasi", "bebek", "karakoy", "galata", "moda", "hotel"
-        ))
+        if any(k in os.path.basename(p).lower() for k in ("canan_p1_", "canan_p3_", "canan_p6_", "canan_stocking_"))
     ]
-    # Grup 2: Ev Hali / Dinlenme / Spor / Pilates / Sabah / Bakım (3. Sahne)
+    # Grup 2: Ayna Karşısı / Yan Oturma / Kalça Dinamiği / Çorapsız Etek Pozları (3. Sahne)
     group_2 = [
         p for p in fresh_pool
         if p not in group_1
-        and any(k in os.path.basename(p).lower() for k in (
-            "bed", "couch", "sofa", "rug", "carpet", "robe", "morning", "home", "book",
-            "gym", "yoga", "tennis", "pilates", "shorts", "workout", "feet", "polish", "pedi"
-        ))
+        and any(k in os.path.basename(p).lower() for k in ("canan_p2_", "canan_p4_", "canan_p5_", "canan_bare", "canan_pleated_", "canan_mini_"))
     ]
-    # Grup 3: Gece Şıklığı / Mini Elbise / Saten / Korse / Ayna / Kombin (4. Sahne)
+    # Grup 3: Diğer Yeni Etek-Çorap (`canan_sk_`) ve Sosyal Yaşam (`canan_social_`) Pozları (4. Sahne)
     group_3 = [
         p for p in fresh_pool
         if p not in group_1 and p not in group_2
