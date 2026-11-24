@@ -64,8 +64,8 @@ def do_run() -> int:
     else:
         print("🎵 [Bulut] TikTok için yeni Reels yok.")
 
-    # 2) Twitter / X
-    res = canan_twitter_sync.check_and_run_due_slots(max_posts=2)
+    # 2) Twitter / X (her çalışmada en fazla 1 gönderi — peş peşe spam olmasın, saatlerinde tek tek atsın)
+    res = canan_twitter_sync.check_and_run_due_slots(max_posts=1)
     print(f"🐦 [Bulut] Twitter sonucu: {res}")
     failures += res.get("failed", 0)
 

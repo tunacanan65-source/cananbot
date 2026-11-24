@@ -1,4 +1,4 @@
-﻿"""
+"""
 Canan Tuna - TikTok Studio Otonom Video Yükleyici
 - TikTok Studio (tiktok.com/tiktokstudio/upload) üzerinden çalışır.
 - Çerez ve onboarding popuplarını ("Tümüne izin ver", "Anladım", "Aç") otomatik temizler.
@@ -48,14 +48,43 @@ def post_video_to_tiktok(video_path: str, caption: str) -> dict:
                 locale="tr-TR",
                 timezone_id="Europe/Istanbul"
             )
-            context.add_cookies(cookies)
+            if bs.IS_CLOUD:
+                # Bulutta sadece çekirdek oturum çerezlerini (.tiktok.com) ver; TR IP'ye bağlı ttwid/msToken/s_v_web_id/odin_tt çakışıp login'e atar
+                core_names = ("sessionid", "sessionid_ss", "sid_tt", "sid_guard", "uid_tt", "uid_tt_ss")
+                clean_tt = []
+                for c in cookies:
+                    if c.get("name") in core_names and c.get("value"):
+                        clean_tt.append({
+                            "name": c["name"],
+                            "value": c["value"],
+                            "domain": ".tiktok.com",
+                            "path": "/",
+                            "secure": True,
+                            "httpOnly": True,
+                            "sameSite": "Lax",
+                        })
+                context.add_cookies(clean_tt if clean_tt else cookies)
+            else:
+                context.add_cookies(cookies)
             page = context.new_page()
             page.add_init_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined});")
             os.makedirs(os.path.join(BASE_DIR, "output"), exist_ok=True)
 
+            if bs.IS_CLOUD:
+                print("🌐 [TikTok] Önce ana sayfa açılıp bulut oturum belirteçleri alınıyor...")
+                try:
+                    page.goto("https://www.tiktok.com/", wait_until="domcontentloaded", timeout=45000)
+                    page.wait_for_timeout(3500)
+                except Exception:
+                    pass
+
             print("🌐 [TikTok] Studio Upload sayfası açılıyor...")
             page.goto("https://www.tiktok.com/tiktokstudio/upload", wait_until="domcontentloaded", timeout=60000)
             page.wait_for_timeout(5000)
+            if "login" in page.url.lower():
+                print("⚠️ [TikTok] Studio login'e attı, creator-center/upload alternatifi deneniyor...")
+                page.goto("https://www.tiktok.com/creator-center/upload", wait_until="domcontentloaded", timeout=60000)
+                page.wait_for_timeout(5000)
             if "login" in page.url.lower():
                 try:
                     page.screenshot(path=os.path.join(BASE_DIR, "output", "tiktok_login_redirect.png"))
