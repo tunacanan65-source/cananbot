@@ -22,9 +22,11 @@ COOKIES_FILE = os.path.join(BASE_DIR, "tiktok_cookies.json")
 
 
 def post_video_to_tiktok(video_path: str, caption: str) -> dict:
-    """TikTok Studio üzerinden videoyu otonom olarak yükler."""
-    if not os.path.exists(COOKIES_FILE):
-        return {"status": "error", "reason": "TikTok oturumu (tiktok_cookies.json) bulunamadı."}
+    """TikTok Studio üzerinden videoyu otonom olarak yükler (ev PC'si veya GitHub Actions bulutu)."""
+    import browser_session as bs
+    cookies = bs.load_cookies("TIKTOK_COOKIES_B64", COOKIES_FILE, ("tiktok.com", "byteoversea.com"))
+    if not any(c.get("name") == "sessionid" for c in cookies):
+        return {"status": "error", "reason": "TikTok oturumu (TIKTOK_COOKIES_B64 / tiktok_cookies.json) bulunamadı."}
 
     if not os.path.exists(video_path):
         return {"status": "error", "reason": f"Video dosyası bulunamadı: {video_path}"}
@@ -34,25 +36,16 @@ def post_video_to_tiktok(video_path: str, caption: str) -> dict:
     except ImportError:
         return {"status": "error", "reason": "Playwright modülü yüklü değil."}
 
-    try:
-        with open(COOKIES_FILE, "r", encoding="utf-8") as f:
-            cookies = json.load(f)
-    except Exception as e:
-        return {"status": "error", "reason": f"Çerez dosyası okunamadı: {e}"}
-
     print(f"🚀 [TikTok Uploader] Video yükleme başlatılıyor: {os.path.basename(video_path)}")
 
     try:
         with sync_playwright() as p:
-            browser = p.chromium.launch(
-                headless=True,
-                channel="chrome",
-                args=["--disable-blink-features=AutomationControlled", "--no-sandbox"],
-                ignore_default_args=["--enable-automation"]
-            )
+            browser = bs.launch_browser(p)
             context = browser.new_context(
-                user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
-                viewport={"width": 1440, "height": 950}
+                user_agent=bs.REAL_UA,
+                viewport={"width": 1440, "height": 950},
+                locale="tr-TR",
+                timezone_id="Europe/Istanbul"
             )
             context.add_cookies(cookies)
             page = context.new_page()
@@ -61,6 +54,9 @@ def post_video_to_tiktok(video_path: str, caption: str) -> dict:
             print("🌐 [TikTok] Studio Upload sayfası açılıyor...")
             page.goto("https://www.tiktok.com/tiktokstudio/upload", wait_until="domcontentloaded", timeout=45000)
             page.wait_for_timeout(3500)
+            if "login" in page.url.lower():
+                browser.close()
+                return {"status": "error", "reason": "TikTok oturumu düşmüş (giriş sayfasına yönlendirildi)."}
 
             def dismiss_overlays():
                 # Çerez bannerları
@@ -72,8 +68,8 @@ def post_video_to_tiktok(video_path: str, caption: str) -> dict:
                             page.wait_for_timeout(800)
                         except Exception:
                             pass
-                # Modallar / Bilgi pencereleri
-                for txt in ["Anladım", "Got it", "Tamam", "Aç", "Kapat", "Cancel"]:
+                # Modallar / Bilgi pencereleri (DİKKAT: "Kapat"/"Cancel" yüklemeyi iptal edip çıkış onayı açtırıyor, ekleme!)
+                for txt in ["Anladım", "Got it", "Tamam", "Aç"]:
                     b = page.locator(f'button:has-text("{txt}")')
                     if b.count():
                         try:
@@ -112,15 +108,24 @@ def post_video_to_tiktok(video_path: str, caption: str) -> dict:
 
             dismiss_overlays()
 
-            # Gizlilik kontrolü: "Herkes" seçili olduğundan emin ol
+            # Gizlilik kontrolü: "Herkes" (Public) seçili olduğundan emin ol
             try:
-                priv_opt = page.locator('div:has-text("Bu gönderiyi kimler görebilir"), span:has-text("Bu gönderiyi kimler görebilir")')
-                if priv_opt.count():
-                    priv_opt.first.scroll_into_view_if_needed()
-                    # Eğer "Sadece ben" veya "Arkadaşlar" seçiliyse "Herkes" yap
-                    herkes_radio = page.locator('input[value="public"], label:has-text("Herkes"), div:has-text("Herkes")')
-                    if herkes_radio.count():
-                        herkes_radio.first.click(force=True)
+                # TikTok Studio'da gizlilik açılır menüsü ("Sadece ben" veya "Arkadaşlar" yazıyorsa tıkla ve "Herkes" seç)
+                priv_dropdown = page.locator(
+                    'button:has-text("Sadece ben"), div[role="combobox"]:has-text("Sadece ben"), '
+                    'span:has-text("Sadece ben"), div:has-text("Bu gönderiyi kimler görebilir") >> .. >> button'
+                )
+                if priv_dropdown.count():
+                    priv_dropdown.first.scroll_into_view_if_needed()
+                    priv_dropdown.first.click(force=True)
+                    page.wait_for_timeout(800)
+                    herkes_opt = page.locator(
+                        'div[role="option"]:has-text("Herkes"), li:has-text("Herkes"), '
+                        'span:has-text("Herkes"), div:has-text("Herkes")'
+                    )
+                    if herkes_opt.count():
+                        herkes_opt.first.click(force=True)
+                        page.wait_for_timeout(800)
             except Exception:
                 pass
 
@@ -144,39 +149,107 @@ def post_video_to_tiktok(video_path: str, caption: str) -> dict:
                     break
                 time.sleep(2)
 
-            print("🚀 [TikTok] 'Paylaş' butonuna tıklanıyor...")
-            post_elem.click()
-            page.wait_for_timeout(3000)
+            def clear_tux_modals(tag: str = ""):
+                """TikTok Studio'nun tux-portal modallarını tespit edip içindeki butonla kapatır."""
+                for _ in range(4):
+                    backdrop = page.locator("div._TUXModal-backdrop--entered, div[class*='TUXModal-backdrop']")
+                    if not backdrop.count():
+                        return
+                    portal = page.locator("#tux-portal-container")
+                    try:
+                        txt = portal.inner_text()[:400].replace("\n", " | ")
+                        print(f"🪟 [TikTok] Modal tespit edildi {tag}: {txt}")
+                        page.screenshot(path=os.path.join(BASE_DIR, "output", "tiktok_modal_debug.png"))
+                    except Exception:
+                        pass
+                    clicked = False
+                    for t in ["Hemen paylaş", "Post now", "Paylaş", "Anladım", "Got it", "Tamam", "OK",
+                              "Devam", "Continue", "Aç", "Turn on", "Kapat", "Close", "İptal", "Cancel", "Şimdi değil", "Not now"]:
+                        b = portal.locator(f'button:has-text("{t}")')
+                        if b.count():
+                            try:
+                                b.first.click(force=True)
+                                print(f"✅ [TikTok] Modal butonu tıklandı: {t}")
+                                clicked = True
+                                page.wait_for_timeout(1500)
+                                break
+                            except Exception:
+                                pass
+                    if not clicked:
+                        try:
+                            page.keyboard.press("Escape")
+                            page.wait_for_timeout(1000)
+                        except Exception:
+                            pass
 
-            # Ek onay penceresi varsa (örn: telif onayı)
-            confirm_pop = page.locator('button:has-text("Yine de paylaş"), button:has-text("Post anyway"), button:has-text("Onayla")')
-            if confirm_pop.count():
-                try:
-                    confirm_pop.first.click()
-                    page.wait_for_timeout(3000)
-                except Exception:
-                    pass
+            clear_tux_modals("(paylaş öncesi)")
+            print("🚀 [TikTok] 'Paylaş' butonuna tıklanıyor...")
+            try:
+                post_elem.click(timeout=8000)
+            except Exception:
+                clear_tux_modals("(tıklama engellendi)")
+                post_elem.click(force=True, timeout=8000)
+            page.wait_for_timeout(3000)
+            clear_tux_modals("(paylaş sonrası)")
+
+            # Ek onay penceresi varsa (örn: "Paylaşmaya devam edilsin mi? -> Hemen paylaş", "Yine de paylaş", "Post now")
+            for _ in range(5):
+                confirm_pop = page.locator(
+                    'button:has-text("Hemen paylaş"), button:has-text("Yine de paylaş"), '
+                    'button:has-text("Post now"), button:has-text("Post anyway"), button:has-text("Onayla")'
+                )
+                if confirm_pop.count():
+                    try:
+                        print("✅ [TikTok] 'Hemen paylaş' onay penceresine tıklanıyor...")
+                        confirm_pop.first.click(force=True)
+                        page.wait_for_timeout(4000)
+                        break
+                    except Exception:
+                        pass
+                page.wait_for_timeout(1000)
 
             # Paylaşımın tamamlanıp içerik sayfasına yönlenmesini bekle
             published = False
-            for sec in range(20):
+            for sec in range(25):
                 page.wait_for_timeout(2000)
+                confirm_pop = page.locator('button:has-text("Hemen paylaş"), button:has-text("Post now")')
+                if confirm_pop.count():
+                    try:
+                        confirm_pop.first.click(force=True)
+                    except Exception:
+                        pass
                 body_text = page.locator("body").inner_text()
-                if "Yönet" in body_text or "Manage" in body_text or "Gönderiler" in body_text or "tiktokstudio/content" in page.url:
+                if "tiktokstudio/content" in page.url or "Gönderilerim" in body_text or "Videolarınız yükleniyor" in body_text:
                     published = True
                     break
 
+            # İçerik listesi sayfasında ("tiktokstudio/content") eğer herhangi bir gönderi "Sadece ben" olarak kaldıysa otomatik "Herkes"e çevir!
+            try:
+                page.wait_for_timeout(2000)
+                sadece_ben_btns = page.locator('button:has-text("Sadece ben"), div:has-text("Sadece ben")')
+                if sadece_ben_btns.count():
+                    sadece_ben_btns.first.click(force=True)
+                    page.wait_for_timeout(800)
+                    herkes_item = page.locator('div[role="option"]:has-text("Herkes"), li:has-text("Herkes"), span:has-text("Herkes")')
+                    if herkes_item.count():
+                        herkes_item.first.click(force=True)
+                        page.wait_for_timeout(1500)
+            except Exception:
+                pass
+
             # Teyit ekran görüntüsü
+            os.makedirs(os.path.join(BASE_DIR, "output"), exist_ok=True)
             confirm_path = os.path.join(BASE_DIR, "output", "tiktok_published_confirm.png")
             page.screenshot(path=confirm_path)
 
-            # Çerezleri güncelle
-            try:
-                updated = context.cookies()
-                with open(COOKIES_FILE, "w", encoding="utf-8") as f:
-                    json.dump(updated, f, ensure_ascii=False, indent=2)
-            except Exception:
-                pass
+            # Çerezleri güncelle (sadece ev PC'sinde; bulutta diske çerez yazılmaz)
+            if not bs.IS_CLOUD:
+                try:
+                    updated = context.cookies()
+                    with open(COOKIES_FILE, "w", encoding="utf-8") as f:
+                        json.dump(updated, f, ensure_ascii=False, indent=2)
+                except Exception:
+                    pass
 
             browser.close()
 
