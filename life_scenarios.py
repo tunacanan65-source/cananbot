@@ -1515,17 +1515,6 @@ SCENARIOS = [
         "tags": '#iyiaksamlar #saten #kırmızıoje #evhali #dinlenme #canantuna #reels #keşfet'
     },
     {
-        "id": 'oje_kiraz_ayna_onu_bakim',
-        "category": 'ev',
-        "type": 'video',
-        "bold": True,
-        "hook": 'Ayna önünde bakım hazırlığı! Kırmızı yakışmış mı?',
-        "image_path": os.path.join(IMAGES_DIR, 'canan_feet_cherry_mirror_floor.jpg'),
-        "signatures": ['boy aynasının karşısına geçip kiraz kırmızısı', 'kırmızı bluz ve kırmızı oje uyumu'],
-        "caption": 'Boy aynasının karşısına geçip kiraz kırmızısı ojemi sürdüm! 🍒💅 Kırmızı bluzumla harika bir takım oldular. Bakımlı olmayı seven herkesi yorumlara bekliyorum! ❤️👇',
-        "tags": '#ayna #kirazkırmızısı #oje #bakım #evkombin #canantuna #reels #keşfet'
-    },
-    {
         "id": 'oje_altin_sandalet_havuz_kenari',
         "category": 'tatil',
         "type": 'video',
