@@ -107,68 +107,85 @@ def post_media_to_twitter(media_path: str, caption: str) -> dict:
                     except Exception:
                         pass
 
-            # 1. Önce Tweet metin kutusunu ("Neler oluyor?") bul, tıkla ve yazıyı gir
-            textbox = page.locator('[data-testid="tweetTextarea_0"], div[role="textbox"], div[contenteditable="true"]').first
-            if not textbox.count():
-                placeholder = page.locator('div:has-text("Neler oluyor?"), div:has-text("What is happening")').last
-                if placeholder.count():
-                    try:
-                        placeholder.click(force=True)
-                        page.wait_for_timeout(800)
-                    except Exception:
-                        pass
-                textbox = page.locator('[data-testid="tweetTextarea_0"], div[role="textbox"], div[contenteditable="true"]').first
-
-            if textbox.count():
-                print("✍️ [Twitter] Tweet metni yazılıyor...")
-                try:
-                    textbox.click(force=True)
-                    page.wait_for_timeout(500)
-                    page.keyboard.insert_text(tweet_text)
-                    page.wait_for_timeout(1000)
-                except Exception as te:
-                    print(f"⚠️ [Twitter] Metin uyarısı: {te}")
-
-            # 2. Medya yükleme inputuna dosyayı aktar
-            file_input = page.locator('input[type="file"]').first
+            # 1. Önce medya dosyasını yükle ve DOM'da eklendiğini doğrula (kanıtlanmış X compose/post akışı)
+            file_input = page.locator('input[data-testid="fileInput"]').first
+            if not file_input.count():
+                file_input = page.locator('input[type="file"]').first
             if not file_input.count():
                 context.close()
-                return {"status": "error", "reason": "Twitter dosya yükleme alanı (input[type=file]) bulunamadı."}
+                if browser:
+                    browser.close()
+                return {"status": "error", "reason": "Twitter dosya yükleme alanı (fileInput) bulunamadı."}
 
             print(f"📤 [Twitter] Medya dosyası aktarılıyor ({os.path.basename(media_path)})...")
             file_input.set_input_files(media_path)
-            page.wait_for_timeout(2000)
 
-            # 3. Gönderi (Post) butonunu bul ve aktifleşmesini bekle
-            wait_loops = 24 if is_video else 6
-            post_btn = page.locator('[data-testid="tweetButtonInline"], [data-testid="tweetButton"]').first
+            media_ready = False
+            for sec in range(1, 50 if is_video else 25):
+                page.wait_for_timeout(1000)
+                has_img = page.locator('div[data-testid="attachments"] img').count() > 0
+                has_remove = page.locator('button[aria-label="Remove media"], div[aria-label="Remove media"], button[data-testid="removeMedia"], button[aria-label="Medyayı kaldır"]').count() > 0
+                has_video_preview = is_video and page.locator('div[data-testid="attachments"] video').count() > 0
+                if (has_img or has_remove or has_video_preview) and (not is_video or sec >= 6):
+                    media_ready = True
+                    print(f"✅ [Twitter] Medya eklendi ve doğrulandı ({sec}. sn).")
+                    page.wait_for_timeout(1000)
+                    break
+
+            if not media_ready:
+                page.screenshot(path=os.path.join(OUTPUT_DIR, "twitter_media_fail.png"))
+                context.close()
+                if browser:
+                    browser.close()
+                return {"status": "error", "reason": "Medya X'e yüklenemedi (attachments görünmedi)."}
+
+            # 2. Tweet metnini doldur
+            textbox = page.locator('div[role="textbox"][data-testid="tweetTextarea_0"]').first
+            if not textbox.count():
+                textbox = page.locator('div[role="textbox"], div[contenteditable="true"]').first
+            if not textbox.count():
+                context.close()
+                if browser:
+                    browser.close()
+                return {"status": "error", "reason": "Tweet metin kutusu bulunamadı."}
+
+            print("✍️ [Twitter] Tweet metni yazılıyor...")
+            textbox.click()
+            page.wait_for_timeout(400)
+            try:
+                textbox.fill(tweet_text)
+            except Exception:
+                page.keyboard.insert_text(tweet_text)
+            page.wait_for_timeout(1500)
+
+            # 3. Gönder (Post) butonunu bul ve aktifleşmesini bekle
+            post_btn = page.locator('button[data-testid="tweetButton"]').first
             if not post_btn.count():
-                # Türkçe arayüzde "Gönderi" yazan sağdaki inline buton
-                post_btn = page.locator('button:has-text("Gönderi"), [role="button"]:has-text("Gönderi")').last
-
-            for i in range(wait_loops):
-                page.wait_for_timeout(2000)
-                # Tekrar bul
-                cand = page.locator('[data-testid="tweetButtonInline"], [data-testid="tweetButton"]').first
-                if cand.count():
-                    post_btn = cand
-                if post_btn.count():
-                    aria_disabled = post_btn.get_attribute("aria-disabled")
-                    is_dis = False
-                    try:
-                        is_dis = post_btn.is_disabled()
-                    except Exception:
-                        pass
-                    if not is_dis and aria_disabled != "true" and i >= (8 if is_video else 2):
-                        break
-
+                post_btn = page.locator('button[data-testid="tweetButtonInline"]').first
             if not post_btn.count():
                 context.close()
+                if browser:
+                    browser.close()
                 return {"status": "error", "reason": "Twitter Gönderi butonu bulunamadı."}
 
+            btn_ready = False
+            for _ in range(25 if is_video else 12):
+                aria_disabled = post_btn.get_attribute("aria-disabled")
+                if aria_disabled != "true":
+                    btn_ready = True
+                    break
+                page.wait_for_timeout(1000)
+
+            if not btn_ready:
+                page.screenshot(path=os.path.join(OUTPUT_DIR, "twitter_btn_disabled.png"))
+                context.close()
+                if browser:
+                    browser.close()
+                return {"status": "error", "reason": "Twitter Gönderi butonu aktifleşmedi (aria-disabled=true)."}
+
             print("🚀 [Twitter] 'Gönderi / Post' butonuna tıklanıyor...")
-            post_btn.click(force=True)
-            page.wait_for_timeout(6000)
+            post_btn.click()
+            page.wait_for_timeout(7000)
 
             # Eğer "Kilidi aç / Unlock more on X" veya benzeri bir bilgi popup'ı çıkarsa Got it / Anladım / Kapat tıkla
             for txt in ["Got it", "Anladım", "Tamam", "Kapat", "Close", "Şimdi değil", "Not now"]:
