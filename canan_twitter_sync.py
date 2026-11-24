@@ -113,6 +113,7 @@ def post_single_twitter_item(media_type: str = "photo") -> bool:
             state["used_images"] = used_list
             save_state(state)
             return True
+        print(f"⚠️ [Twitter] Hata detayı: {res}")
         return False
     else:
         res = twitter_poster.post_media_to_twitter(chosen_img, caption)
@@ -122,6 +123,7 @@ def post_single_twitter_item(media_type: str = "photo") -> bool:
             state["used_images"] = used_list
             save_state(state)
             return True
+        print(f"⚠️ [Twitter] Hata detayı: {res}")
         return False
 
 

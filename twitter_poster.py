@@ -71,18 +71,30 @@ def post_media_to_twitter(media_path: str, caption: str) -> dict:
                 )
             else:
                 browser = bs.launch_browser(p)
-                context = browser.new_context(user_agent=bs.REAL_UA, viewport={"width": 1366, "height": 900},
+                win_ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+                context = browser.new_context(user_agent=win_ua, viewport={"width": 1366, "height": 900},
                                               locale="tr-TR", timezone_id="Europe/Istanbul")
-                context.add_cookies(x_cookies)
+                # Sadece temel X oturum çerezlerini (.x.com) temiz şekilde ekle (çakışan eski çerezler X'te login'e atar)
+                auth_val = next((c["value"] for c in x_cookies if c.get("name") == "auth_token" and c.get("value")), "")
+                ct0_val = next((c["value"] for c in x_cookies if c.get("name") == "ct0" and c.get("value")), "")
+                clean_x = []
+                if auth_val:
+                    clean_x.append({"name": "auth_token", "value": auth_val, "domain": ".x.com", "path": "/", "secure": True, "httpOnly": True})
+                if ct0_val:
+                    clean_x.append({"name": "ct0", "value": ct0_val, "domain": ".x.com", "path": "/", "secure": True, "httpOnly": False})
+                context.add_cookies(clean_x if clean_x else x_cookies)
             page = context.pages[0] if context.pages else context.new_page()
             page.add_init_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined});")
 
-            print("🌐 [Twitter] X Ana Sayfa açılıyor...")
-            page.goto("https://x.com/home", wait_until="domcontentloaded", timeout=45000)
+            print("🌐 [Twitter] X Paylaşım sayfası açılıyor...")
+            page.goto("https://x.com/compose/post", wait_until="domcontentloaded", timeout=45000)
             page.wait_for_timeout(4500)
 
             if "login" in page.url.lower():
+                print(f"❌ [Twitter] Oturum açık değil (yönlendirilen adres: {page.url})")
                 context.close()
+                if browser:
+                    browser.close()
                 return {"status": "error", "reason": "Twitter oturumu henüz açık değil."}
 
             # Varsa çerez / bildirim popuplarını kapat
