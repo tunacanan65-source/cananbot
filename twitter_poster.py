@@ -1,4 +1,4 @@
-"""
+﻿"""
 Canan Tuna - Twitter (X) (@canantunau) Otonom Video (Reels) ve Görsel (Fotoğraf) Yükleyici
 - Doğrudan gerçek Chrome profili (twitter_chrome_profile) veya twitter_cookies.json üzerinden çalışır.
 - Hem MP4 Reels videolarını hem de JPG/PNG tekli fotoğrafları yüksek kalitede X'e yükler.
@@ -97,15 +97,29 @@ def post_media_to_twitter(media_path: str, caption: str) -> dict:
                     browser.close()
                 return {"status": "error", "reason": "Twitter oturumu henüz açık değil."}
 
+            def dismiss_x_overlays():
+                """X'in çerez, bildirim, bilgi veya etiket öneri katmanlarını temizler (compose modalını kapatmadan)."""
+                for txt in [
+                    "Accept all cookies", "Tüm çerezleri kabul et", "Refuse non-essential cookies",
+                    "Not now", "Şimdi değil", "Got it", "Anladım", "Tamam", "Skip for now"
+                ]:
+                    btn = page.locator(f'button:has-text("{txt}"), [role="button"]:has-text("{txt}")')
+                    if btn.count():
+                        try:
+                            btn.first.click(force=True, timeout=2000)
+                            page.wait_for_timeout(500)
+                        except Exception:
+                            pass
+                # Etiket (#keşfet) öneri açılır listesi açıksa güvenli şekilde kapat
+                try:
+                    if page.locator('div[data-testid="typeaheadDropdown"]').count():
+                        page.keyboard.press("Escape")
+                        page.wait_for_timeout(400)
+                except Exception:
+                    pass
+
             # Varsa çerez / bildirim popuplarını kapat
-            for txt in ["Accept all cookies", "Tüm çerezleri kabul et", "Refuse non-essential cookies", "Not now", "Şimdi değil", "Got it", "Anladım"]:
-                btn = page.locator(f'button:has-text("{txt}"), span:has-text("{txt}")')
-                if btn.count():
-                    try:
-                        btn.first.click(force=True)
-                        page.wait_for_timeout(600)
-                    except Exception:
-                        pass
+            dismiss_x_overlays()
 
             # 1. Önce medya dosyasını yükle ve DOM'da eklendiğini doğrula (kanıtlanmış X compose/post akışı)
             file_input = page.locator('input[data-testid="fileInput"]').first
@@ -183,19 +197,52 @@ def post_media_to_twitter(media_path: str, caption: str) -> dict:
                     browser.close()
                 return {"status": "error", "reason": "Twitter Gönderi butonu aktifleşmedi (aria-disabled=true)."}
 
-            print("🚀 [Twitter] 'Gönderi / Post' butonuna tıklanıyor...")
-            post_btn.click()
-            page.wait_for_timeout(7000)
+            dismiss_x_overlays()
 
-            # Eğer "Kilidi aç / Unlock more on X" veya benzeri bir bilgi popup'ı çıkarsa Got it / Anladım / Kapat tıkla
-            for txt in ["Got it", "Anladım", "Tamam", "Kapat", "Close", "Şimdi değil", "Not now"]:
-                pop = page.locator(f'button:has-text("{txt}"), [role="button"]:has-text("{txt}")')
-                if pop.count():
+            print("🚀 [Twitter] 'Gönderi / Post' butonuna tıklanıyor...")
+            clicked = False
+            try:
+                post_btn.click(timeout=6000)
+                clicked = True
+            except Exception as click_err:
+                print(f"⚠️ [Twitter] Normal tıklama engellendi, katmanlar temizlenip alternatif yöntem deneniyor: {str(click_err)[:140]}")
+                dismiss_x_overlays()
+                try:
+                    post_btn.click(force=True, timeout=6000)
+                    clicked = True
+                except Exception:
+                    pass
+
+            page.wait_for_timeout(3000)
+
+            # Eğer compose penceresi hâlâ açıksa ve buton duruyorsa JS click + Ctrl+Enter ile gönder
+            try:
+                if "compose" in page.url.lower() and post_btn.count() and post_btn.is_visible():
+                    dismiss_x_overlays()
                     try:
-                        pop.first.click(force=True)
-                        page.wait_for_timeout(1500)
+                        post_btn.evaluate("el => el.click()")
+                        page.wait_for_timeout(2500)
                     except Exception:
                         pass
+                if "compose" in page.url.lower() and post_btn.count() and post_btn.is_visible():
+                    print("⌨️ [Twitter] Ctrl+Enter kısayolu ile gönderiliyor...")
+                    textbox.focus()
+                    page.keyboard.press("Control+Enter")
+                    clicked = True
+            except Exception:
+                pass
+
+            if not clicked:
+                page.screenshot(path=os.path.join(OUTPUT_DIR, "twitter_click_fail.png"))
+                context.close()
+                if browser:
+                    browser.close()
+                return {"status": "error", "reason": "Twitter Gönderi butonuna tıklanamadı."}
+
+            page.wait_for_timeout(6000)
+
+            # Eğer gönderim sonrası bilgi popup'ı çıkarsa temizle
+            dismiss_x_overlays()
 
             confirm_path = os.path.join(OUTPUT_DIR, "twitter_published_confirm.png")
             page.screenshot(path=confirm_path)
