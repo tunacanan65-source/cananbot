@@ -1,0 +1,97 @@
+name: Canan Tuna - Twitter + TikTok Bulut Paylasimi
+
+on:
+  schedule:
+    - cron: '35 7 * * *'
+    - cron: '35 9 * * *'
+    - cron: '20 10 * * *'
+    - cron: '5 12 * * *'
+    - cron: '5 14 * * *'
+    - cron: '40 15 * * *'
+    - cron: '5 18 * * *'
+    - cron: '5 20 * * *'
+    - cron: '40 20 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: canan-social-cloud
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      TZ: Europe/Istanbul
+      PYTHONUNBUFFERED: "1"
+      FACEBOOK_ACCESS_TOKEN: ${{ secrets.FACEBOOK_ACCESS_TOKEN }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TWITTER_COOKIES_B64: ${{ secrets.TWITTER_COOKIES_B64 }}
+      TIKTOK_COOKIES_B64: ${{ secrets.TIKTOK_COOKIES_B64 }}
+
+    steps:
+      - name: Kodu cek
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Bot durum dosyalarini cek (bot-state dali)
+        run: |
+          if git fetch --depth 1 origin bot-state:refs/remotes/origin/bot-state 2>/dev/null; then
+            git worktree add .state origin/bot-state
+          else
+            git worktree add --orphan -b bot-state .state
+          fi
+          for f in tiktok_synced_ids.json twitter_daily_state.json used_images_quarantine.json; do
+            [ -f ".state/$f" ] && cp ".state/$f" . ;
+          done; true
+
+      - name: Python kur
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Hizli kontrol - paylasim vakti geldi mi?
+        id: check
+        run: |
+          pip install -q requests
+          python cloud_runner.py --check
+
+      - name: Paylasim araclarini kur
+        if: steps.check.outputs.due == 'true'
+        run: |
+          pip install -q requests pillow imageio-ffmpeg playwright
+          python -m playwright install-deps chromium > /dev/null 2>&1 || true
+          google-chrome --version || python -m playwright install chromium
+
+      - name: Paylas (TikTok + Twitter)
+        id: run
+        if: steps.check.outputs.due == 'true'
+        run: python cloud_runner.py --run
+
+      - name: Bot durumunu kaydet
+        if: always() && steps.check.outputs.due == 'true'
+        run: |
+          cd .state
+          git checkout -B bot-state 2>/dev/null || true
+          for f in tiktok_synced_ids.json twitter_daily_state.json used_images_quarantine.json; do
+            [ -f "../$f" ] && cp "../$f" . ;
+          done
+          git config user.name "canan-bot"
+          git config user.email "canan-bot@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet || git commit -q -m "bot durumu guncellendi [skip ci]"
+          git push -q origin HEAD:bot-state
+
+      - name: Kanit ekran goruntuleri
+        if: always() && steps.check.outputs.due == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: kanit-${{ github.run_id }}
+          path: output/*.png
+          retention-days: 3
+          if-no-files-found: ignore
