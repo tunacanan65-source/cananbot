@@ -60,6 +60,42 @@ STORY_SLOTS = [
     {"id": "night_story", "hour": 23, "minute": 0, "end_hour": 23, "mode": "night", "label": "Gece İyi Geceler Hikayesi (Story)"}
 ]
 
+# Twitter + TikTok GitHub Actions Bulut Tetikleme Saatleri (TSİ - Dakikası Dakikasına, Cron Gecikmesi Yok!)
+CLOUD_SOCIAL_TRIGGERS = [
+    {"id": "tw_1030", "hour": 10, "minute": 31, "label": "Twitter 1. Fotoğraf (10:30)"},
+    {"id": "tw_1230", "hour": 12, "minute": 31, "label": "Twitter 1. Reels (12:30)"},
+    {"id": "tt_1300", "hour": 13, "minute": 6,  "label": "TikTok Öğlen Reels (13:00 IG sonrası)"},
+    {"id": "tw_1500", "hour": 15, "minute": 1,  "label": "Twitter 2. Reels (15:00)"},
+    {"id": "tw_1700", "hour": 17, "minute": 1,  "label": "Twitter 2. Fotoğraf (17:00)"},
+    {"id": "tt_2030", "hour": 20, "minute": 36, "label": "TikTok Akşam Reels (20:30 IG sonrası)"},
+    {"id": "tw_2100", "hour": 21, "minute": 1,  "label": "Twitter 3. Reels (21:00)"},
+    {"id": "tw_2300", "hour": 23, "minute": 1,  "label": "Twitter 3. Fotoğraf (23:00)"},
+]
+
+
+def trigger_github_social_cloud(reason: str = "") -> bool:
+    """GitHub Actions (Twitter + TikTok) iş akışını workflow_dispatch ile anında (2 sn içinde) tetikler."""
+    token = os.environ.get("GITHUB_DISPATCH_TOKEN", "").strip()
+    if not token:
+        return False
+    repo = os.environ.get("GITHUB_DISPATCH_REPO", "tunacanan65-source/cananbot").strip()
+    url = f"https://api.github.com/repos/{repo}/actions/workflows/canan_social_cloud.yml/dispatches"
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
+    try:
+        r = requests.post(url, headers=headers, json={"ref": "main"}, timeout=15)
+        if r.status_code in (200, 201, 204):
+            print(f"⚡ [Bulut Tetikleyici] GitHub Actions anında başlatıldı! ({reason})")
+            return True
+        print(f"⚠️ [Bulut Tetikleyici] GitHub yanıtı {r.status_code}: {r.text[:200]}")
+        return False
+    except Exception as e:
+        print(f"⚠️ [Bulut Tetikleyici] Bağlantı hatası: {e}")
+        return False
+
 
 def get_today_instagram_posts_tr() -> list:
     """
@@ -134,6 +170,7 @@ def run_scheduler():
     start_self_keepalive()
     last_posted_date_slot = {}
     last_story_date_slot = {}
+    last_cloud_trigger_slot = {}
     last_comment_check_ts = 0.0
 
     while True:
@@ -167,6 +204,9 @@ def run_scheduler():
                     ok = canan_autopilot.run_single_autopilot_post(force_type=slot["type"])
                     if ok:
                         last_posted_date_slot[slot_key] = True
+                        # Yeni Reels Instagram'a düştüyse TikTok senkronu için GitHub Actions'ı hemen dürt
+                        if slot["type"] == "video":
+                            trigger_github_social_cloud(f"Yeni IG Reels sonrası TikTok ({slot['id']})")
                     time.sleep(65)
 
             # 3. Günlük Otomatik Hikaye (Story) Paylaşımları (10:30 Sabah & 23:00 Gece)
@@ -181,6 +221,17 @@ def run_scheduler():
                     canan_autopilot.run_daily_story_post(slot_mode=st_slot["mode"])
                     last_story_date_slot[st_key] = True
                     time.sleep(30)
+
+            # 4. Twitter + TikTok GitHub Actions Bulut Tetikleyicisi (Dakikası Dakikasına, Cron Gecikmesiz)
+            for ct in CLOUD_SOCIAL_TRIGGERS:
+                ct_key = f"{today_str}_{ct['id']}"
+                if ct_key in last_cloud_trigger_slot:
+                    continue
+                ct_target = ct["hour"] * 60 + ct["minute"]
+                if ct_target <= now_minutes <= ct_target + 45:
+                    if trigger_github_social_cloud(ct["label"]):
+                        last_cloud_trigger_slot[ct_key] = True
+                        time.sleep(10)
 
             time.sleep(25)
         except Exception as e:
