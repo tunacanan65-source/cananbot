@@ -12,7 +12,8 @@
       "tw_reels_1_noon",
       "tw_reels_2_afternoon",
       "tw_photo_2_evening",
-      "tw_reels_3_primetime"
+      "tw_reels_3_primetime",
+      "tw_photo_3_night"
     ]
   },
   "used_images": [
@@ -43,6 +44,7 @@
     "canan_bare_02_red_top_plaid_school_skirt_bed.jpg",
     "canan_p1_highangle_red_lace_velvet_skirt_bed.jpg",
     "canan_p2_hippose_white_lace_leather_skirt_kitchen.jpg",
-    "canan_sk_30_window_lounge_mocha_lace_suede_skirt.jpg"
+    "canan_sk_30_window_lounge_mocha_lace_suede_skirt.jpg",
+    "canan_bare_03_emerald_corset_ruffle_skirt_chaise.jpg"
   ]
 }
