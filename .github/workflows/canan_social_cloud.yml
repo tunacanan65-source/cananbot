@@ -2,15 +2,9 @@ name: Canan Tuna - Twitter + TikTok Bulut Paylasimi
 
 on:
   schedule:
-    - cron: '35 7 * * *'
-    - cron: '35 9 * * *'
-    - cron: '20 10 * * *'
-    - cron: '5 12 * * *'
-    - cron: '5 14 * * *'
-    - cron: '40 15 * * *'
-    - cron: '5 18 * * *'
-    - cron: '5 20 * * *'
-    - cron: '40 20 * * *'
+
+
+    - cron: '7,37 7-20 * * *'
   workflow_dispatch:
 
 concurrency:
