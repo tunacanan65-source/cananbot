@@ -14,6 +14,9 @@
       "tw_photo_2_evening",
       "tw_reels_3_primetime",
       "tw_photo_3_night"
+    ],
+    "2026-11-26": [
+      "tw_photo_1_morning"
     ]
   },
   "used_images": [
@@ -45,6 +48,7 @@
     "canan_p1_highangle_red_lace_velvet_skirt_bed.jpg",
     "canan_p2_hippose_white_lace_leather_skirt_kitchen.jpg",
     "canan_sk_30_window_lounge_mocha_lace_suede_skirt.jpg",
-    "canan_bare_03_emerald_corset_ruffle_skirt_chaise.jpg"
+    "canan_bare_03_emerald_corset_ruffle_skirt_chaise.jpg",
+    "canan_terracotta_pottery_cafe.jpg"
   ]
 }
