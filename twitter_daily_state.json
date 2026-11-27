@@ -22,6 +22,9 @@
       "tw_photo_2_evening",
       "tw_reels_3_primetime",
       "tw_photo_3_night"
+    ],
+    "2026-11-27": [
+      "tw_photo_1_morning"
     ]
   },
   "used_images": [
@@ -68,6 +71,7 @@
     "canan_p3_curve_16_lilac_ribbed_knit_pants_bed.jpg",
     "canan_p4_mirror_curve_red_corset_white_lace_leather.jpg",
     "canan_sofa_kneel_18_navy_plaid_pleated_skirt_white_fishnet.jpg",
-    "canan_bare_04_black_corset_white_tennis_skirt_rug.jpg"
+    "canan_bare_04_black_corset_white_tennis_skirt_rug.jpg",
+    "canan_bold_grey_shorts_floor.jpg"
   ]
 }
