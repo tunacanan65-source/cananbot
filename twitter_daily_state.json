@@ -27,7 +27,8 @@
       "tw_photo_1_morning",
       "tw_reels_1_noon",
       "tw_reels_2_afternoon",
-      "tw_photo_2_evening"
+      "tw_photo_2_evening",
+      "tw_reels_3_primetime"
     ]
   },
   "used_images": [
@@ -84,6 +85,10 @@
     "canan_p1_highangle_navy_lace_plaid_skirt_bed.jpg",
     "canan_p4_mirror_curve_white_corset_burgundy_velvet_skirt.jpg",
     "canan_sk_20_burgundy_fishnet_tulle_skirt_bed.jpg",
-    "canan_bare_06_lean_forward_red_corset_satin_sofa.jpg"
+    "canan_bare_06_lean_forward_red_corset_satin_sofa.jpg",
+    "canan_bold_black_mesh_night.jpg",
+    "canan_stocking_13_black_sheer_lace_red_corset_sofa.jpg",
+    "canan_mini_skirt_lace_stockings_sofa.jpg",
+    "canan_sk_34_white_lace_black_corset_emerald_satin_bed.jpg"
   ]
 }
