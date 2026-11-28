@@ -219,23 +219,27 @@ def get_30day_quarantined_filenames(recent_caps: list = None) -> set:
                         prefer_new_generation=is_new_sc
                     )
                     for cp in sim_comps:
-                        quarantined.add(os.path.basename(cp))
+                        cp_name = os.path.basename(cp)
+                        if not cp_name.startswith("canan_meta_"):
+                            quarantined.add(cp_name)
                 break
 
     return quarantined
 
 
-def pick_next_scenario(force_type: str = None) -> dict:
+def pick_next_scenario(force_type: str = None, meta_safe_only: bool = True) -> dict:
     """
     Canan Tuna için 30 GÜN SIFIR-TEKRAR KALKANLI canlı senaryo seçicisi:
     1. Instagram API'ye canlı bağlanıp son 100 gönderiyi çeker.
     2. Son 30 günde hem ana karede, hem Reels'in 2-3-4. yan karelerinde, hem de Story'de
        kullanılmış tüm fotoğrafları karantinaya alır.
-    3. Öncelikle HİÇ PAYLAŞILMAMIŞ ve ana görseli karantinada olmayan senaryoları seçer.
+    3. meta_safe_only=True iken Facebook/Instagram Para Kazanma & 18+ kısıtsız keşfet için
+       yalnızca temiz, şık lifestyle/moda senaryolarını seçer (cesurlar yalnızca X'te kullanılır).
     """
     all_scenarios = [
         sc for sc in life_scenarios.SCENARIOS
         if sc.get("image_path") and os.path.exists(sc.get("image_path"))
+        and (not meta_safe_only or create_canan_reel.is_meta_safe_image(sc.get("image_path", "")))
     ]
     if not all_scenarios:
         return None
@@ -600,6 +604,7 @@ def run_daily_story_post(slot_mode: str = "morning") -> bool:
         for f in os.listdir(images_dir)
         if f.lower().endswith((".jpg", ".jpeg", ".png"))
         and "canan_cousin_" not in f.lower()
+        and create_canan_reel.is_meta_safe_image(f)
     ])
     if not all_imgs:
         return False
@@ -691,7 +696,8 @@ def run_single_autopilot_post(force_type: str = None):
             chosen_img,
             count=3,
             extra_candidates=scenario.get("companions"),
-            exclude_filenames=quarantined_files
+            exclude_filenames=quarantined_files,
+            meta_safe_only=True
         )
         used_companion_names = [os.path.basename(p) for p in planned_companions]
         create_canan_reel.create_reels_video(

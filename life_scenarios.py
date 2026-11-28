@@ -3604,6 +3604,160 @@ SCENARIOS = [
         "caption": "Salonda koltuğa yaslanıp biraz dinlenirken pembe saten mini eteğim ve beyaz dantelli çoraplarım ile size küçük bir selam göndermek istedim! 🌸✨ Evde hem rahat hem de bakımlı olmayı çok seviyorum. Bu kombinime 10 üzerinden kaç puan verirsiniz? 😉👇",
         "tags": '#evhali #eşofman #pembe #kombin #fit #şıklık #canantuna #reels #keşfet'
     },
+    {
+        "id": 'meta_safe_01_bogaz_trenckot_kahve',
+        "category": 'sokak',
+        "type": 'video',
+        "bold": False,
+        "hook": "Boğaz havası, trençkot ve sıcak kahve! Puanın kaç?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_meta_01_bosphorus_trench_coffee.jpg'),
+        "signatures": ["boğaz kenarında bej trençkotum ve sıcak kahvemle altın saat"],
+        "caption": "Boğaz kenarında bej trençkotum ve sıcak kahvemle altın saat yürüyüşü! ☕🌇 İstanbul'un serin havasında bu manzaraya doyum olmuyor. Sizce trençkot kombinim 10 üzerinden kaç puan alır? 👇✨",
+        "tags": '#istanbul #boğaz #trençkot #kahve #kombin #sonbahar #canantuna #keşfet'
+    },
+    {
+        "id": 'meta_safe_02_nisantasi_zumrut_blazer',
+        "category": 'sokak',
+        "type": 'photo',
+        "bold": False,
+        "hook": "Nişantaşı sokaklarında zümrüt blazer! Yakışmış mı?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_meta_02_nisantasi_blazer_street.jpg'),
+        "signatures": ["nişantaşı sokaklarında zümrüt yeşili blazer ceketimle yürüyüş"],
+        "caption": "Nişantaşı sokaklarında zümrüt yeşili blazer ceketimle yürüyüş ve küçük bir şehir turu! 🌿🛍️ Hem şık hem rahat kombinleri çok seviyorum. Zümrüt yeşili sizce bana yakışmış mı? Yorumda buluşalım! 👇",
+        "tags": '#nişantaşı #blazer #sokakmodası #kombin #istanbul #şıklık #canantuna #keşfet'
+    },
+    {
+        "id": 'meta_safe_03_karakoy_kitap_kafe_cay',
+        "category": 'lifestyle',
+        "type": 'video',
+        "bold": False,
+        "hook": "Karaköy'de kitap ve sıcak çay molası! Sen ne okuyorsun?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_meta_03_karakoy_bookstore_tea.jpg'),
+        "signatures": ["karaköy'de pencere kenarında kitap ve sıcak çay keyfi"],
+        "caption": "Karaköy'de pencere kenarında kitap ve sıcak çay keyfi! 📖☕ Bazen şehrin bütün koşuşturmasını durdurup böyle sakin bir köşeye sığınmak iyi geliyor. Şu sıralar okuduğun güzel bir kitap önerin var mı? 👇",
+        "tags": '#karaköy #kitap #çaykeyfi #kafe #istanbul #yaşam #canantuna #keşfet'
+    },
+    {
+        "id": 'meta_safe_04_galata_aksam_kaban',
+        "category": 'gece',
+        "type": 'video',
+        "bold": False,
+        "hook": "Galata manzarası ve siyah kaban şıklığı! Nasıl olmuş?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_meta_04_galata_evening_coat.jpg'),
+        "signatures": ["galata kulesi manzarasına karşı siyah kaşe kabanımla akşam"],
+        "caption": "Galata Kulesi manzarasına karşı siyah kaşe kabanımla akşam ışıkları! 🌃✨ İstanbul'un gece büyüsü bambaşka. Akşam yürüyüşü mü yoksa sıcak bir kafe sohbeti mi? Favorini yoruma yaz! 👇",
+        "tags": '#galata #istanbulgeceleri #kaban #akşamkombini #şıklık #canantuna #keşfet'
+    },
+    {
+        "id": 'meta_safe_05_ofis_pencere_kahve',
+        "category": 'is',
+        "type": 'photo',
+        "bold": False,
+        "hook": "Ofiste gün ortası kahve molası! Bugün yoğun musun?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_meta_05_office_window_laptop.jpg'),
+        "signatures": ["ofiste büyük cam kenarında kahvem ve planlamalarım"],
+        "caption": "Ofiste büyük cam kenarında kahvem ve haftanın yeni planlamaları! 💻☕ İş kombinlerinde krem ve bej tonlarının zarafetine bayılıyorum. Bugün senin günün nasıl geçiyor? 👇✨",
+        "tags": '#ofiskombini #işhayatı #kahvemolası #istanbul #zarafet #canantuna #keşfet'
+    },
+    {
+        "id": 'meta_safe_06_bebek_brunch_kruvasan',
+        "category": 'lifestyle',
+        "type": 'video',
+        "bold": False,
+        "hook": "Bebek sahilinde brunch ve kruvasan! Eşlik eder misin?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_meta_06_bebek_brunch_croissant.jpg'),
+        "signatures": ["bebek sahilinde güneşli bir brunch ve taze kruvasan"],
+        "caption": "Bebek sahilinde güneşli bir brunch, taze kruvasan ve mis gibi filtre kahve! 🥐☕ Güzel bir kahvaltı tüm günün enerjisini değiştiriyor. Kahvaltıda tatlı mı tuzlu mu seversin? 👇✨",
+        "tags": '#bebek #brunch #kruvasan #kahve #haftasonu #istanbul #canantuna #keşfet'
+    },
+    {
+        "id": 'meta_safe_07_ev_temizligi_supurge',
+        "category": 'ev',
+        "type": 'video',
+        "bold": False,
+        "hook": "Bugün büyük temizlik günü! Temizlik yapmayı sever misin?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_meta_07_home_vacuum_cleaning.jpg'),
+        "signatures": ["hafta sonu büyük ev temizliği başladı müzik açık süpürge elde"],
+        "caption": "Hafta sonu büyük ev temizliği başladı, müzik açık süpürge elde! 🧹🎶 Ev tertemiz olunca insanın kafası da ferahlıyor. Sen temizlik yaparken en çok hangi müziği dinlersin? 👇✨",
+        "tags": '#evtemizliği #temizlikgünü #evdüzeni #günlükvlog #evhali #canantuna #keşfet'
+    },
+    {
+        "id": 'meta_safe_08_mutfak_makarna_hazirligi',
+        "category": 'ev',
+        "type": 'video',
+        "bold": False,
+        "hook": "Mutfakta taze makarna ve sebze! En sevdiğin yemek ne?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_meta_08_kitchen_cooking_pasta.jpg'),
+        "signatures": ["mutfağa girdim önlüğümü taktım mis gibi fesleğenli makarna"],
+        "caption": "Mutfağa girdim önlüğümü taktım, mis gibi çeri domatesli ve fesleğenli makarna hazırlıyorum! 🍝🍅 Ev yemeğinin yerini hiçbir şey tutmuyor. Senin en iyi yaptığın yemek hangisi? 👇",
+        "tags": '#mutfak #yemektarifleri #evyemeği #makarna #günlükyaşam #canantuna #keşfet'
+    },
+    {
+        "id": 'meta_safe_09_sabah_kahve_demleme',
+        "category": 'ev',
+        "type": 'photo',
+        "bold": False,
+        "hook": "Sabah kahvesi demleniyor! Güne kaç fincanla başlarsın?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_meta_09_coffee_brewing_morning.jpg'),
+        "signatures": ["sabah güneşinin altında taze filtre kahve demlemeden güne"],
+        "caption": "Sabah güneşinin altında taze filtre kahve demlemeden güne başlayamayanlar kulübü! ☕☀️ Kahvenin kokusu bütün mutfağı sardı. Sade mi sütlü mü içersin? 👇✨",
+        "tags": '#sabahkahvesi #filtrekahve #günaydın #kahvekeyfi #evhali #canantuna #keşfet'
+    },
+    {
+        "id": 'meta_safe_10_ev_bitkileri_sulama',
+        "category": 'hobi',
+        "type": 'photo',
+        "bold": False,
+        "hook": "Çiçeklerimin bakım saati! Evde bitki besliyor musun?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_meta_10_watering_houseplants.jpg'),
+        "signatures": ["evdeki yeşil bitkilerimin sulama ve bakım saati geldi"],
+        "caption": "Evdeki yeşil bitkilerimin sulama ve bakım saati geldi! 🌿💧 Onlarla ilgilenmek bütün günün stresini alıyor. Evinde en çok hangi bitkiyi seviyorsun? 👇✨",
+        "tags": '#evbitkileri #çiçekbakımı #evdekorasyonu #huzur #günlükyaşam #canantuna #keşfet'
+    },
+    {
+        "id": 'meta_safe_11_gardirop_duzenleme',
+        "category": 'ev',
+        "type": 'video',
+        "bold": False,
+        "hook": "Kışlık kazaklar ve gardırop düzeni! Düzenli misin?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_meta_11_organizing_wardrobe_clothes.jpg'),
+        "signatures": ["gardırop düzenleme vakti kışlık kazakları ve kabanları yerleştirdim"],
+        "caption": "Gardırop düzenleme vakti, kışlık kazakları ve kabanları tek tek yerleştirdim! 🧥✨ Dolap düzenli olunca sabah kombin seçmek yarı yarıya kolaylaşıyor. Sen de dolap düzeni sevenlerden misin? 👇",
+        "tags": '#gardıropdüzeni #evdüzeni #kışkombinleri #temizlik #yaşam #canantuna #keşfet'
+    },
+    {
+        "id": 'meta_safe_12_semt_pazari_alisveris',
+        "category": 'sokak',
+        "type": 'photo',
+        "bold": False,
+        "hook": "Semt pazarından taze meyve sebze! Pazar alışverişi sever misin?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_meta_12_grocery_shopping_market.jpg'),
+        "signatures": ["bez çantamı aldım semt pazarından taze elma ve yeşillik"],
+        "caption": "Bez çantamı aldım, semt pazarından haftanın taze elma ve yeşilliklerini seçiyorum! 🍎🥬 Semt pazarının o renkli havasını ve tazeliğini hiçbir markete değişmem. Pazarda ilk ne alırsın? 👇",
+        "tags": '#semtpazarı #alışveriş #sağlıklıyaşam #istanbul #günlükvlog #canantuna #keşfet'
+    },
+    {
+        "id": 'meta_safe_13_mutfak_tezgahi_temizlik',
+        "category": 'ev',
+        "type": 'video',
+        "bold": False,
+        "hook": "Mutfak pırıl pırıl oldu! Temizlik sonrası his nasıl?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_meta_13_kitchen_wiping_counter.jpg'),
+        "signatures": ["mutfak tezgahını da pırıl pırıl sildim mi temizlik tamamdır"],
+        "caption": "Mutfak tezgâhını da pırıl pırıl sildim mi temizlik tamamdır! ✨🧽 İş bitince o tertemiz mutfağa bakıp derin bir oh çekmek gibisi yok. Temizlikte en sevdiğin ve en üşendiğin iş hangisi? 👇",
+        "tags": '#mutfaktemizliği #temizlik #evdüzeni #evhali #günlükyaşam #canantuna #keşfet'
+    },
+    {
+        "id": 'meta_safe_14_temizlik_sonrasi_cay_molasi',
+        "category": 'ev',
+        "type": 'photo',
+        "bold": False,
+        "hook": "Temizlik bitti, sıcak çay molası! Hak ettik mi?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_meta_14_cozy_livingroom_tea_break.jpg'),
+        "signatures": ["tüm ev mis gibi olunca koltuğa geçip sıcak bir bitki çayı"],
+        "caption": "Tüm ev mis gibi olunca koltuğa geçip sıcak bir bitki çayı içmenin keyfi hiçbir şeyde yok! 🍵☀️ Bugün kendine küçük bir dinlenme molası verebildin mi? Yorumda konuşalım! 👇✨",
+        "tags": '#çaymolası #temizliksonrası #huzur #evkeyfi #günlükyaşam #canantuna #keşfet'
+    },
 ]
 
 

@@ -32,17 +32,35 @@ SUMMER_FILENAME_KEYWORDS = (
     "coral_mini_sunset", "silver_anklet_terrace", "denim_shorts_crop"
 )
 
-# Dünden itibaren üretilen 172 Yepyeni Görselin (Etek/Çorap, Özel Pozlar, Pembe Eşofman, Çekyat Diz Çökme ve Sosyal Yaşam) Öncelikli Ön Ekleri
+# Yeni nesil görsel ön ekleri (canan_meta_ = %100 Meta Para Kazanma Dostu yeni seri en üstte)
 NEW_GENERATION_PREFIXES = (
+    "canan_meta_", "canan_social_",
     "canan_sk_", "canan_p1_", "canan_p2_", "canan_p3_", "canan_p4_",
     "canan_p5_", "canan_p6_", "canan_sofa_kneel_", "canan_stocking_",
     "canan_bare_", "canan_barelegs_", "canan_cousin_stocking_",
-    "canan_social_", "canan_example_", "canan_pleated_skirt_", "canan_mini_skirt_"
+    "canan_example_", "canan_pleated_skirt_", "canan_mini_skirt_"
+)
+
+# Facebook/Instagram 'Yaşla ilgili kurallar' ve Para Kazanma uyarısı doğuran cesur/yetişkin dosya anahtarları
+META_RISKY_FILENAME_KEYWORDS = (
+    "lace", "garter", "stocking", "corset", "lingerie", "bra", "panty", "bikini",
+    "swim", "pool", "beach", "yacht", "bed", "bedroom", "kneel", "micro_skirt",
+    "mini_skirt", "plaid", "school", "fishnet", "bare", "feet", "polish", "toes",
+    "cousin", "velvet", "satin", "nightgown", "robe", "slip", "curve", "lean_forward",
+    "highangle", "sofa_kneel", "sheer", "mesh", "slit", "bold_", "sk_", "p1_", "p2_",
+    "p3_", "p4_", "p5_", "p6_", "yoga", "squat", "booty", "shorts", "stretch",
+    "glamour", "backless", "plunge", "cutout", "unbuttoned", "bodycon"
 )
 
 
+def is_meta_safe_image(image_path: str) -> bool:
+    """Görselin Facebook/Instagram Para Kazanma & 18+ kısıtsız keşfet politikasına %100 uygun olup olmadığını döner."""
+    fname = os.path.basename(image_path).lower()
+    return not any(k in fname for k in META_RISKY_FILENAME_KEYWORDS)
+
+
 def is_new_generation_image(image_path: str) -> bool:
-    """Görselin yeni üretilen 157 görsellik koleksiyondan olup olmadığını döner."""
+    """Görselin yeni üretilen koleksiyondan olup olmadığını döner."""
     fname = os.path.basename(image_path).lower()
     return fname.startswith(NEW_GENERATION_PREFIXES)
 
@@ -458,7 +476,8 @@ def pick_companion_images(
     count: int = 3,
     extra_candidates: list = None,
     exclude_filenames: set = None,
-    prefer_new_generation: bool = True
+    prefer_new_generation: bool = True,
+    meta_safe_only: bool = False
 ) -> list:
     """
     30 Günlük Sıfır-Tekrar Karantinalı & %100 Sabit İndeksli 4-Kare Seçici:
@@ -481,6 +500,7 @@ def pick_companion_images(
             if os.path.exists(p)
             and os.path.abspath(p) != primary_abs
             and os.path.basename(p) not in quarantined
+            and (not meta_safe_only or is_meta_safe_image(p))
         ]
         if len(ordered) >= count:
             return ordered[:count]
@@ -490,6 +510,7 @@ def pick_companion_images(
         for f in os.listdir(IMAGES_DIR)
         if f.lower().endswith((".jpg", ".jpeg", ".png"))
         and os.path.abspath(os.path.join(IMAGES_DIR, f)) != primary_abs
+        and (not meta_safe_only or is_meta_safe_image(f))
     ])
 
     is_cousin = "canan_cousin_" in primary_fname.lower()

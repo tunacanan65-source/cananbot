@@ -63,7 +63,7 @@ def post_single_twitter_item(media_type: str = "photo") -> bool:
     state = load_state()
     tw_used = set(state.get("used_images", []))
 
-    scenario = canan_autopilot.pick_next_scenario(force_type=media_type)
+    scenario = canan_autopilot.pick_next_scenario(force_type=media_type, meta_safe_only=False)
     if not scenario:
         print("⚠️ [Twitter Autopilot] Senaryo bulunamadı.")
         return False
@@ -113,7 +113,6 @@ def post_single_twitter_item(media_type: str = "photo") -> bool:
             state["used_images"] = used_list
             save_state(state)
             return True
-        print(f"⚠️ [Twitter] Hata detayı: {res}")
         return False
     else:
         res = twitter_poster.post_media_to_twitter(chosen_img, caption)
@@ -123,7 +122,6 @@ def post_single_twitter_item(media_type: str = "photo") -> bool:
             state["used_images"] = used_list
             save_state(state)
             return True
-        print(f"⚠️ [Twitter] Hata detayı: {res}")
         return False
 
 
