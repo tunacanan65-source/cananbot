@@ -3758,6 +3758,116 @@ SCENARIOS = [
         "caption": "Tüm ev mis gibi olunca koltuğa geçip sıcak bir bitki çayı içmenin keyfi hiçbir şeyde yok! 🍵☀️ Bugün kendine küçük bir dinlenme molası verebildin mi? Yorumda konuşalım! 👇✨",
         "tags": '#çaymolası #temizliksonrası #huzur #evkeyfi #günlükyaşam #canantuna #keşfet'
     },
+    {
+        "id": 'meta_safe_15_vapur_bogaz_cay',
+        "category": 'sokak',
+        "type": 'video',
+        "bold": False,
+        "hook": "Vapurda Boğaz havası ve ince belli çay! Özledin mi?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_meta_15_ferry_bosphorus_tea.jpg'),
+        "signatures": ["istanbul vapurunun güvertesinde martılar eşliğinde ince belli çay"],
+        "caption": "İstanbul vapurunun güvertesinde martılar eşliğinde ince belli çay keyfi! ⛴️☕ Boğaz rüzgârı insanın bütün yorgunluğunu alıyor. Senin en sevdiğin vapur hattı hangisi? 👇✨",
+        "tags": '#vapur #boğaz #istanbul #çaykeyfi #martılar #canantuna #keşfet'
+    },
+    {
+        "id": 'meta_safe_16_kadikoy_pastane_kahvalti',
+        "category": 'lifestyle',
+        "type": 'photo',
+        "bold": False,
+        "hook": "Kadıköy'de sıcak çay ve taze poğaça! Günaydın!",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_meta_16_kadikoy_bakery_pastry.jpg'),
+        "signatures": ["kadıköy'ün şirin bir pastanesinde sıcak çay ve taze poğaça"],
+        "caption": "Kadıköy'ün şirin bir pastanesinde sıcak çay ve fırından yeni çıkmış taze poğaça! 🥐🍵 Sabahın en güzel başlangıcı budur bence. Kahvaltıda simit mi poğaça mı? 👇",
+        "tags": '#kadıköy #pastane #kahvaltı #çay #istanbul #günaydın #canantuna #keşfet'
+    },
+    {
+        "id": 'meta_safe_17_emirgan_korusu_yuruyus',
+        "category": 'sokak',
+        "type": 'video',
+        "bold": False,
+        "hook": "Emirgan Korusu'nda sonbahar yürüyüşü! Huzur değil mi?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_meta_17_emirgan_park_autumn_walk.jpg'),
+        "signatures": ["emirgan korusu'nda dökülen sonbahar yaprakları arasında yürüyüş"],
+        "caption": "Emirgan Korusu'nda dökülen sonbahar yaprakları arasında uzun bir yürüyüş! 🍂🚶‍♀️ Doğa içinde nefes almak gibisi yok. İstanbul'da en sevdiğin yürüyüş rotası neresi? 👇✨",
+        "tags": '#emirgan #sonbahar #yürüyüş #doğa #istanbul #trençkot #canantuna #keşfet'
+    },
+    {
+        "id": 'meta_safe_18_sanat_muzesi_sergi',
+        "category": 'sanat',
+        "type": 'photo',
+        "bold": False,
+        "hook": "Bugün müze ve sergi günü! Sanat sever misin?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_meta_18_art_museum_exhibition.jpg'),
+        "signatures": ["bugün biraz kültür ve sanat molası verip sergi gezmeye geldim"],
+        "caption": "Bugün biraz kültür ve sanat molası verip sergi gezmeye geldim! 🖼️✨ Yeni eserler görmek insana hem ilham hem huzur veriyor. En son hangi müze ya da sergiye gittin? 👇",
+        "tags": '#sanat #müze #sergi #istanbul #kültür #kombin #canantuna #keşfet'
+    },
+    {
+        "id": 'meta_safe_19_cicekci_papatya_buketi',
+        "category": 'sokak',
+        "type": 'video',
+        "bold": False,
+        "hook": "Taze papatya ve laleler! En sevdiğin çiçek hangisi?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_meta_19_flower_shop_bouquet.jpg'),
+        "signatures": ["mahalle çiçekçisinden eve taze papatya ve lale buketi aldım"],
+        "caption": "Mahalle çiçekçisinden eve taze papatya ve lale buketi aldım! 🌼🌷 Küçük bir buket bile evin bütün havasını ve enerjisini değiştiriyor. Senin en sevdiğin çiçek hangisi? 👇✨",
+        "tags": '#çiçek #papatya #lale #mutluluk #istanbul #günlükyaşam #canantuna #keşfet'
+    },
+    {
+        "id": 'meta_safe_20_sinema_fuaye_misir',
+        "category": 'gece',
+        "type": 'photo',
+        "bold": False,
+        "hook": "Sinema akşamı ve patlamış mısır! Hangi filmi önerirsin?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_meta_20_cinema_lobby_popcorn.jpg'),
+        "signatures": ["akşam sinema keyfi için patlamış mısırım hazır bekliyorum"],
+        "caption": "Akşam sinema keyfi için patlamış mısırım hazır! 🍿🎬 Haftanın yorgunluğunu güzel bir filmle atmak gibisi yok. Son zamanlarda izlediğin en iyi film hangisiydi? 👇",
+        "tags": '#sinema #filmkeyfi #patlamışmısır #akşamplanı #istanbul #canantuna #keşfet'
+    },
+    {
+        "id": 'meta_safe_21_araba_kahve_molasi',
+        "category": 'sokak',
+        "type": 'photo',
+        "bold": False,
+        "hook": "Yol öncesi sıcak kahve molası! Trafik nasıl?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_meta_21_car_drive_coffee_break.jpg'),
+        "signatures": ["yola çıkmadan önce emniyet kemeri takılı sıcak kahvem elimde"],
+        "caption": "Yola çıkmadan önce emniyet kemeri takılı, sıcak kahvem elimde! ☕🚗 Güzel bir müzik listesi açınca İstanbul trafiği bile daha çekilir oluyor. Yolda en çok ne dinlersin? 👇",
+        "tags": '#yolculuk #kahvemolası #istanbul #günlükvlog #canantuna #keşfet'
+    },
+    {
+        "id": 'meta_safe_22_sahil_parki_sabah_yuruyusu',
+        "category": 'spor',
+        "type": 'video',
+        "bold": False,
+        "hook": "Sahilde sabah yürüyüşü! Güne sporla başlayanlar burada mı?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_meta_22_seaside_jogging_park.jpg'),
+        "signatures": ["caddebostan sahil parkında sabah temiz havasında tempolu yürüyüş"],
+        "caption": "Caddebostan sahil parkında sabah temiz havasında tempolu yürüyüş! 🌊👟 Güne hareketle başlayınca bütün gün enerji yüksek kalıyor. Sabah yürüyüşü mü akşam yürüyüşü mü? 👇✨",
+        "tags": '#sabahyürüyüşü #sahil #sağlıklıyaşam #spor #istanbul #canantuna #keşfet'
+    },
+    {
+        "id": 'meta_safe_23_kutuphane_defter_not',
+        "category": 'hobi',
+        "type": 'photo',
+        "bold": False,
+        "hook": "Sakin bir köşede not alma ve planlama! Hedeflerin hazır mı?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_meta_23_library_study_notebook.jpg'),
+        "signatures": ["sakin bir kütüphane kafesinde defterimi açtım yeni hafta planları"],
+        "caption": "Sakin bir kütüphane kafesinde defterimi açtım, yeni hafta planlarını yazıyorum! 📓☕ Kâğıda yazarak plan yapmak zihnimi çok rahatlatıyor. Sen notlarını deftere mi telefona mı alırsın? 👇",
+        "tags": '#kütüphane #planlama #notdefteri #çay #verimlilik #canantuna #keşfet'
+    },
+    {
+        "id": 'meta_safe_24_bogaz_aksam_yemegi_sik',
+        "category": 'gece',
+        "type": 'video',
+        "bold": False,
+        "hook": "Boğaz ışıkları ve zarif akşam yemeği! Bordo yakışmış mı?",
+        "image_path": os.path.join(IMAGES_DIR, 'canan_meta_24_bosphorus_dinner_modest.jpg'),
+        "signatures": ["boğaz manzarasına karşı bordo uzun kollu elbisemle keyifli bir akşam"],
+        "caption": "Boğaz manzarasına karşı bordo elbisemle keyifli bir akşam yemeği! 🌃🍽️ Zarafet sadelikte gizli diyenlerdenim. Bordo tonları kış akşamlarına sizce de çok yakışmıyor mu? 👇✨",
+        "tags": '#boğaz #akşamyemeği #zarafet #bordoelbise #istanbul #canantuna #keşfet'
+    },
 ]
 
 
