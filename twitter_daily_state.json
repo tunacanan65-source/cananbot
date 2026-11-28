@@ -29,6 +29,9 @@
       "tw_reels_2_afternoon",
       "tw_photo_2_evening",
       "tw_reels_3_primetime"
+    ],
+    "2026-11-28": [
+      "tw_photo_1_morning"
     ]
   },
   "used_images": [
@@ -89,6 +92,7 @@
     "canan_bold_black_mesh_night.jpg",
     "canan_stocking_13_black_sheer_lace_red_corset_sofa.jpg",
     "canan_mini_skirt_lace_stockings_sofa.jpg",
-    "canan_sk_34_white_lace_black_corset_emerald_satin_bed.jpg"
+    "canan_sk_34_white_lace_black_corset_emerald_satin_bed.jpg",
+    "canan_bookstore_cafe.jpg"
   ]
 }
