@@ -40,31 +40,20 @@ def write_output(key: str, val: str):
 
 
 def do_check() -> int:
-    tt = tiktok_pending_reel_id()
+    # TikTok artık sadece Ev PC'sinden (Türk Ev IP'si) yüklenir; bulutta yalnızca Twitter/X çalışır.
     tw = canan_twitter_sync.get_due_slots()
-    print(f"🔎 TikTok bekleyen Reels: {tt or 'yok'}")
-    print(f"🔎 Twitter vakti gelen slotlar: {[s['id'] for s in tw] or 'yok'}")
-    write_output("due", "true" if (tt or tw) else "false")
+    print(f"🔎 [Bulut] Twitter vakti gelen slotlar: {[s['id'] for s in tw] or 'yok'}")
+    write_output("due", "true" if tw else "false")
     return 0
 
 
 def do_run() -> int:
     failures = 0
 
-    # 1) TikTok (yurt dışı IP engeline takılırsa Twitter'ı ve iş akışını kırmızıya düşürmesin)
-    pending = tiktok_pending_reel_id()
-    if pending:
-        print(f"🎵 [Bulut] TikTok'a yüklenecek Reels: {pending}")
-        try:
-            canan_tiktok_sync.sync_once(seed_existing=False)
-            if pending not in canan_tiktok_sync.load_synced_ids():
-                print("⚠️ [Bulut] TikTok yurt dışı IP nedeniyle atlandı (PC açılınca otomatik yüklenir).")
-        except Exception as te:
-            print(f"⚠️ [Bulut] TikTok uyarısı: {te}")
-    else:
-        print("🎵 [Bulut] TikTok için yeni Reels yok.")
+    # TikTok bulut (ABD veri merkezi IP) kısıtlaması nedeniyle devre dışı; sadece Ev PC'sinden yüklenir.
+    print("ℹ️ [Bulut] TikTok yüklemesi Ev PC'sine (Türk IP) devredildi, bulutta atlanıyor.")
 
-    # 2) Twitter / X (her çalışmada en fazla 1 gönderi — peş peşe spam olmasın, saatlerinde tek tek atsın)
+    # Twitter / X (her çalışmada en fazla 1 gönderi — peş peşe spam olmasın, saatlerinde tek tek atsın)
     res = canan_twitter_sync.check_and_run_due_slots(max_posts=1)
     print(f"🐦 [Bulut] Twitter sonucu: {res}")
     failures += res.get("failed", 0)
